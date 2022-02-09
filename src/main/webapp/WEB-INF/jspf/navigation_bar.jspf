@@ -1,0 +1,107 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page isELIgnored="false"%>
+<%@ page session="true"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+
+<c:set var="currentLocale" value="${not empty currentLocale ? currentLocale : 'en'}" scope="session"/>
+<fmt:setLocale value="${currentLocale}"/>
+<fmt:setBundle basename="${initParam.bundleName}" var="msg"/>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">Library</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <c:choose>
+                    <c:when test="${role == null}">
+                        <li class="nav-item">
+                            <a class="nav-link" aria-current="page"
+                               href="${pageContext.request.contextPath}/library/catalog">
+                                <fmt:message key="catalog" bundle="${msg}"/>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="${pageContext.request.contextPath}/library/registration">
+                                <fmt:message key="registration" bundle="${msg}"/>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="${pageContext.request.contextPath}/library/login">
+                                <fmt:message key="login" bundle="${msg}"/>
+                            </a>
+                        </li>
+                    </c:when>
+                    <c:otherwise>
+                        <c:if test="${role eq 'admin'}">
+                            <a class="nav-link" href="?operations=createBook"> Create Book
+                            </a>
+                            <a class="nav-link" href="?operations=catalog"> Catalog
+                            </a>
+                            book operations : create, delete, update
+                            (search or catalog)??
+                            <br>
+                            <a class="nav-link" href="?operations=createLibrarian"> Create Librarian
+                            </a>
+                            <a class="nav-link" href="?operations=deleteLibrarian"> Delete Librarian
+                            </a>
+                            librarian operations : create, delete
+                            <br>
+                            <a class="nav-link" href="?operations=listUsers"> List Users
+                            </a>
+                            add search user to block or unblock
+                            user operations : block, unblock
+                            <br>
+                            <form class="d-flex">
+                                <input class="form-control me-2" name="searchByAuthor" type="search"
+                                       placeholder="Search by author" aria-label="Search by author">
+                                <input class="form-control me-2" name="searchByTitle" type="search"
+                                       placeholder="Search by title" aria-label="Search by title">
+                                <button class="btn btn-outline-success" type="submit">Search</button>
+                                <h5><font style="color:hsl(0,100%,50%);">${notFound}</font></h5>
+                            </form>
+                        </c:if>
+                        <c:if test="${role eq 'librarian'}">
+                            list readers orders <br>
+                            list readers with abonements <br>
+                        </c:if>
+                        <c:if test="${role eq 'reader'}">
+                            search : by author, by title
+                            make order for book (abonement or reading room) (order duration (20 days - then penalty))
+                            catalog
+                            <form class="d-flex">
+                                <input class="form-control me-2" name="searchByAuthor" type="search"
+                                       placeholder="Search by author" aria-label="Search by author">
+                                <input class="form-control me-2" name="searchByTitle" type="search"
+                                       placeholder="Search by title" aria-label="Search by title">
+                                <button class="btn btn-outline-success" type="submit">Search</button>
+                                <h3><font style="color:hsl(0,100%,50%);">${notFound}</font></h3>
+                            </form>
+                        </c:if>
+                        <li class="nav-item">
+                            <a class="nav-link" href="?profile=u">View Profile</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="${pageContext.request.contextPath}/library/logout">LogOut</a>
+                        </li>
+                    </c:otherwise>
+                </c:choose>
+                <form>
+                    <select class="form-select" aria-label="Default select example" id="currentLocale"
+                            name="currentLocale" onchange="submit()">
+                        <option value="en" ${currentLocale==
+                        "en" ? 'selected' : ''}>en</option>
+                        <option value="uk" ${currentLocale==
+                        "uk" ? 'selected' : ''}>ua</option>
+                    </select>
+                </form>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
