@@ -2,34 +2,31 @@ package com.dkop.library.controller.filters;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 public class LocaleFilter implements Filter {
-    @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
-    }
+    private static final String LANGUAGE = "language";
+
+    private static final Locale DEFAULT_LOCALE = new Locale("en");
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest req = (HttpServletRequest) servletRequest;
-        HttpServletResponse resp = (HttpServletResponse) servletResponse;
 
-        String currentLocale = req.getParameter("currentLocale");
-        if (currentLocale != null) {
-            if (currentLocale.equals("uk")){
-                req.setAttribute("currentLocale", "uk");
-                filterChain.doFilter(req, resp);
-            } else {
-                req.setAttribute("currentLocale", "en");
-                filterChain.doFilter(req, resp);
-            }
+        String userSelectedLanguage = req.getParameter("lang");
+        Locale locale = DEFAULT_LOCALE;
+        if (userSelectedLanguage != null){
+            req.getSession().setAttribute(LANGUAGE, userSelectedLanguage);
+            locale = new Locale(userSelectedLanguage);
+        } else if (req.getSession().getAttribute(LANGUAGE) == null){
+            req.getSession().setAttribute(LANGUAGE, "en");
         } else {
-            filterChain.doFilter(req, resp);
+            locale = new Locale((String) req.getSession().getAttribute(LANGUAGE));
         }
-    }
-
-    @Override
-    public void destroy() {
+        ResourceBundle resourceBundle = ResourceBundle.getBundle("messages", locale);
+        req.setAttribute("bundle", resourceBundle);
+        filterChain.doFilter(servletRequest, servletResponse);
     }
 }
