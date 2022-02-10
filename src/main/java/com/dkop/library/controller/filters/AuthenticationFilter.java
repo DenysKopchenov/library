@@ -7,11 +7,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.Set;
 
 public class AuthenticationFilter implements Filter {
 
+    //    LogOutCommand logOutCommand = new LogOutCommand();
+    private static final String HOME_PAGE = "/app/library/";
+
     @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
+    public void init(FilterConfig filterConfig) {
+        // Do nothing
     }
 
     @Override
@@ -23,38 +28,59 @@ public class AuthenticationFilter implements Filter {
         String role = (String) session.getAttribute("role");
         String requestURI = req.getRequestURI();
 
-        if (requestURI.contains("admin")) {
-            if (role != null && role.equals("admin")) {
-                filterChain.doFilter(req, resp);
+        Set<String> publicAvailablePages = Set.of("/registration", "/login", "/catalog", "/logout", "library/");
+        boolean isPublicAvailablePage = isPublicAvailablePage(requestURI, publicAvailablePages);
+        if (role == null) {
+            if (isPublicAvailablePage) {
+                filterChain.doFilter(servletRequest, servletResponse);
             } else {
-                new LogOutCommand().execute(req);
-                resp.sendRedirect("/app/library/login");
+                resp.sendRedirect(HOME_PAGE);
             }
-        } else if (requestURI.contains("librarian")) {
-            if (role != null && role.equals("librarian")) {
-                filterChain.doFilter(req, resp);
-            } else {
-                new LogOutCommand().execute(req);
-                resp.sendRedirect("/app/library/login");
-            }
-        } else if (requestURI.contains("reader")) {
-            if (role != null && role.equals("reader")) {
-                filterChain.doFilter(req, resp);
-            } else {
-                new LogOutCommand().execute(req);
-                resp.sendRedirect("/app/library/login");
-            }
-        } else if (requestURI.contains("catalog")) {
-            filterChain.doFilter(req, resp);
-        } else {
-            new LogOutCommand().execute(req);
-            filterChain.doFilter(req, resp);
+            return;
         }
 
+        switch (role) {
+            case "admin":
+                if (requestURI.contains("admin") || requestURI.contains("logout")) {
+                    filterChain.doFilter(servletRequest, servletResponse);
+                } else {
+//                    logOutCommand.execute(req);
+                    resp.sendRedirect(HOME_PAGE + role);
+                }
+                break;
+            case "librarian":
+                if (requestURI.contains("librarian") || requestURI.contains("logout")) {
+                    filterChain.doFilter(servletRequest, servletResponse);
+                } else {
+//                    logOutCommand.execute(req);
+                    resp.sendRedirect(HOME_PAGE + role);
+                }
+                break;
+            case "reader":
+                if (requestURI.contains("reader") || requestURI.contains("logout")) {
+                    filterChain.doFilter(servletRequest, servletResponse);
+                } else {
+//                    logOutCommand.execute(req);
+                    resp.sendRedirect(HOME_PAGE + role);
+                }
+                break;
+            default:
+                throw new RuntimeException("Unknown role: " + role);
+        }
 
+    }
+
+    private boolean isPublicAvailablePage(String requestURI, Set<String> publicAvailablePages) {
+        for (String publicAvailablePage : publicAvailablePages) {
+            if (requestURI.endsWith(publicAvailablePage)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
     public void destroy() {
+        // Do nothing
     }
 }
