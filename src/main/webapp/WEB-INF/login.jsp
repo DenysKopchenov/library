@@ -7,7 +7,7 @@
 
 
 <!DOCTYPE html>
-<html lang=${currentLocale}>
+<html lang=${language}>
 <head>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
@@ -16,11 +16,10 @@
 <body>
 <div align="center">
 <h1>Login</h1>
-<h3> <font style="color:hsl(0,100%,50%);">${doesNotExist}</font></h3>
-<h3> <font style="color:hsl(0,100%,50%);">${alreadyLogged}</font></h3>
+<h3> <font style="color:hsl(0,100%,50%);">${errorMessage}</font></h3>
 <form method="post">
                 <br><label for="email"><b>E-mail</b></label><br>
-                <input type="text" name="email" placeholder="E-mail"/>
+                <input type="text" name="email" placeholder="E-mail" value="${email}"/>
                 <br><c:if test="${validation.containsKey('email')}">
                 <font style="color:hsl(0,100%,50%);">${validation.get("email")}</font>
                 </c:if>

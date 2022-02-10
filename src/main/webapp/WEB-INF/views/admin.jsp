@@ -2,7 +2,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <!DOCTYPE html>
-<html lang=${currentLocale} xmlns:c="http://www.w3.org/1999/html">
+<html lang=${language} xmlns:c="http://www.w3.org/1999/html">
 <head>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
           integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
@@ -60,7 +60,7 @@
     <div>
         <form method="post">
             <br><label for="title"><b>Title</b></label><br>
-            <input type="text" name="title" placeholder="${updatingBook.getTitle()}"/>
+            <input type="text" name="title" value="${operation eq 'updateBook' ? updatingBook.getTitle() : ''}" placeholder="Title"/>
             <br>
             <c:if test="${validation.containsKey('title')}">
                 <font style="color:hsl(0,100%,50%);">${validation.get("title")}</font>

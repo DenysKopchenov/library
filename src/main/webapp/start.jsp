@@ -2,12 +2,12 @@
     <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
         <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
-            <c:set var="currentLocale" value="${not empty currentLocale ? currentLocale : 'en'}" scope="page" />
+<!--            <c:set var="currentLocale" value="${not empty currentLocale ? currentLocale : 'en'}" scope="page" />
             <fmt:setLocale value="${currentLocale}" />
-            <fmt:setBundle basename="${initParam.bundleName}" var="msg" />
+            <fmt:setBundle basename="${initParam.bundleName}" var="msg" />-->
 
 
-            <html lang=${currentLocale}>
+            <html lang=${language}>
 
             <head>
                 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -19,7 +19,7 @@
             <body>
                 <div>
                     <h1>Привет</h1>
-                    <%@ include file="/WEB-INF/jspf/navigation_bar.jspf" %>
+                    <%@ include file="/WEB-INF/jspf/nav_bar_guest.jspf" %>
                 </div>
                 
                 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"

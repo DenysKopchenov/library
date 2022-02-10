@@ -1,7 +1,7 @@
 <%@page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
-<html lang=${currentLocale}>
+<html lang=${language}>
 <head>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
           integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
@@ -10,7 +10,7 @@
 </head>
 <body>
 hello form READER page
-<%@ include file="/WEB-INF/jspf/navigation_bar.jspf" %>
+<%@ include file="/WEB-INF/jspf/nav_bar_reader.jspf" %>
 <div>
     <c:if test="${!booksByAuthor.isEmpty()}">
         <c:forEach var="books" items="${booksByAuthor}">
@@ -32,6 +32,26 @@ hello form READER page
             </li>
         </c:forEach>
     </c:if>
+</div>
+<div>
+    <c:out value="${userInfo}"/>
+    <h3><font style="color:hsl(0,100%,50%);">${successDelete}</font></h3>
+</div>
+<div>
+<div>
+Catalog sorting
+<a href="?sort=byTitle"> Sort by Title</a>
+<a href="?sort=byAuthor"> Sort by Author</a>
+<a href="?sort=byPublisher"> Sort bu Publisher</a>
+<a href="?sort=byPublishingDate"> Sort by Publishing Date</a>
+</div>
+    <c:forEach var="book" items="${catalog}">
+        <li>
+            ${book}
+            <br> <a href="?orderBook=reading-room"> Order to reading room</a>
+            <br> <a href="?orderBook=home"> Order to home</a>
+        </li>
+    </c:forEach>
 </div>
 <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
         integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
