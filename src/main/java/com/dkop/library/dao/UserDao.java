@@ -39,11 +39,12 @@ public class UserDao implements AutoCloseable {
         String SELECT_EMAIL_SQL = "SELECT email FROM users WHERE email = ?;";
         try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_EMAIL_SQL)) {
             preparedStatement.setString(1, email);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()) {
-                String emailFromDB = resultSet.getString("email");
-                if (emailFromDB.equals(email)) {
-                    throw new AlreadyExistException("Email " + email + " already exist!");
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    String emailFromDB = resultSet.getString("email");
+                    if (emailFromDB.equals(email)) {
+                        throw new AlreadyExistException("Email " + email + " already exist!");
+                    }
                 }
             }
         } catch (SQLException ex) {
@@ -75,31 +76,23 @@ public class UserDao implements AutoCloseable {
     public User findUser(String email) throws DoesNotExistException {
         String SELECT_USER = "SELECT * FROM users WHERE email = ?;";
         User user = new User();
-        ResultSet resultSet = null;
         try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_USER)) {
             preparedStatement.setString(1, email);
-            resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()) {
-                user.setFirstName(resultSet.getString("first_name"));
-                user.setLastName(resultSet.getString("last_name"));
-                user.setEmail(resultSet.getString("email"));
-                user.setPassword(resultSet.getString("password"));
-                user.setRole(resultSet.getString("role"));
-                user.setStatus(resultSet.getString("status"));
-                user.setId(resultSet.getInt("id"));
-            } else {
-                throw new DoesNotExistException(email + " Does not exist!");
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    user.setFirstName(resultSet.getString("first_name"));
+                    user.setLastName(resultSet.getString("last_name"));
+                    user.setEmail(resultSet.getString("email"));
+                    user.setPassword(resultSet.getString("password"));
+                    user.setRole(resultSet.getString("role"));
+                    user.setStatus(resultSet.getString("status"));
+                    user.setId(resultSet.getInt("id"));
+                } else {
+                    throw new DoesNotExistException(email + " Does not exist!");
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-            if (resultSet != null) {
-                try {
-                    resultSet.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
         }
         return user;
     }

@@ -98,19 +98,19 @@ public class BooksDao implements AutoCloseable {
         List<Book> booksByTitle = new ArrayList<>();
         Book book;
         String SELECT_BOOK = "SELECT * FROM books WHERE title LIKE ?;";
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(SELECT_BOOK);
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_BOOK)) {
             preparedStatement.setString(1, "%" + title + "%");
-            ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                int idFromDB = resultSet.getInt("id");
-                String titleFromDB = resultSet.getString("title");
-                String authorFromDB = resultSet.getString("author");
-                String publisherFromDB = resultSet.getString("publisher");
-                LocalDate publishing_dateFromDB = resultSet.getDate("publishing_date").toLocalDate();
-                Integer amountFromDB = Integer.valueOf(resultSet.getString("amount"));
-                book = new Book(idFromDB, titleFromDB, authorFromDB, publisherFromDB, publishing_dateFromDB, amountFromDB);
-                booksByTitle.add(book);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    int idFromDB = resultSet.getInt("id");
+                    String titleFromDB = resultSet.getString("title");
+                    String authorFromDB = resultSet.getString("author");
+                    String publisherFromDB = resultSet.getString("publisher");
+                    LocalDate publishing_dateFromDB = resultSet.getDate("publishing_date").toLocalDate();
+                    Integer amountFromDB = Integer.valueOf(resultSet.getString("amount"));
+                    book = new Book(idFromDB, titleFromDB, authorFromDB, publisherFromDB, publishing_dateFromDB, amountFromDB);
+                    booksByTitle.add(book);
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -121,21 +121,18 @@ public class BooksDao implements AutoCloseable {
     public Book findById(int id) throws SQLException {
         Book book = null;
         String SELECT_BOOK = "SELECT * FROM books WHERE id = ?;";
-        ResultSet resultSet = null;
+
         try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_BOOK)) {
             preparedStatement.setInt(1, id);
-            resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()) {
-                String titleFromDB = resultSet.getString("title");
-                String authorFromDB = resultSet.getString("author");
-                String publisherFromDB = resultSet.getString("publisher");
-                LocalDate publishingDateFromDB = resultSet.getDate("publishing_date").toLocalDate();
-                int amountFromDB = Integer.parseInt(resultSet.getString("amount"));
-                book = new Book(id, titleFromDB, authorFromDB, publisherFromDB, publishingDateFromDB, amountFromDB);
-            }
-        } finally {
-            if (resultSet != null) {
-                resultSet.close();
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    String titleFromDB = resultSet.getString("title");
+                    String authorFromDB = resultSet.getString("author");
+                    String publisherFromDB = resultSet.getString("publisher");
+                    LocalDate publishingDateFromDB = resultSet.getDate("publishing_date").toLocalDate();
+                    int amountFromDB = Integer.parseInt(resultSet.getString("amount"));
+                    book = new Book(id, titleFromDB, authorFromDB, publisherFromDB, publishingDateFromDB, amountFromDB);
+                }
             }
         }
         return book;
