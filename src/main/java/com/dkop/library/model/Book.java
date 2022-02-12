@@ -11,6 +11,15 @@ public class Book {
     private String publisher;
     private LocalDate publishingDate;
     private int amount;
+    private int onOrder;
+
+    public int getOnOrder() {
+        return onOrder;
+    }
+
+    public void setOnOrder(int onOrder) {
+        this.onOrder = onOrder;
+    }
 
     public int getId() {
         return id;

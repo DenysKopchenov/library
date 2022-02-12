@@ -11,7 +11,7 @@ public class CatalogCommand implements Command {
     @Override
     public String execute(HttpServletRequest request) {
         try (BooksDao booksDao = DaoFactory.getInstance().createBooksDao()) {
-            List<Book> catalog = booksDao.getAllBooks();
+            List<Book> catalog = booksDao.findAll();
             request.setAttribute("catalog", catalog);
         }
         return "/WEB-INF/catalog.jsp";
