@@ -5,7 +5,6 @@ import com.dkop.library.dao.DaoFactory;
 import com.dkop.library.model.Book;
 import com.dkop.library.model.exceptions.NotFoundException;
 
-import javax.servlet.http.HttpServletRequest;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -71,7 +70,12 @@ public class BookService {
         }
     }
 
-    public void updateBook(Book book) throws SQLException {
+    public void updateBook(Book book, String title, String author, String publisher, String publishingDate, String amount) throws SQLException {
+        book.setTitle(title);
+        book.setAuthor(author);
+        book.setPublisher(publisher);
+        book.setPublishingDate(LocalDate.parse(publishingDate, DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+        book.setAmount(Integer.parseInt(amount));
         try (BooksDao booksDao = DaoFactory.getInstance().createBooksDao()) {
             booksDao.updateBook(book);
         }

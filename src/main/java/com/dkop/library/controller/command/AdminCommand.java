@@ -8,8 +8,11 @@ import com.dkop.library.services.UserService;
 import com.dkop.library.services.Validator;
 import org.apache.commons.lang3.StringUtils;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import javax.servlet.http.HttpServletRequest;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
@@ -157,7 +160,7 @@ public class AdminCommand implements Command {
                     String amount = request.getParameter("amount");
                     Map<String, String> errors = Validator.validateBookForm(title, author, publisher, publishingDate, amount);
                     if (errors.isEmpty()) {
-                        bookService.updateBook(book);
+                        bookService.updateBook(book, title, author, publisher, publishingDate, amount);
                         request.setAttribute("successMessage", "Successfully updated");
                     } else {
                         request.setAttribute("validation", errors);
