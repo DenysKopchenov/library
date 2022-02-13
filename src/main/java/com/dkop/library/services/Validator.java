@@ -46,4 +46,24 @@ public class Validator {
         }
         return errors;
     }
+
+    public static Map<String, String> validateRegistrationForm(String firstName, String lastName, String password, String confirmPassword, String email) {
+        Map<String, String> errors = new HashMap<>();
+        if (!firstName.matches(RegexContainer.NAME_VALIDATION)) {
+            errors.put("firstName", "First name may contains only letters, must starts with uppercase letter");
+        }
+        if (!lastName.matches(RegexContainer.NAME_VALIDATION)) {
+            errors.put("lastName", "Last name may contains only letters, must starts with uppercase letter");
+        }
+        if (!password.matches(RegexContainer.PASSWORD_VALIDATION)) {
+            errors.put("password", "Your password must be 8-20 characters long and must contain number, uppercase and lowercase letter, special character");
+        }
+        if (!password.equals(confirmPassword)) {
+            errors.put("confirmPassword", "Does not match to password");
+        }
+        if (!email.matches(RegexContainer.EMAIL_VALIDATION)) {
+            errors.put("email", "E-mail is invalid. Must contains '@'");
+        }
+        return errors;
+    }
 }

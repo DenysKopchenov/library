@@ -5,8 +5,8 @@ import java.util.Objects;
 public class User {
     private String firstName;
     private String lastName;
-    private String password;
     private String email;
+    private String password;
     private String role;
     private int id;
     private String status;

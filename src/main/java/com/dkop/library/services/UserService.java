@@ -3,9 +3,11 @@ package com.dkop.library.services;
 import com.dkop.library.dao.DaoFactory;
 import com.dkop.library.dao.UserDao;
 import com.dkop.library.model.User;
+import com.dkop.library.model.exceptions.AlreadyExistException;
 import com.dkop.library.model.exceptions.DoesNotExistException;
+import org.apache.commons.codec.digest.DigestUtils;
 
-import javax.servlet.http.HttpServletRequest;
+import java.sql.SQLException;
 import java.util.List;
 
 public class UserService {
@@ -22,5 +24,21 @@ public class UserService {
             user = userDao.findByEmail(email);
         }
         return user;
+    }
+
+    public void createUser(String firstName, String lastName, String email, String password, String role, String status) throws AlreadyExistException {
+        try (UserDao userDao = DaoFactory.getInstance().createUserDao()) {
+            User user = User.newBuilder()
+                    .firstName(firstName)
+                    .lastName(lastName)
+                    .email(email)
+                    .password(DigestUtils.sha256Hex(password))
+                    .role(role)
+                    .status(status)
+                    .build();
+            userDao.create(user);
+        } catch (SQLException e) {
+            throw new AlreadyExistException("Email " + email + " already exist!");
+        }
     }
 }

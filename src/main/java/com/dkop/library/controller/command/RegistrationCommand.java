@@ -1,10 +1,8 @@
 package com.dkop.library.controller.command;
 
-import com.dkop.library.dao.DaoFactory;
-import com.dkop.library.services.RegistrationService;
-import com.dkop.library.dao.UserDao;
-import com.dkop.library.model.User;
 import com.dkop.library.model.exceptions.AlreadyExistException;
+import com.dkop.library.services.UserService;
+import com.dkop.library.services.Validator;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
@@ -12,16 +10,15 @@ import java.util.Map;
 
 public class RegistrationCommand implements Command {
     private static final String REGISTRATION_JSP = "/WEB-INF/registration.jsp";
+    private final UserService userService = new UserService();
+
     @Override
     public String execute(HttpServletRequest request) {
-        Map<String, String> errors = new HashMap<>();
-
         String firstName = request.getParameter("firstName");
         String lastName = request.getParameter("lastName");
         String password = request.getParameter("password");
         String confirmPassword = request.getParameter("confirmPassword");
         String email = request.getParameter("email");
-
         if (firstName == null
                 || lastName == null
                 || password == null
@@ -30,14 +27,12 @@ public class RegistrationCommand implements Command {
             return REGISTRATION_JSP;
         }
 
-        RegistrationService registrationService = new RegistrationService();
-        User user = new User();
-        if (registrationService.validate(firstName, lastName, password, confirmPassword, email, user, errors)) {
-            try (UserDao userDao = DaoFactory.getInstance().createUserDao()){
-                userDao.checkUser(email);
-                userDao.createUser(user);
+        Map<String, String> errors = Validator.validateRegistrationForm(firstName, lastName, password, confirmPassword, email);
+        if (errors.isEmpty()) {
+            try {
+                userService.createUser(firstName, lastName, email, password, "reader", "active");
             } catch (AlreadyExistException e) {
-                request.setAttribute("alreadyExist", e.getMessage());
+                request.setAttribute("errorMessage", e.getMessage());
                 return REGISTRATION_JSP;
             }
         } else {
