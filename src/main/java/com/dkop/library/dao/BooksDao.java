@@ -3,7 +3,6 @@ package com.dkop.library.dao;
 import com.dkop.library.model.Book;
 
 import java.sql.*;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,19 +13,25 @@ public class BooksDao implements AutoCloseable {
         this.connection = connection;
     }
 
-    public List<Book> findAll() {//todo add String sort "author, title, publisher, publishing date" depends on it ORDER BY ?
+    public List<Book> findAll() {
+        return findAllSorted("author");
+    }
+
+    public List<Book> findAllSorted(String sortBy) {
         List<Book> allBooks = new ArrayList<>();
-        String SELECT_BOOKS = "SELECT * FROM books;";
+        String SELECT_BOOKS = "SELECT * FROM books ORDER BY ?;";
         try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_BOOKS)) {
+            preparedStatement.setString(1, sortBy);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 while (resultSet.next()) {
-                    int id = resultSet.getInt("id");
-                    String title = resultSet.getString("title");
-                    String author = resultSet.getString("author");
-                    String publisher = resultSet.getString("publisher");
-                    LocalDate publishingDate = resultSet.getDate("publishing_date").toLocalDate();
-                    int amount = Integer.parseInt(resultSet.getString("amount"));
-                    Book book = new Book(id, title, author, publisher, publishingDate, amount);
+                    Book book = Book.newBuilder()
+                            .id(resultSet.getInt("id"))
+                            .title(resultSet.getString("title"))
+                            .author(resultSet.getString("author"))
+                            .publisher(resultSet.getString("publisher"))
+                            .publishingDate(resultSet.getDate("publishing_date").toLocalDate())
+                            .amount(resultSet.getInt("amount"))
+                            .build();
                     allBooks.add(book);
                 }
             }
@@ -36,7 +41,7 @@ public class BooksDao implements AutoCloseable {
         return allBooks;
     }
 
-    public void createBook(Book book) throws SQLException {
+    public void create(Book book) throws SQLException {
         String INSERT_BOOK = "INSERT INTO books (title, author, publisher, publishing_date, amount) VALUES (?, ?, ?, ?, ?);";
         try (PreparedStatement preparedStatement = connection.prepareStatement(INSERT_BOOK)) {
             preparedStatement.setString(1, book.getTitle());
@@ -49,7 +54,7 @@ public class BooksDao implements AutoCloseable {
         }
     }
 
-    public void deleteBook(int id) throws SQLException {
+    public void delete(int id) throws SQLException {
         String DELETE_BOOK = "DELETE FROM books WHERE id = ?;";
         try (PreparedStatement preparedStatement = connection.prepareStatement(DELETE_BOOK)) {
             preparedStatement.setInt(1, id);
@@ -70,7 +75,7 @@ public class BooksDao implements AutoCloseable {
         }
     }
 
-    public List<Book> findByTitle(String author) {
+    public List<Book> findByAuthor(String author) {//todo!
         List<Book> booksByAuthor = new ArrayList<>();
         Book book;
         String SELECT_BOOK = "SELECT * FROM books WHERE author LIKE ?;";
@@ -78,13 +83,14 @@ public class BooksDao implements AutoCloseable {
             preparedStatement.setString(1, "%" + author + "%");
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 while (resultSet.next()) {
-                    int id = resultSet.getInt("id");
-                    String title = resultSet.getString("title");
-                    String authorFromDB = resultSet.getString("author");
-                    String publisher = resultSet.getString("publisher");
-                    LocalDate publishing_date = resultSet.getDate("publishing_date").toLocalDate();
-                    Integer amount = Integer.valueOf(resultSet.getString("amount"));
-                    book = new Book(id, title, authorFromDB, publisher, publishing_date, amount);
+                    book = Book.newBuilder()
+                            .id(resultSet.getInt("id"))
+                            .title(resultSet.getString("title"))
+                            .author(resultSet.getString("author"))
+                            .publisher(resultSet.getString("publisher"))
+                            .publishingDate(resultSet.getDate("publishing_date").toLocalDate())
+                            .amount(resultSet.getInt("amount"))
+                            .build();
                     booksByAuthor.add(book);
                 }
             }
@@ -94,21 +100,21 @@ public class BooksDao implements AutoCloseable {
         return booksByAuthor;
     }
 
-    public List<Book> findByAuthor(String title) {
+    public List<Book> findByTitle(String title) {
         List<Book> booksByTitle = new ArrayList<>();
-        Book book;
         String SELECT_BOOK = "SELECT * FROM books WHERE title LIKE ?;";
         try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_BOOK)) {
             preparedStatement.setString(1, "%" + title + "%");
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 while (resultSet.next()) {
-                    int idFromDB = resultSet.getInt("id");
-                    String titleFromDB = resultSet.getString("title");
-                    String authorFromDB = resultSet.getString("author");
-                    String publisherFromDB = resultSet.getString("publisher");
-                    LocalDate publishing_dateFromDB = resultSet.getDate("publishing_date").toLocalDate();
-                    Integer amountFromDB = Integer.valueOf(resultSet.getString("amount"));
-                    book = new Book(idFromDB, titleFromDB, authorFromDB, publisherFromDB, publishing_dateFromDB, amountFromDB);
+                    Book book = Book.newBuilder()
+                            .id(resultSet.getInt("id"))
+                            .title(resultSet.getString("title"))
+                            .author(resultSet.getString("author"))
+                            .publisher(resultSet.getString("publisher"))
+                            .publishingDate(resultSet.getDate("publishing_date").toLocalDate())
+                            .amount(resultSet.getInt("amount"))
+                            .build();
                     booksByTitle.add(book);
                 }
             }
@@ -119,19 +125,20 @@ public class BooksDao implements AutoCloseable {
     }
 
     public Book findById(int id) throws SQLException {
-        Book book = null;
         String SELECT_BOOK = "SELECT * FROM books WHERE id = ?;";
-
+        Book book = null;
         try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_BOOK)) {
             preparedStatement.setInt(1, id);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
-                    String titleFromDB = resultSet.getString("title");
-                    String authorFromDB = resultSet.getString("author");
-                    String publisherFromDB = resultSet.getString("publisher");
-                    LocalDate publishingDateFromDB = resultSet.getDate("publishing_date").toLocalDate();
-                    int amountFromDB = Integer.parseInt(resultSet.getString("amount"));
-                    book = new Book(id, titleFromDB, authorFromDB, publisherFromDB, publishingDateFromDB, amountFromDB);
+                    book = Book.newBuilder()
+                            .id(resultSet.getInt("id"))
+                            .title(resultSet.getString("title"))
+                            .author(resultSet.getString("author"))
+                            .publisher(resultSet.getString("publisher"))
+                            .publishingDate(resultSet.getDate("publishing_date").toLocalDate())
+                            .amount(resultSet.getInt("amount"))
+                            .build();
                 }
             }
         }

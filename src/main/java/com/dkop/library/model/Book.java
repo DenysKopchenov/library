@@ -13,78 +13,81 @@ public class Book {
     private int amount;
     private int onOrder;
 
+    private Book() {
+    }
+
     public int getOnOrder() {
         return onOrder;
     }
 
-    public void setOnOrder(int onOrder) {
-        this.onOrder = onOrder;
-    }
+//    public void setOnOrder(int onOrder) {
+//        this.onOrder = onOrder;
+//    }
 
     public int getId() {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
+//    public void setId(int id) {
+//        this.id = id;
+//    }
 
     public String getTitle() {
         return title;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
+//    public void setTitle(String title) {
+//        this.title = title;
+//    }
 
     public String getAuthor() {
         return author;
     }
 
-    public void setAuthor(String author) {
-        this.author = author;
-    }
+//    public void setAuthor(String author) {
+//        this.author = author;
+//    }
 
     public String getPublisher() {
         return publisher;
     }
 
-    public void setPublisher(String publisher) {
-        this.publisher = publisher;
-    }
+//    public void setPublisher(String publisher) {
+//        this.publisher = publisher;
+//    }
 
     public LocalDate getPublishingDate() {
         return publishingDate;
     }
 
-    public void setPublishingDate(LocalDate publishingDate) {
-        this.publishingDate = publishingDate;
-    }
+//    public void setPublishingDate(LocalDate publishingDate) {
+//        this.publishingDate = publishingDate;
+//    }
 
     public int getAmount() {
         return amount;
     }
 
-    public void setAmount(int amount) {
-        this.amount = amount;
-    }
+//    public void setAmount(int amount) {
+//        this.amount = amount;
+//    }
 
-    public Book(int id, String title, String author, String publisher, LocalDate publishingDate, int amount) {
-        this.id = id;
-        this.title = title;
-        this.author = author;
-        this.publisher = publisher;
-        this.publishingDate = publishingDate;
-        this.amount = amount;
-    }
-
-    public Book(String title, String author, String publisher, LocalDate publishingDate, int amount) {
-        this.title = title;
-        this.author = author;
-        this.publisher = publisher;
-        this.publishingDate = publishingDate;
-        this.amount = amount;
-    }
+//    public Book(int id, String title, String author, String publisher, LocalDate publishingDate, int amount) {
+//        this.id = id;
+//        this.title = title;
+//        this.author = author;
+//        this.publisher = publisher;
+//        this.publishingDate = publishingDate;
+//        this.amount = amount;
+//    }
+//
+//    public Book(String title, String author, String publisher, LocalDate publishingDate, int amount) {
+//        this.title = title;
+//        this.author = author;
+//        this.publisher = publisher;
+//        this.publishingDate = publishingDate;
+//        this.amount = amount;
+//    }
 
     @Override
     public boolean equals(Object o) {
@@ -109,5 +112,49 @@ public class Book {
         sb.append(", amount=").append(amount);
         sb.append('}');
         return sb.toString();
+    }
+
+    public static Builder newBuilder() {
+        return new Book().new Builder();
+    }
+
+    public class Builder {
+        private Builder() {
+
+        }
+
+        public Builder id(int id) {
+            Book.this.id = id;
+            return this;
+        }
+
+        public Builder title(String title) {
+            Book.this.title = title;
+            return this;
+        }
+
+        public Builder author(String author) {
+            Book.this.author = author;
+            return this;
+        }
+
+        public Builder publisher(String publisher) {
+            Book.this.publisher = publisher;
+            return this;
+        }
+
+        public Builder publishingDate(LocalDate publishingDate) {
+            Book.this.publishingDate = publishingDate;
+            return this;
+        }
+
+        public Builder amount(int amount) {
+            Book.this.amount = amount;
+            return this;
+        }
+
+        public Book build() {
+            return Book.this;
+        }
     }
 }

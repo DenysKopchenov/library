@@ -8,11 +8,8 @@ import com.dkop.library.services.UserService;
 import com.dkop.library.services.Validator;
 import org.apache.commons.lang3.StringUtils;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import javax.servlet.http.HttpServletRequest;
 import java.sql.SQLException;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
@@ -31,8 +28,8 @@ public class AdminCommand implements Command {
         operations.put("deleteBook", this::deleteBookOperation);
         operations.put("updateBook", this::updateBookOperation);
         operations.put("catalog", this::showCatalogBookOperation);
+        operations.put("showAllUsers", this::showAllUsersOperation);
     }
-
 
     @Override
     public String execute(HttpServletRequest request) {
@@ -147,11 +144,10 @@ public class AdminCommand implements Command {
     private void updateBookOperation(HttpServletRequest request) {
         request.setAttribute("operation", "updateBook");
         String id = request.getParameter("bookId");
-
         if (StringUtils.isNumeric(id)) {
             try {
                 Book book = bookService.findById(Integer.parseInt(id));
-                request.setAttribute("updatingBook", book);
+                request.setAttribute("updatingBook", book); //shows what book is updating
                 if (request.getParameter("updateCurrentBook") != null) {
                     String title = request.getParameter("title");
                     String author = request.getParameter("author");
@@ -160,7 +156,7 @@ public class AdminCommand implements Command {
                     String amount = request.getParameter("amount");
                     Map<String, String> errors = Validator.validateBookForm(title, author, publisher, publishingDate, amount);
                     if (errors.isEmpty()) {
-                        bookService.updateBook(book, title, author, publisher, publishingDate, amount);
+                        bookService.updateBook(Integer.parseInt(id), title, author, publisher, publishingDate, amount);
                         request.setAttribute("successMessage", "Successfully updated");
                     } else {
                         request.setAttribute("validation", errors);
@@ -173,4 +169,10 @@ public class AdminCommand implements Command {
             }
         }
     }
+
+
+    private void showAllUsersOperation(HttpServletRequest request) {
+        request.setAttribute("allUsers", userService.findAll());
+    }
+
 }

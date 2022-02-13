@@ -15,15 +15,21 @@ public class BookService {
 
     public void addNewBook(String title, String author, String publisher, String publishingDate, String amount) throws SQLException {
         LocalDate date = LocalDate.parse(publishingDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-        Book book = new Book(title, author, publisher, date, Integer.parseInt(amount));
+        Book book = Book.newBuilder()
+                .title(title)
+                .author(author)
+                .publisher(publisher)
+                .publishingDate(date)
+                .amount(Integer.parseInt(amount))
+                .build();
         try (BooksDao booksDao = DaoFactory.getInstance().createBooksDao()) {
-            booksDao.createBook(book);
+            booksDao.create(book);
         }
     }
 
-    public void deleteBook(int bookId) throws SQLException {
+    public void deleteBook(int id) throws SQLException {
         try (BooksDao booksDao = DaoFactory.getInstance().createBooksDao()) {
-            booksDao.deleteBook(bookId);
+            booksDao.delete(id);
         }
 
     }
@@ -70,14 +76,18 @@ public class BookService {
         }
     }
 
-    public void updateBook(Book book, String title, String author, String publisher, String publishingDate, String amount) throws SQLException {
-        book.setTitle(title);
-        book.setAuthor(author);
-        book.setPublisher(publisher);
-        book.setPublishingDate(LocalDate.parse(publishingDate, DateTimeFormatter.ofPattern("yyyy-MM-dd")));
-        book.setAmount(Integer.parseInt(amount));
+    public void updateBook(int id, String title, String author, String publisher, String publishingDate, String amount) throws SQLException {
+        LocalDate date = LocalDate.parse(publishingDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        Book updatingBook = Book.newBuilder()
+                .id(id)
+                .title(title)
+                .author(author)
+                .publisher(publisher)
+                .publishingDate(date)
+                .amount(Integer.parseInt(amount))
+                .build();
         try (BooksDao booksDao = DaoFactory.getInstance().createBooksDao()) {
-            booksDao.updateBook(book);
+            booksDao.updateBook(updatingBook);
         }
     }
 }

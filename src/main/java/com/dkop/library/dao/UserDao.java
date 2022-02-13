@@ -15,23 +15,18 @@ public class UserDao implements AutoCloseable {
         this.connection = connection;
     }
 
-    public void createUser(User user) {
+    public void create(User user) throws SQLException {
         String INSERT_USERS_SQL = "INSERT INTO users" +
                 " (first_name, last_name, password, email, role, status) VALUES " +
                 " (?, ?, ?, ?, ?, ?);";
         try (PreparedStatement preparedStatement = connection.prepareStatement(INSERT_USERS_SQL)) {
-            // Step 2:Create a statement using connection object
             preparedStatement.setString(1, user.getFirstName());
             preparedStatement.setString(2, user.getLastName());
             preparedStatement.setString(3, user.getPassword());
             preparedStatement.setString(4, user.getEmail());
             preparedStatement.setString(5, user.getRole());
             preparedStatement.setString(6, user.getStatus());
-            // Step 3: Execute the query or update query
             preparedStatement.executeUpdate();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
     }
 
@@ -52,10 +47,9 @@ public class UserDao implements AutoCloseable {
         }
     }
 
-    public List<User> getAllUsers() {
+    public List<User> findAll() {
         List<User> allUsers = new ArrayList<>();
         String SELECT_USERS = "SELECT * FROM users WHERE role NOT LIKE 'admin';";
-
         try (ResultSet resultSet = connection.createStatement().executeQuery(SELECT_USERS)) {
             while (resultSet.next()) {
                 User user = User.newBuilder()
@@ -80,7 +74,7 @@ public class UserDao implements AutoCloseable {
         return allUsers;
     }
 
-    public User findUser(String email) throws DoesNotExistException {
+    public User findByEmail(String email) throws DoesNotExistException {
         String SELECT_USER = "SELECT * FROM users WHERE email = ?;";
         User user = null;
         try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_USER)) {
