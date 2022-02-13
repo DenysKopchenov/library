@@ -2,6 +2,8 @@ package com.dkop.library.controller.command;
 
 
 import com.dkop.library.model.Book;
+import com.dkop.library.model.User;
+import com.dkop.library.model.exceptions.DoesNotExistException;
 import com.dkop.library.model.exceptions.NotFoundException;
 import com.dkop.library.services.BookService;
 import com.dkop.library.services.UserService;
@@ -15,7 +17,7 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 public class AdminCommand implements Command {
-    Map<String, Consumer<HttpServletRequest>> operations = new HashMap<>();
+    private final Map<String, Consumer<HttpServletRequest>> operations = new HashMap<>();
     private final BookService bookService = new BookService();
     private final UserService userService = new UserService();
 
@@ -29,24 +31,28 @@ public class AdminCommand implements Command {
         operations.put("updateBook", this::updateBookOperation);
         operations.put("catalog", this::showCatalogBookOperation);
         operations.put("showAllUsers", this::showAllUsersOperation);
+        operations.put("userInfo", this::showUserInfo);
+        operations.put("blockUser", this::blockUserOperation);
+        operations.put("unblockUser", this::unblockUserOperation);
+        operations.put("createLibrarian", this::createLibrarianOperation);
+        operations.put("deleteLibrarian", this::deleteLibrarianOperation);
     }
 
     @Override
     public String execute(HttpServletRequest request) {
+        if (StringUtils.isNotBlank(request.getParameter("operations"))) {
+            String operation = request.getParameter("operations");
+            handleOperations(operation, request);
+
 //        if (StringUtils.isNotBlank(request.getParameter("searchByAuthor"))) {
 //            bookService.searchByAuthor(request);
 //
 //        } else if (StringUtils.isNotBlank(request.getParameter("searchByTitle"))) {
 //            bookService.searchByTitle(request);
 //        }
-        if (StringUtils.isNotBlank(request.getParameter("profile"))) {
-            userService.getUserProfile(request);
-        }
-
-        if (StringUtils.isNotBlank(request.getParameter("operations"))) {
-            String operation = request.getParameter("operations");
-            handleOperations(operation, request);
-
+//        if (StringUtils.isNotBlank(request.getParameter("profile"))) {
+//            showUserInfo(request);
+//        }
 //            switch (operation) {
 //                case "catalog":
 //                    try (BooksDao booksDao = DaoFactory.getInstance().createBooksDao()) {
@@ -96,6 +102,16 @@ public class AdminCommand implements Command {
         return "/WEB-INF/views/admin.jsp";
     }
 
+    private void showUserInfo(HttpServletRequest request) {
+        String email = (String) request.getServletContext().getAttribute("email");
+        try {
+            User user = userService.getUserInfo(email);
+            request.setAttribute("userInfo", user);
+        } catch (DoesNotExistException e) {
+            request.setAttribute("errorMessage", e.getMessage());
+        }
+    }
+
     private void handleOperations(String operation, HttpServletRequest request) {
         if (operations.containsKey(operation)) {
             operations.get(operation).accept(request);
@@ -137,10 +153,6 @@ public class AdminCommand implements Command {
         }
     }
 
-    private void showCatalogBookOperation(HttpServletRequest request) {
-        request.setAttribute("catalog", bookService.findAll());
-    }
-
     private void updateBookOperation(HttpServletRequest request) {
         request.setAttribute("operation", "updateBook");
         String id = request.getParameter("bookId");
@@ -170,9 +182,25 @@ public class AdminCommand implements Command {
         }
     }
 
-
     private void showAllUsersOperation(HttpServletRequest request) {
         request.setAttribute("allUsers", userService.findAll());
+    }
+
+    private void showCatalogBookOperation(HttpServletRequest request) {
+        request.setAttribute("catalog", bookService.findAll());
+    }
+
+    private void deleteLibrarianOperation(HttpServletRequest request) {
+        request.setAttribute("operation", "createLibrarian");
+    }
+
+    private void createLibrarianOperation(HttpServletRequest request) {
+    }
+
+    private void unblockUserOperation(HttpServletRequest request) {
+    }
+
+    private void blockUserOperation(HttpServletRequest request) {
     }
 
 }

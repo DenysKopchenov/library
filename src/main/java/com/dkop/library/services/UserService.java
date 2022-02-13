@@ -16,13 +16,11 @@ public class UserService {
     }
 
     //return user
-    public void getUserProfile(HttpServletRequest request) {
-        String email = (String) request.getServletContext().getAttribute("email");
+    public User getUserInfo(String email) throws DoesNotExistException {
+        User user;
         try (UserDao userDao = DaoFactory.getInstance().createUserDao()) {
-            User user = userDao.findByEmail(email);
-            request.setAttribute("userInfo", user);
-        } catch (DoesNotExistException e) {
-            request.setAttribute("error", e.getMessage());
+            user = userDao.findByEmail(email);
         }
+        return user;
     }
 }

@@ -91,7 +91,7 @@ public class UserDao implements AutoCloseable {
                             .id(resultSet.getInt("id"))
                             .build();
                 } else {
-                    throw new DoesNotExistException(email + " Does not exist!");
+                    throw new DoesNotExistException(email + " does not exist!");
                 }
             }
         } catch (SQLException e) {

@@ -41,7 +41,7 @@ public class LoginService {
      */
     private String authenticateUser(String email, String password) throws DoesNotExistException, WrongPasswordException, WasBlockedException {
         try (UserDao userDao = DaoFactory.getInstance().createUserDao()) {
-            User user = userDao.findUser(email);
+            User user = userDao.findByEmail(email);
             if (user.getStatus().equals("active")) {
                 if (user.getPassword().equals(DigestUtils.sha256Hex(password))) {
                     return user.getRole();
