@@ -11,53 +11,56 @@ public class User {
     private int id;
     private String status;
 
+    private User() {
+    }
+
     public String getRole() {
         return role;
     }
 
-    public void setRole(String role) {
-        this.role = role;
-    }
+//    public void setRole(String role) {
+//        this.role = role;
+//    }
 
     public String getStatus() {
         return status;
     }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
+//
+//    public void setStatus(String status) {
+//        this.status = status;
+//    }
 
     public long getId() {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
+//    public void setId(int id) {
+//        this.id = id;
+//    }
 
     public String getFirstName() {
         return firstName;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
+//    public void setFirstName(String firstName) {
+//        this.firstName = firstName;
+//    }
 
     public String getLastName() {
         return lastName;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
+//    public void setLastName(String lastName) {
+//        this.lastName = lastName;
+//    }
 
     public String getPassword() {
         return password;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+//    public void setPassword(String password) {
+//        this.password = password;
+//    }
 
     public String getEmail() {
         return email;
@@ -90,5 +93,53 @@ public class User {
         sb.append(", status='").append(status).append('\'');
         sb.append('}');
         return sb.toString();
+    }
+
+    public static Builder newBuilder() {
+        return new User().new Builder();
+    }
+
+    public class Builder {
+        private Builder() {
+        }
+
+        public Builder firstName(String firstName) {
+            User.this.firstName = firstName;
+            return this;
+        }
+
+        public Builder lastName(String lastName) {
+            User.this.lastName = lastName;
+            return this;
+        }
+
+        public Builder email(String email) {
+            User.this.email = email;
+            return this;
+        }
+
+        public Builder password(String password) {
+            User.this.password = password;
+            return this;
+        }
+
+        public Builder role(String role) {
+            User.this.role = role;
+            return this;
+        }
+
+        public Builder status(String status) {
+            User.this.status = status;
+            return this;
+        }
+
+        public Builder id(int id) {
+            User.this.id = id;
+            return this;
+        }
+
+        public User build() {
+            return User.this;
+        }
     }
 }

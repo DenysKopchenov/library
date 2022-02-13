@@ -58,13 +58,20 @@ public class UserDao implements AutoCloseable {
 
         try (ResultSet resultSet = connection.createStatement().executeQuery(SELECT_USERS)) {
             while (resultSet.next()) {
-                User user = new User();
-                user.setFirstName(resultSet.getString("first_name"));
-                user.setLastName(resultSet.getString("last_name"));
-                user.setEmail(resultSet.getString("email"));
-                user.setRole(resultSet.getString("role"));
-                user.setStatus(resultSet.getString("status"));
-                user.setId(resultSet.getInt("id"));
+                User user = User.newBuilder()
+                        .firstName(resultSet.getString("first_name"))
+                        .lastName(resultSet.getString("last_name"))
+                        .email(resultSet.getString("email"))
+                        .role(resultSet.getString("role"))
+                        .status(resultSet.getString("status"))
+                        .id(resultSet.getInt("id"))
+                        .build();
+//                user.setFirstName(resultSet.getString("first_name"));
+//                user.setLastName(resultSet.getString("last_name"));
+//                user.setEmail(resultSet.getString("email"));
+//                user.setRole(resultSet.getString("role"));
+//                user.setStatus(resultSet.getString("status"));
+//                user.setId(resultSet.getInt("id"));
                 allUsers.add(user);
             }
         } catch (SQLException e) {
@@ -75,18 +82,20 @@ public class UserDao implements AutoCloseable {
 
     public User findUser(String email) throws DoesNotExistException {
         String SELECT_USER = "SELECT * FROM users WHERE email = ?;";
-        User user = new User();
+        User user = null;
         try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_USER)) {
             preparedStatement.setString(1, email);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
-                    user.setFirstName(resultSet.getString("first_name"));
-                    user.setLastName(resultSet.getString("last_name"));
-                    user.setEmail(resultSet.getString("email"));
-                    user.setPassword(resultSet.getString("password"));
-                    user.setRole(resultSet.getString("role"));
-                    user.setStatus(resultSet.getString("status"));
-                    user.setId(resultSet.getInt("id"));
+                    user = User.newBuilder()
+                            .firstName(resultSet.getString("first_name"))
+                            .lastName(resultSet.getString("last_name"))
+                            .email(resultSet.getString("email"))
+                            .password(resultSet.getString("password"))
+                            .role(resultSet.getString("role"))
+                            .status(resultSet.getString("status"))
+                            .id(resultSet.getInt("id"))
+                            .build();
                 } else {
                     throw new DoesNotExistException(email + " Does not exist!");
                 }
