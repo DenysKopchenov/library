@@ -11,98 +11,20 @@
 </head>
 <body>
 <%@ include file="/WEB-INF/jspf/navigation_bar.jspf" %>
+<c:if test="${operation eq 'createLibrarian'}">
+<c:set var="button" value="Create"/>
+<%@ include file="/WEB-INF/forms/reg_form.jspf" %>
+    <h3><font style="color:hsl(0,100%,50%);">${errorMessage}</font></h3>
+    <h3><font style="color:hsl(100, 100%, 50%);">${successMessage}</font></h3>
+</c:if>
 <c:if test="${operation eq 'createBook'}">
-    <div>
-        <form method="post">
-            <br><label for="title"><b>Title</b></label><br>
-            <input type="text" name="title" placeholder="Title"/>
-            <br>
-            <c:if test="${validation.containsKey('title')}">
-                <font style="color:hsl(0,100%,50%);">${validation.get("title")}</font>
-            </c:if>
-
-            <br><label for="author"><b>Author</b></label><br>
-            <input type="text" name="author" placeholder="Author"/>
-            <br>
-            <c:if test="${validation.containsKey('author')}">
-                <font style="color:hsl(0,100%,50%);">${validation.get("author")}</font>
-            </c:if>
-
-            <br><label for="publisher"><b>Publisher</b></label><br>
-            <input type="text" name="publisher" placeholder="Publisher"/>
-            <br>
-            <c:if test="${validation.containsKey('publisher')}">
-                <font style="color:hsl(0,100%,50%);">${validation.get("publisher")}</font>
-            </c:if>
-
-            <br><label for="publishing_date"><b>Publishing date</b></label><br>
-            <input type="date" name="publishing_date" placeholder="yyyy/MM/dd"/>
-            <br>
-            <c:if test="${validation.containsKey('publishingDate')}">
-                <font style="color:hsl(0,100%,50%);">${validation.get("publishingDate")}</font>
-            </c:if>
-
-            <br><label for="amount"><b>Amount</b></label><br>
-            <input type="number" name="amount" placeholder="Amount"/>
-            <br>
-            <c:if test="${validation.containsKey('amount')}">
-                <font style="color:hsl(0,100%,50%);">${validation.get("amount")}</font>
-            </c:if>
-
-            <br><input class="btn btn-primary" type="submit" name="createNewBook" value="Create Book"/>
-            <h3><font style="color:hsl(0,100%,50%);">${successCreate}</font></h3>
-            <h3><font style="color:hsl(0,100%,50%);">${failedCreate}</font></h3>
-        </form>
-    </div>
+<%@ include file="/WEB-INF/forms/create_book_form.jspf" %>
 </c:if>
 <c:if test="${operation eq 'updateBook'}">
-    <c:out value="You updating book ${updatingBook}"/>
-    <div>
-        <form method="post">
-            <br><label for="title"><b>Title</b></label><br>
-            <input type="text" name="title" value="${operation eq 'updateBook' ? updatingBook.getTitle() : ''}" placeholder="Title"/>
-            <br>
-            <c:if test="${validation.containsKey('title')}">
-                <font style="color:hsl(0,100%,50%);">${validation.get("title")}</font>
-            </c:if>
-
-            <br><label for="author"><b>Author</b></label><br>
-            <input type="text" name="author" placeholder="${updatingBook.getAuthor()}"/>
-            <br>
-            <c:if test="${validation.containsKey('author')}">
-                <font style="color:hsl(0,100%,50%);">${validation.get("author")}</font>
-            </c:if>
-
-            <br><label for="publisher"><b>Publisher</b></label><br>
-            <input type="text" name="publisher" placeholder="${updatingBook.getPublisher()}"/>
-            <br>
-            <c:if test="${validation.containsKey('publisher')}">
-                <font style="color:hsl(0,100%,50%);">${validation.get("publisher")}</font>
-            </c:if>
-
-            <br><label for="publishing_date"><b>Publishing date</b></label><br>
-            <input type="date" name="publishing_date" placeholder="${updatingBook.getPublishingDate()}"/>
-            <br>
-            <c:if test="${validation.containsKey('publishingDate')}">
-                <font style="color:hsl(0,100%,50%);">${validation.get("publishingDate")}</font>
-            </c:if>
-
-            <br><label for="amount"><b>Amount</b></label><br>
-            <input type="number" name="amount" placeholder="${updatingBook.getAmount()}"/>
-            <br>
-            <c:if test="${validation.containsKey('amount')}">
-                <font style="color:hsl(0,100%,50%);">${validation.get("amount")}</font>
-            </c:if>
-
-            <br><input class="btn btn-primary" type="submit" name="updateCurrentBook" value="Update Book"/>
-            <h3><font style="color:hsl(0,100%,50%);">${successUpdate}</font></h3>
-            <h3><font style="color:hsl(0,100%,50%);">${failedUpdate}</font></h3>
-        </form>
-    </div>
+    <%@ include file="/WEB-INF/forms/update_book_form.jspf" %>
 </c:if>
 <div>
     <c:out value="${userInfo}"/>
-    <h3><font style="color:hsl(0,100%,50%);">${successDelete}</font></h3>
 </div>
 <div>
     <c:forEach var="book" items="${catalog}">
@@ -110,6 +32,8 @@
             ${book}
             <a href="?operations=deleteBook&bookId=${book.getId()}"> delete</a>
             <a href="?operations=updateBook&bookId=${book.getId()}"> update</a>
+                    <h3><font style="color:hsl(0,100%,50%);">${errorMessage}</font></h3>
+                    <h3><font style="color:hsl(100, 100%, 50%);">${successMessage}</font></h3>
         </li>
     </c:forEach>
 </div>
@@ -117,9 +41,19 @@
     <c:forEach var="user" items="${allUsers}">
         <li>
             ${user}
-            <a href="?operations=blockUser&userId=${user.getId()}"> block </a>
+            <c:choose>
+                        <c:when test="${user.getRole() eq 'librarian'}">
+                        <a href="?operations=deleteLibrarian&userId=${user.getId()}"> delete </a>
+                        </c:when>
+            <c:otherwise>
+            <c:if test="${user.getStatus() eq 'blocked'}">
             <a href="?operations=unblockUser&userId=${user.getId()}"> unblock </a>
-            depends on status show 1 of operation
+            </c:if>
+                        <c:if test="${user.getStatus() eq 'active'}">
+                        <a href="?operations=blockUser&userId=${user.getId()}"> block </a>
+                        </c:if>
+            </c:otherwise>
+            </c:choose>
         </li>
     </c:forEach>
 </div>
@@ -128,6 +62,8 @@
         <c:forEach var="book" items="${booksByAuthor}">
             <li>
                 ${book}
+                <h3><font style="color:hsl(0,100%,50%);">${errorMessage}</font></h3>
+                <h3><font style="color:hsl(100, 100%, 50%);">${successMessage}</font></h3>
                 <a href="?operations=deleteBook&bookId=${book.getId()}"> delete</a>
                 <a href="?operations=updateBook&bookId=${book.getId()}"> update</a>
             </li>
@@ -138,7 +74,10 @@
     <c:if test="${!booksByTitle.isEmpty()}">
         <c:forEach var="book" items="${booksByTitle}">
             <li>
-                ${book}<a href="?operations=deleteBook&bookId=${book.getId()}"> delete</a>
+                ${book}
+                <h3><font style="color:hsl(0,100%,50%);">${errorMessage}</font></h3>
+                <h3><font style="color:hsl(100, 100%, 50%);">${successMessage}</font></h3>
+                <a href="?operations=deleteBook&bookId=${book.getId()}"> delete</a>
                 <a href="?operations=updateBook&bookId=${book.getId()}"> update</a>
             </li>
         </c:forEach>

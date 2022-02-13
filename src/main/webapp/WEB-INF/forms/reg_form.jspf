@@ -1,0 +1,33 @@
+<form name="form" method="post">
+    <label for="firstName"><b>First Name</b></label><br>
+    <input type="text" name="firstName" placeholder="First name"/>
+    <br>
+    <c:if test="${validation.containsKey('firstName')}">
+        <font style="color:hsl(0,100%,50%);">${validation.get("firstName")}</font>
+    </c:if>
+    <br><label for="lastName"><b>Last Name</b></label><br>
+    <input type="text" name="lastName" placeholder="Last name"/>
+    <br>
+    <c:if test="${validation.containsKey('lastName')}">
+        <font style="color:hsl(0,100%,50%);">${validation.get("lastName")}</font>
+    </c:if>
+    <br><label for="password"><b>Password</b></label><br>
+    <input type="password" name="password" placeholder="Password"/>
+    <br>
+    <c:if test="${validation.containsKey('password')}">
+        <font style="color:hsl(0,100%,50%);">${validation.get("password")}</font>
+    </c:if>
+    <br><label for="confirmPassword"><b>Confirm Password</b></label><br>
+    <input type="password" name="confirmPassword" placeholder="Confirm password"/>
+    <br>
+    <c:if test="${validation.containsKey('confirmPassword')}">
+        <font style="color:hsl(0,100%,50%);">${validation.get("confirmPassword")}</font>
+    </c:if>
+    <br><label for="email"><b>E-mail</b></label><br>
+    <input type="text" name="email" placeholder="E-mail"/>
+    <br>
+    <c:if test="${validation.containsKey('email')}">
+        <font style="color:hsl(0,100%,50%);">${validation.get("email")}</font>
+    </c:if>
+    <br><input class="btn btn-primary" type="submit" name="register" value="${button}"/>
+</form>

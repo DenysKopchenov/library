@@ -1,0 +1,41 @@
+<div>
+    <form method="post">
+        <br><label for="title"><b>Title</b></label><br>
+        <input type="text" name="title" placeholder="Title"/>
+        <br>
+        <c:if test="${validation.containsKey('title')}">
+            <font style="color:hsl(0,100%,50%);">${validation.get("title")}</font>
+        </c:if>
+
+        <br><label for="author"><b>Author</b></label><br>
+        <input type="text" name="author" placeholder="Author"/>
+        <br>
+        <c:if test="${validation.containsKey('author')}">
+            <font style="color:hsl(0,100%,50%);">${validation.get("author")}</font>
+        </c:if>
+
+        <br><label for="publisher"><b>Publisher</b></label><br>
+        <input type="text" name="publisher" placeholder="Publisher"/>
+        <br>
+        <c:if test="${validation.containsKey('publisher')}">
+            <font style="color:hsl(0,100%,50%);">${validation.get("publisher")}</font>
+        </c:if>
+
+        <br><label for="publishing_date"><b>Publishing date</b></label><br>
+        <input type="date" name="publishing_date" placeholder="yyyy/MM/dd"/>
+        <br>
+        <c:if test="${validation.containsKey('publishingDate')}">
+            <font style="color:hsl(0,100%,50%);">${validation.get("publishingDate")}</font>
+        </c:if>
+
+        <br><label for="amount"><b>Amount</b></label><br>
+        <input type="number" name="amount" placeholder="Amount"/>
+        <br>
+        <c:if test="${validation.containsKey('amount')}">
+            <font style="color:hsl(0,100%,50%);">${validation.get("amount")}</font>
+        </c:if>
+        <br><input class="btn btn-primary" type="submit" name="createNewBook" value="Create Book"/>
+        <h3><font style="color:hsl(0,100%,50%);">${errorMessage}</font></h3>
+        <h3><font style="color:hsl(100, 100%, 50%);">${successMessage}</font></h3>
+    </form>
+</div>
