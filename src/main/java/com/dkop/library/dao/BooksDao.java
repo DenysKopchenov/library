@@ -1,6 +1,7 @@
 package com.dkop.library.dao;
 
 import com.dkop.library.model.Book;
+import com.dkop.library.model.exceptions.NotFoundException;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -124,7 +125,7 @@ public class BooksDao implements AutoCloseable {
         return booksByTitle;
     }
 
-    public Book findById(int id) throws SQLException {
+    public Book findById(int id) throws NotFoundException {
         String SELECT_BOOK = "SELECT * FROM books WHERE id = ?;";
         Book book = null;
         try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_BOOK)) {
@@ -139,8 +140,12 @@ public class BooksDao implements AutoCloseable {
                             .publishingDate(resultSet.getDate("publishing_date").toLocalDate())
                             .amount(resultSet.getInt("amount"))
                             .build();
+                } else {
+                    throw new NotFoundException("Book is not found");
                 }
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         return book;
     }

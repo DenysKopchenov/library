@@ -3,6 +3,7 @@ package com.dkop.library.controller.command;
 
 import com.dkop.library.model.Book;
 import com.dkop.library.model.User;
+import com.dkop.library.model.exceptions.AlreadyExistException;
 import com.dkop.library.model.exceptions.DoesNotExistException;
 import com.dkop.library.model.exceptions.NotFoundException;
 import com.dkop.library.services.BookService;
@@ -130,10 +131,10 @@ public class AdminCommand implements Command {
             Map<String, String> errors = Validator.validateBookForm(title, author, publisher, publishingDate, amount);
             if (errors.isEmpty()) {
                 try {
-                    bookService.addNewBook(title, author, publisher, publishingDate, amount);
+                    bookService.createBook(title, author, publisher, publishingDate, amount);
                     request.setAttribute("successMessage", "Successfully created");
-                } catch (SQLException e) {
-                    request.setAttribute("errorMessage", "Creation failed, try to update book!");
+                } catch (AlreadyExistException e) {
+                    request.setAttribute("errorMessage", e.getMessage());
                 }
             } else {
                 request.setAttribute("validation", errors);
@@ -191,10 +192,29 @@ public class AdminCommand implements Command {
     }
 
     private void deleteLibrarianOperation(HttpServletRequest request) {
-        request.setAttribute("operation", "createLibrarian");
     }
 
     private void createLibrarianOperation(HttpServletRequest request) {
+        request.setAttribute("operation", "createLibrarian");
+        if (request.getParameter("register") != null) {
+            String firstName = request.getParameter("firstName");
+            String lastName = request.getParameter("lastName");
+            String password = request.getParameter("password");
+            String confirmPassword = request.getParameter("confirmPassword");
+            String email = request.getParameter("email");
+
+            Map<String, String> errors = Validator.validateRegistrationForm(firstName, lastName, password, confirmPassword, email);
+            if (errors.isEmpty()) {
+                try {
+                    userService.createUser(firstName, lastName, email, password, "librarian", "active");
+                    request.setAttribute("successMessage", "Successfully created");
+                } catch (AlreadyExistException e) {
+                    request.setAttribute("errorMessage", e.getMessage());
+                }
+            } else {
+                request.setAttribute("validation", errors);
+            }
+        }
     }
 
     private void unblockUserOperation(HttpServletRequest request) {

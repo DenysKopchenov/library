@@ -3,6 +3,7 @@ package com.dkop.library.services;
 import com.dkop.library.dao.BooksDao;
 import com.dkop.library.dao.DaoFactory;
 import com.dkop.library.model.Book;
+import com.dkop.library.model.exceptions.AlreadyExistException;
 import com.dkop.library.model.exceptions.NotFoundException;
 
 import java.sql.SQLException;
@@ -13,7 +14,7 @@ import java.util.List;
 
 public class BookService {
 
-    public void addNewBook(String title, String author, String publisher, String publishingDate, String amount) throws SQLException {
+    public void createBook(String title, String author, String publisher, String publishingDate, String amount) throws AlreadyExistException {
         LocalDate date = LocalDate.parse(publishingDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         Book book = Book.newBuilder()
                 .title(title)
@@ -24,6 +25,8 @@ public class BookService {
                 .build();
         try (BooksDao booksDao = DaoFactory.getInstance().createBooksDao()) {
             booksDao.create(book);
+        } catch (SQLException e) {
+            throw new AlreadyExistException("Book already exist, you can update it!");
         }
     }
 
@@ -71,8 +74,6 @@ public class BookService {
     public Book findById(int id) throws NotFoundException {
         try (BooksDao booksDao = DaoFactory.getInstance().createBooksDao()) {
             return booksDao.findById(id);
-        } catch (SQLException e) {
-            throw new NotFoundException("Book not found");
         }
     }
 
