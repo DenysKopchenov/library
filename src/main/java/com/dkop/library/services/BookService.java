@@ -1,6 +1,7 @@
 package com.dkop.library.services;
 
 import com.dkop.library.dao.BooksDao;
+import com.dkop.library.dao.impls.BooksDaoImpl;
 import com.dkop.library.dao.DaoFactory;
 import com.dkop.library.model.Book;
 import com.dkop.library.model.exceptions.AlreadyExistException;
@@ -88,7 +89,7 @@ public class BookService {
                 .amount(Integer.parseInt(amount))
                 .build();
         try (BooksDao booksDao = DaoFactory.getInstance().createBooksDao()) {
-            booksDao.updateBook(updatingBook);
+            booksDao.update(updatingBook);
         }
     }
 }
