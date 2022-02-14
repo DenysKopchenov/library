@@ -39,7 +39,7 @@ public class LoginService {
      * @throws WrongPasswordException if password is not equal to user password in DB
      * @throws WasBlockedException    if status is blocked
      */
-    private String authenticateUser(String email, String password) throws DoesNotExistException, WrongPasswordException, WasBlockedException {
+    public String authenticateUser(String email, String password) throws DoesNotExistException, WrongPasswordException, WasBlockedException {
         try (UserDao userDao = DaoFactory.getInstance().createUserDao()) {
             User user = userDao.findByEmail(email);
             if (user.getStatus().equals("active")) {
@@ -48,8 +48,9 @@ public class LoginService {
                 } else {
                     throw new WrongPasswordException("Wrong Password!");
                 }
+            } else {
+                throw new WasBlockedException("Your account was blocked. Contact administrator");
             }
-            throw new WasBlockedException("Your account was blocked. Contact administrator");
         }
     }
 
@@ -59,7 +60,7 @@ public class LoginService {
      * @param userRole after authenticate user
      * @return path to move depends on user role
      */
-    private String resolvePageByRole(String userRole) {
+    public String resolvePageByRole(String userRole) {
         switch (userRole) {
             case "admin":
                 return "redirect:/library/admin";
