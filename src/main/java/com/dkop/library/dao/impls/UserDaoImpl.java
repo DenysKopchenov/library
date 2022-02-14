@@ -30,26 +30,30 @@ public class UserDaoImpl implements UserDao {
         }
     }
 
-//    public void checkUser(String email) throws AlreadyExistException {
-//        String SELECT_EMAIL_SQL = "SELECT email FROM users WHERE email = ?;";
-//        try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_EMAIL_SQL)) {
-//            preparedStatement.setString(1, email);
-//            try (ResultSet resultSet = preparedStatement.executeQuery()) {
-//                if (resultSet.next()) {
-//                    String emailFromDB = resultSet.getString("email");
-//                    if (emailFromDB.equals(email)) {
-//                        throw new AlreadyExistException("Email " + email + " already exist!");
-//                    }
-//                }
-//            }
-//        } catch (SQLException ex) {
-//            ex.printStackTrace();
-//        }
-//    }
-
     public List<User> findAll() {
         List<User> allUsers = new ArrayList<>();
-        String SELECT_USERS = "SELECT * FROM users WHERE role NOT LIKE 'admin';";
+        String SELECT_USERS = "SELECT * FROM users WHERE role = 'reader';";
+        try (ResultSet resultSet = connection.createStatement().executeQuery(SELECT_USERS)) {
+            while (resultSet.next()) {
+                User user = User.newBuilder()
+                        .firstName(resultSet.getString("first_name"))
+                        .lastName(resultSet.getString("last_name"))
+                        .email(resultSet.getString("email"))
+                        .role(resultSet.getString("role"))
+                        .status(resultSet.getString("status"))
+                        .id(resultSet.getInt("id"))
+                        .build();
+                allUsers.add(user);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return allUsers;
+    }
+
+    public List<User> findAllLibrarians() {
+        List<User> allUsers = new ArrayList<>();
+        String SELECT_USERS = "SELECT * FROM users WHERE role = 'librarian';";
         try (ResultSet resultSet = connection.createStatement().executeQuery(SELECT_USERS)) {
             while (resultSet.next()) {
                 User user = User.newBuilder()

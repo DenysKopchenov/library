@@ -12,7 +12,6 @@ import com.dkop.library.services.Validator;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
@@ -32,6 +31,7 @@ public class AdminCommand implements Command {
         operations.put("updateBook", this::updateBookOperation);
         operations.put("catalog", this::showCatalogBookOperation);
         operations.put("showAllUsers", this::showAllUsersOperation);
+        operations.put("showAllLibrarians", this::showAllLibrariansOperation);
         operations.put("userInfo", this::showUserInfo);
         operations.put("blockUser", this::blockUserOperation);
         operations.put("unblockUser", this::unblockUserOperation);
@@ -148,6 +148,7 @@ public class AdminCommand implements Command {
             try {
                 bookService.deleteBook(Integer.parseInt(bookId));
                 request.setAttribute("successMessage", "Successfully deleted");
+                showCatalogBookOperation(request);
             } catch (NotFoundException e) {
                 request.setAttribute("errorMessage", e.getMessage());
             }
@@ -185,6 +186,10 @@ public class AdminCommand implements Command {
         request.setAttribute("allUsers", userService.findAll());
     }
 
+    private void showAllLibrariansOperation(HttpServletRequest request) {
+        request.setAttribute("allLibrarians", userService.findAllLibrarians());
+    }
+
     private void showCatalogBookOperation(HttpServletRequest request) {
         request.setAttribute("catalog", bookService.findAll());
     }
@@ -195,6 +200,7 @@ public class AdminCommand implements Command {
             try {
                 userService.deleteUser(Integer.parseInt(userId));
                 request.setAttribute("successMessage", "Successfully deleted");
+                showAllLibrariansOperation(request);
             } catch (NotFoundException e) {
                 request.setAttribute("errorMessage", e.getMessage());
             }

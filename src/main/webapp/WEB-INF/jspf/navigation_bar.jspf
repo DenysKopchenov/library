@@ -48,23 +48,23 @@
                             <br>
                             <a class="nav-link" href="?operations=createLibrarian"> Create Librarian
                             </a>
-                            <a class="nav-link" href="?operations=deleteLibrarian"> Delete Librarian
+                            <a class="nav-link" href="?operations=showAllLibrarians"> List Librarians
                             </a>
                             librarian operations : create, delete
                             <br>
-                            <a class="nav-link" href="?operations=listUsers"> List Users
+                            <a class="nav-link" href="?operations=showAllUsers"> List Users
                             </a>
                             add search user to block or unblock
                             user operations : block, unblock
                             <br>
-                            <form class="d-flex">
-                                <input class="form-control me-2" name="searchByAuthor" type="search"
-                                       placeholder="Search by author" aria-label="Search by author">
-                                <input class="form-control me-2" name="searchByTitle" type="search"
-                                       placeholder="Search by title" aria-label="Search by title">
-                                <button class="btn btn-outline-success" type="submit">Search</button>
-                                <h5><font style="color:hsl(0,100%,50%);">${notFound}</font></h5>
-                            </form>
+                            <!--                            <form class="d-flex">-->
+                            <!--                                <input class="form-control me-2" name="searchByAuthor" type="search"-->
+                            <!--                                       placeholder="Search by author" aria-label="Search by author">-->
+                            <!--                                <input class="form-control me-2" name="searchByTitle" type="search"-->
+                            <!--                                       placeholder="Search by title" aria-label="Search by title">-->
+                            <!--                                <button class="btn btn-outline-success" type="submit">Search</button>-->
+                            <!--                                <h5><font style="color:hsl(0,100%,50%);">${notFound}</font></h5>-->
+                            <!--                            </form>-->
                         </c:if>
                         <c:if test="${role eq 'librarian'}">
                             list readers orders <br>
@@ -84,7 +84,7 @@
                             </form>
                         </c:if>
                         <li class="nav-item">
-                            <a class="nav-link" href="?profile=u">View Profile</a>
+                            <a class="nav-link" href="?operations=userInfo">View Profile</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="${pageContext.request.contextPath}/library/logout">LogOut</a>
@@ -92,11 +92,11 @@
                     </c:otherwise>
                 </c:choose>
                 <form>
-                    <select class="form-select" aria-label="Default select example" id="currentLocale"
-                            name="currentLocale" onchange="submit()">
-                        <option value="en" ${currentLocale==
+                    <select class="form-select" aria-label="Default select example"
+                            name="lang" onchange="submit()">
+                        <option value="en" ${language==
                         "en" ? 'selected' : ''}>en</option>
-                        <option value="uk" ${currentLocale==
+                        <option value="uk" ${language==
                         "uk" ? 'selected' : ''}>ua</option>
                     </select>
                 </form>

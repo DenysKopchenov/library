@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BooksDaoImpl implements BooksDao {
+
     private Connection connection;
 
     public BooksDaoImpl(Connection connection) {
@@ -76,7 +77,7 @@ public class BooksDaoImpl implements BooksDao {
         }
     }
 
-    public List<Book> findByAuthor(String author) {//todo!
+    public List<Book> findAllByAuthor(String author) {//todo!
         List<Book> booksByAuthor = new ArrayList<>();
         Book book;
         String SELECT_BOOK = "SELECT * FROM books WHERE author LIKE ?;";
@@ -101,7 +102,7 @@ public class BooksDaoImpl implements BooksDao {
         return booksByAuthor;
     }
 
-    public List<Book> findByTitle(String title) {
+    public List<Book> findAllByTitle(String title) {
         List<Book> booksByTitle = new ArrayList<>();
         String SELECT_BOOK = "SELECT * FROM books WHERE title LIKE ?;";
         try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_BOOK)) {

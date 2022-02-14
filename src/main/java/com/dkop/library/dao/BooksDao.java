@@ -7,9 +7,9 @@ import java.util.List;
 public interface BooksDao extends GenericDao<Book> {
     List<Book> findAllSorted(String sortBy);
 
-    List<Book> findByAuthor(String author);
+    List<Book> findAllByAuthor(String author);
 
-    List<Book> findByTitle(String title);
+    List<Book> findAllByTitle(String title);
 
 
 }

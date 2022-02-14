@@ -18,6 +18,12 @@ public class UserService {
         }
     }
 
+    public List<User> findAllLibrarians() {
+        try (UserDao userDao = DaoFactory.getInstance().createUserDao()) {
+            return userDao.findAllLibrarians();
+        }
+    }
+
     //return user
     public User getUserInfo(String email) throws DoesNotExistException {
         User user;
