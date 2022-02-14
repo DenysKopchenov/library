@@ -103,6 +103,12 @@ public class AdminCommand implements Command {
         return "/WEB-INF/views/admin.jsp";
     }
 
+    private void handleOperations(String operation, HttpServletRequest request) {
+        if (operations.containsKey(operation)) {
+            operations.get(operation).accept(request);
+        }
+    }
+
     private void showUserInfo(HttpServletRequest request) {
         String email = (String) request.getServletContext().getAttribute("email");
         try {
@@ -110,12 +116,6 @@ public class AdminCommand implements Command {
             request.setAttribute("userInfo", user);
         } catch (DoesNotExistException e) {
             request.setAttribute("errorMessage", e.getMessage());
-        }
-    }
-
-    private void handleOperations(String operation, HttpServletRequest request) {
-        if (operations.containsKey(operation)) {
-            operations.get(operation).accept(request);
         }
     }
 
@@ -192,6 +192,15 @@ public class AdminCommand implements Command {
     }
 
     private void deleteLibrarianOperation(HttpServletRequest request) {
+        String userId = request.getParameter("userId");
+        if (StringUtils.isNumeric(userId)) {
+            try {
+                userService.deleteUser(Integer.parseInt(userId));
+                request.setAttribute("successMessage", "Successfully deleted");
+            } catch (SQLException e) {
+                request.setAttribute("errorMessage", "Failed delete");
+            }
+        }
     }
 
     private void createLibrarianOperation(HttpServletRequest request) {

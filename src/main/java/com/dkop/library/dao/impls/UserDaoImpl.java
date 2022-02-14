@@ -79,8 +79,12 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public void delete(int id) {
-
+    public void delete(int id) throws SQLException {
+        String DELETE_USER = "DELETE FROM users WHERE id = ?;";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(DELETE_USER)) {
+            preparedStatement.setInt(1, id);
+            preparedStatement.executeUpdate();
+        }
     }
 
     public User findByEmail(String email) throws DoesNotExistException {

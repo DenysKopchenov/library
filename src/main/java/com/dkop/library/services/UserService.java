@@ -41,4 +41,10 @@ public class UserService {
             throw new AlreadyExistException("Email " + email + " already exist!");
         }
     }
+
+    public void deleteUser(int id) throws SQLException {
+        try (UserDao userDao = DaoFactory.getInstance().createUserDao()) {
+            userDao.delete(id);
+        }
+    }
 }
