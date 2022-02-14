@@ -31,9 +31,13 @@ public class BookService {
         }
     }
 
-    public void deleteBook(int id) throws SQLException {
+    public void deleteBook(int id) throws NotFoundException {
         try (BooksDao booksDao = DaoFactory.getInstance().createBooksDao()) {
-            booksDao.delete(id);
+            try {
+                booksDao.delete(id);
+            } catch (SQLException e) {
+                throw new NotFoundException("Book not found");
+            }
         }
 
     }
@@ -75,10 +79,12 @@ public class BookService {
     public Book findById(int id) throws NotFoundException {
         try (BooksDao booksDao = DaoFactory.getInstance().createBooksDao()) {
             return booksDao.findById(id);
+        } catch (SQLException e) {
+            throw new NotFoundException("Book not found");
         }
     }
 
-    public void updateBook(int id, String title, String author, String publisher, String publishingDate, String amount) throws SQLException {
+    public void updateBook(int id, String title, String author, String publisher, String publishingDate, String amount) throws NotFoundException {
         LocalDate date = LocalDate.parse(publishingDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         Book updatingBook = Book.newBuilder()
                 .id(id)
@@ -90,6 +96,8 @@ public class BookService {
                 .build();
         try (BooksDao booksDao = DaoFactory.getInstance().createBooksDao()) {
             booksDao.update(updatingBook);
+        } catch (SQLException e) {
+            throw new NotFoundException("Book not found");
         }
     }
 }

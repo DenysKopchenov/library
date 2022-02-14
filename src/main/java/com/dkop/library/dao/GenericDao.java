@@ -1,7 +1,5 @@
 package com.dkop.library.dao;
 
-import com.dkop.library.model.exceptions.NotFoundException;
-
 import java.sql.SQLException;
 import java.util.List;
 
@@ -10,7 +8,7 @@ public interface GenericDao<E> extends AutoCloseable {
 
     List<E> findAll();
 
-    E findById(int id) throws NotFoundException;
+    E findById(int id) throws SQLException;
 
     void update(E e) throws SQLException;
 

@@ -69,8 +69,18 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public User findById(int id) {
-        return null;
+    public void blockUserById(int id) throws SQLException {
+        String BLOCK_USER = "UPDATE users SET status = ? WHERE id = ?;";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(BLOCK_USER)) {
+            preparedStatement.setString(1, "blocked");
+            preparedStatement.setInt(2, id);
+            preparedStatement.executeUpdate();
+        }
+    }
+
+    @Override
+    public User findById(int id) throws SQLException {
+        throw new UnsupportedOperationException();
     }
 
     @Override

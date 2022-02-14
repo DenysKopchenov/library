@@ -148,8 +148,8 @@ public class AdminCommand implements Command {
             try {
                 bookService.deleteBook(Integer.parseInt(bookId));
                 request.setAttribute("successMessage", "Successfully deleted");
-            } catch (SQLException e) {
-                request.setAttribute("errorMessage", "Failed delete");
+            } catch (NotFoundException e) {
+                request.setAttribute("errorMessage", e.getMessage());
             }
         }
     }
@@ -177,8 +177,6 @@ public class AdminCommand implements Command {
                 }
             } catch (NotFoundException e) {
                 request.setAttribute("errorMessage", e.getMessage());
-            } catch (SQLException e) {
-                request.setAttribute("errorMessage", "Update failed");
             }
         }
     }
@@ -197,8 +195,8 @@ public class AdminCommand implements Command {
             try {
                 userService.deleteUser(Integer.parseInt(userId));
                 request.setAttribute("successMessage", "Successfully deleted");
-            } catch (SQLException e) {
-                request.setAttribute("errorMessage", "Failed delete");
+            } catch (NotFoundException e) {
+                request.setAttribute("errorMessage", e.getMessage());
             }
         }
     }
@@ -230,6 +228,15 @@ public class AdminCommand implements Command {
     }
 
     private void blockUserOperation(HttpServletRequest request) {
+        String userId = request.getParameter("userId");
+        if (StringUtils.isNumeric(userId)) {
+            try {
+                userService.blockUser(Integer.parseInt(userId));
+                request.setAttribute("successMessage", "Successfully blocked");
+            } catch (NotFoundException e) {
+                request.setAttribute("errorMessage", e.getMessage());
+            }
+        }
     }
 
 }
