@@ -14,6 +14,15 @@
     <title>Catalog</title>
 </head>
 <body>
+                <form>
+                    <select class="form-select" aria-label="Default select example"
+                            name="sort" onchange="submit()">
+                        <option value="author" ${sort == "author" ? 'selected' : ''}>By author</option>
+                        <option value="title" ${sort == "title" ? 'selected' : ''}>By title</option>
+                        <option value="publisher" ${sort == "publisher" ? 'selected' : ''}>By publisher</option>
+                        <option value="publishingDate" ${sort == "publishingDate" ? 'selected' : ''}>By publishing date</option>
+                    </select>
+                </form>
         <c:forEach var="book" items="${catalog}">
         <li>${book}</li>
         </c:forEach>

@@ -11,11 +11,13 @@
 </head>
 <body>
 <%@ include file="/WEB-INF/jspf/navigation_bar.jspf" %>
+<h3><font style="color:hsl(0,100%,50%);">${errorMessage}</font></h3>
+<h3><font style="color:hsl(100, 100%, 50%);">${successMessage}</font></h3>
 <c:if test="${operation eq 'createLibrarian'}">
 <c:set var="button" value="Create"/>
 <%@ include file="/WEB-INF/forms/reg_form.jspf" %>
-    <h3><font style="color:hsl(0,100%,50%);">${errorMessage}</font></h3>
-    <h3><font style="color:hsl(100, 100%, 50%);">${successMessage}</font></h3>
+<h3><font style="color:hsl(0,100%,50%);">${errorMessage}</font></h3>
+<h3><font style="color:hsl(100, 100%, 50%);">${successMessage}</font></h3>
 </c:if>
 <c:if test="${operation eq 'createBook'}">
 <%@ include file="/WEB-INF/forms/create_book_form.jspf" %>
@@ -32,28 +34,29 @@
             ${book}
             <a href="?operations=deleteBook&bookId=${book.getId()}"> delete</a>
             <a href="?operations=updateBook&bookId=${book.getId()}"> update</a>
-                    <h3><font style="color:hsl(0,100%,50%);">${errorMessage}</font></h3>
-                    <h3><font style="color:hsl(100, 100%, 50%);">${successMessage}</font></h3>
+        </li>
+    </c:forEach>
+</div>
+<div>
+    <c:forEach var="user" items="${allLibrarians}">
+        <li>
+        ${user}
+        <a href="?operations=deleteLibrarian&userId=${user.getId()}"> delete </a>
         </li>
     </c:forEach>
 </div>
 <div>
     <c:forEach var="user" items="${allUsers}">
+    <h3><font style="color:hsl(0,100%,50%);">${errorMessage}</font></h3>
+    <h3><font style="color:hsl(100, 100%, 50%);">${successMessage}</font></h3>
         <li>
             ${user}
-            <c:choose>
-                        <c:when test="${user.getRole() eq 'librarian'}">
-                        <a href="?operations=deleteLibrarian&userId=${user.getId()}"> delete </a>
-                        </c:when>
-            <c:otherwise>
             <c:if test="${user.getStatus() eq 'blocked'}">
             <a href="?operations=unblockUser&userId=${user.getId()}"> unblock </a>
             </c:if>
-                        <c:if test="${user.getStatus() eq 'active'}">
-                        <a href="?operations=blockUser&userId=${user.getId()}"> block </a>
-                        </c:if>
-            </c:otherwise>
-            </c:choose>
+            <c:if test="${user.getStatus() eq 'active'}">
+            <a href="?operations=blockUser&userId=${user.getId()}"> block </a>
+            </c:if>
         </li>
     </c:forEach>
 </div>

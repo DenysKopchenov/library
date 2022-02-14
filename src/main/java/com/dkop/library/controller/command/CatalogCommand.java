@@ -13,6 +13,7 @@ public class CatalogCommand implements Command {
         try (BooksDao booksDao = DaoFactory.getInstance().createBooksDao()) {
             List<Book> catalog = booksDao.findAll();
             request.setAttribute("catalog", catalog);
+            request.setAttribute("sort", request.getParameter("sort"));
         }
         return "/WEB-INF/catalog.jsp";
     }
