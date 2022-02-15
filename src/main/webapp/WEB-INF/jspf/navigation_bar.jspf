@@ -5,9 +5,9 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 
-<c:set var="currentLocale" value="${not empty currentLocale ? currentLocale : 'en'}" scope="session"/>
+<!--<c:set var="currentLocale" value="${not empty currentLocale ? currentLocale : 'en'}" scope="session"/>
 <fmt:setLocale value="${currentLocale}"/>
-<fmt:setBundle basename="${initParam.bundleName}" var="msg"/>
+<fmt:setBundle basename="${initParam.bundleName}" var="msg"/>-->
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid">

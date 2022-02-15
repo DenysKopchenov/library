@@ -24,6 +24,7 @@ public class ReaderCommand implements Command {
 
     private void init() {
         operations.put("catalog", this::showCatalogBookOperation);
+        operations.put("userInfo", this::showUserInfo);
     }
 
     @Override
@@ -38,13 +39,9 @@ public class ReaderCommand implements Command {
             List<Book> books = bookService.findAllBooksByTitle(title);
             isAnyFounded(books, request, "by Title", title);
         }
-
-        if (StringUtils.isNotBlank(request.getParameter("profile"))) {
-            showUserInfo(request);
-        }
         if (StringUtils.isNotBlank(request.getParameter("operations"))) {
-            String operations = request.getParameter("operations");
-            handleOperations(operations, request);
+            String operation = request.getParameter("operations");
+            handleOperations(operation, request);
         }
         return "/WEB-INF/views/reader.jsp";
     }
@@ -56,7 +53,16 @@ public class ReaderCommand implements Command {
     }
 
     private void showCatalogBookOperation(HttpServletRequest request) {
-        request.setAttribute("catalog", bookService.findAll());
+        request.setAttribute("operation", "catalog");
+        request.setAttribute("sort", request.getParameter("sort"));
+        String sortBy = request.getParameter("sort");
+        List<Book> catalog;
+        if (sortBy != null) {
+            catalog = bookService.findAllSorted(sortBy);
+        } else {
+            catalog = bookService.findAll();
+        }
+        request.setAttribute("catalog", catalog);
     }
 
     private void isAnyFounded(List<Book> books, HttpServletRequest request, String by, String parameter) {

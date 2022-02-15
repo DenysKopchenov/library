@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid">
-        <a class="navbar-brand" href="#">Library</a>
+        <a class="navbar-brand" href="${pageContext.request.contextPath}/library/reader">Library</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -14,13 +14,15 @@
                 <form class="d-flex">
                     <input class="form-control me-2" name="searchByAuthor" type="search"
                            placeholder="Search by author" aria-label="Search by author">
+                    <button class="btn btn-outline-success" type="submit">Search</button>
+                </form>
+                <form class="d-flex">
                     <input class="form-control me-2" name="searchByTitle" type="search"
                            placeholder="Search by title" aria-label="Search by title">
                     <button class="btn btn-outline-success" type="submit">Search</button>
-                    <h3><font style="color:hsl(0,100%,50%);">${notFound}</font></h3>
                 </form>
                 <li class="nav-item">
-                    <a class="nav-link" href="?profile=u">View Profile</a>
+                    <a class="nav-link" href="?operations=userInfo">View Profile</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="${pageContext.request.contextPath}/library/logout">LogOut</a>

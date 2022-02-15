@@ -14,13 +14,13 @@
 <h3><font style="color:hsl(0,100%,50%);">${errorMessage}</font></h3>
 <h3><font style="color:hsl(100, 100%, 50%);">${successMessage}</font></h3>
 <c:if test="${operation eq 'createLibrarian'}">
-<c:set var="button" value="Create"/>
-<%@ include file="/WEB-INF/forms/reg_form.jspf" %>
-<h3><font style="color:hsl(0,100%,50%);">${errorMessage}</font></h3>
-<h3><font style="color:hsl(100, 100%, 50%);">${successMessage}</font></h3>
+    <c:set var="button" value="Create"/>
+    <%@ include file="/WEB-INF/forms/reg_form.jspf" %>
+    <!--    <h3><font style="color:hsl(0,100%,50%);">${errorMessage}</font></h3>
+        <h3><font style="color:hsl(100, 100%, 50%);">${successMessage}</font></h3>-->
 </c:if>
 <c:if test="${operation eq 'createBook'}">
-<%@ include file="/WEB-INF/forms/create_book_form.jspf" %>
+    <%@ include file="/WEB-INF/forms/create_book_form.jspf" %>
 </c:if>
 <c:if test="${operation eq 'updateBook'}">
     <%@ include file="/WEB-INF/forms/update_book_form.jspf" %>
@@ -40,22 +40,22 @@
 <div>
     <c:forEach var="user" items="${allLibrarians}">
         <li>
-        ${user}
-        <a href="?operations=deleteLibrarian&userId=${user.getId()}"> delete </a>
+            ${user}
+            <a href="?operations=deleteLibrarian&userId=${user.getId()}"> delete </a>
         </li>
     </c:forEach>
 </div>
 <div>
     <c:forEach var="user" items="${allUsers}">
-    <h3><font style="color:hsl(0,100%,50%);">${errorMessage}</font></h3>
-    <h3><font style="color:hsl(100, 100%, 50%);">${successMessage}</font></h3>
+        <!--        <h3><font style="color:hsl(0,100%,50%);">${errorMessage}</font></h3>
+                <h3><font style="color:hsl(100, 100%, 50%);">${successMessage}</font></h3>-->
         <li>
             ${user}
             <c:if test="${user.getStatus() eq 'blocked'}">
-            <a href="?operations=unblockUser&userId=${user.getId()}"> unblock </a>
+                <a href="?operations=unblockUser&userId=${user.getId()}"> unblock </a>
             </c:if>
             <c:if test="${user.getStatus() eq 'active'}">
-            <a href="?operations=blockUser&userId=${user.getId()}"> block </a>
+                <a href="?operations=blockUser&userId=${user.getId()}"> block </a>
             </c:if>
         </li>
     </c:forEach>
@@ -65,8 +65,8 @@
         <c:forEach var="book" items="${booksByAuthor}">
             <li>
                 ${book}
-                <h3><font style="color:hsl(0,100%,50%);">${errorMessage}</font></h3>
-                <h3><font style="color:hsl(100, 100%, 50%);">${successMessage}</font></h3>
+                <!--                <h3><font style="color:hsl(0,100%,50%);">${errorMessage}</font></h3>
+                                <h3><font style="color:hsl(100, 100%, 50%);">${successMessage}</font></h3>-->
                 <a href="?operations=deleteBook&bookId=${book.getId()}"> delete</a>
                 <a href="?operations=updateBook&bookId=${book.getId()}"> update</a>
             </li>
@@ -78,8 +78,8 @@
         <c:forEach var="book" items="${booksByTitle}">
             <li>
                 ${book}
-                <h3><font style="color:hsl(0,100%,50%);">${errorMessage}</font></h3>
-                <h3><font style="color:hsl(100, 100%, 50%);">${successMessage}</font></h3>
+                <!--                <h3><font style="color:hsl(0,100%,50%);">${errorMessage}</font></h3>
+                                <h3><font style="color:hsl(100, 100%, 50%);">${successMessage}</font></h3>-->
                 <a href="?operations=deleteBook&bookId=${book.getId()}"> delete</a>
                 <a href="?operations=updateBook&bookId=${book.getId()}"> update</a>
             </li>

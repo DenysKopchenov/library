@@ -11,40 +11,40 @@
 <body>
 hello form READER page
 <%@ include file="/WEB-INF/jspf/nav_bar_reader.jspf" %>
-<div>
-    <c:if test="${!booksByAuthor.isEmpty()}">
-        <c:forEach var="books" items="${booksByAuthor}">
-            <li>
-                ${books}
-                <br> <a href="?orderBook=reading-room"> Order to reading room</a>
-                <br> <a href="?orderBook=home"> Order to home</a>
-            </li>
-        </c:forEach>
-    </c:if>
-</div>
-<div>
-    <c:if test="${!booksByTitle.isEmpty()}">
-        <c:forEach var="books" items="${booksByTitle}">
-            <li>
-                ${books}
-                <br> <a href="?orderBook=reading-room"> Order to reading room</a>
-                <br> <a href="?orderBook=home"> Order to home</a>
-            </li>
-        </c:forEach>
-    </c:if>
+<h3><font style="color:hsl(0,100%,50%);">${errorMessage}</font></h3>
+<h3><font style="color:hsl(100,100%,50%);">${successMessage}</font></h3>
+<c:forEach var="book" items="${foundedBooks}">
+    <li>
+        ${book}
+        <br> <a href="?orderBook=reading-room&bookId=${book.getId()}"> Order to reading room</a>
+        <br> <a href="?orderBook=home&bookId=${book.getId()}"> Order to home</a>
+    </li>
+</c:forEach>
 </div>
 <div>
     <c:out value="${userInfo}"/>
     <h3><font style="color:hsl(0,100%,50%);">${successDelete}</font></h3>
 </div>
-<div>
-<div>
-Catalog sorting
-<a href="?sort=byTitle"> Sort by Title</a>
-<a href="?sort=byAuthor"> Sort by Author</a>
-<a href="?sort=byPublisher"> Sort bu Publisher</a>
-<a href="?sort=byPublishingDate"> Sort by Publishing Date</a>
 </div>
+<c:if test="${operation eq 'catalog'}">
+    <!--    <form>
+            <select class="form-select" aria-label="Default select example"
+                    name="sort" onchange="submit()">
+                <option value="title" ${sort==
+                "title" ? 'selected' : ''}>By title</option>
+                <option value="author" ${sort==
+                "author" ? 'selected' : ''}>By author</option>
+                <option value="publisher" ${sort==
+                "publisher" ? 'selected' : ''}>By publisher</option>
+                <option value="publishing_date" ${sort==
+                "publishing_date" ? 'selected' : ''}>By publishing date</option>
+            </select>
+        </form>-->
+    <a class="nav-link" href="?operations=catalog&sort=title"> by title </a>
+    <a class="nav-link" href="?operations=catalog&sort=author"> by author </a>
+    <a class="nav-link" href="?operations=catalog&sort=publisher"> by publisher </a>
+    <a class="nav-link" href="?operations=catalog&sort=publishing_date"> by publishing date </a>
+</c:if>
     <c:forEach var="book" items="${catalog}">
         <li>
             ${book}
