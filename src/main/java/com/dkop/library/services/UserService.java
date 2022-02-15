@@ -57,9 +57,9 @@ public class UserService {
         }
     }
 
-    public void blockUser(int id) throws NotFoundException {
+    public void changeStatus(int id, String newStatus) throws NotFoundException {
         try (UserDao userDao = DaoFactory.getInstance().createUserDao()) {
-            userDao.blockUserById(id);
+            userDao.changeStatus(id, newStatus);
         } catch (SQLException e) {
             throw new NotFoundException(id + " not found");
         }

@@ -2,7 +2,6 @@ package com.dkop.library.dao.impls;
 
 import com.dkop.library.dao.BooksDao;
 import com.dkop.library.model.Book;
-import com.dkop.library.model.exceptions.IllegalParameterException;
 import org.apache.commons.lang3.StringUtils;
 
 import java.sql.*;
@@ -22,6 +21,9 @@ public class BooksDaoImpl implements BooksDao {
     }
 
     public List<Book> findAllSorted(String sortBy) {
+        if (!StringUtils.equalsAny(sortBy, "title", "author", "publisher", "publishing_date")) {
+            sortBy = "title";
+        }
         List<Book> allBooks = new ArrayList<>();
         String SELECT_BOOKS = String.format("SELECT * FROM books ORDER BY %s;", sortBy);
         try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_BOOKS);
@@ -42,6 +44,7 @@ public class BooksDaoImpl implements BooksDao {
         }
         return allBooks;
     }
+
 
     public void create(Book book) throws SQLException {
         String INSERT_BOOK = "INSERT INTO books (title, author, publisher, publishing_date, amount) VALUES (?, ?, ?, ?, ?);";

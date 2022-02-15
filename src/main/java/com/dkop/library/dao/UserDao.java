@@ -9,7 +9,7 @@ import java.util.List;
 public interface UserDao extends GenericDao<User> {
     User findByEmail(String email) throws DoesNotExistException;
 
-    void blockUserById(int id) throws SQLException;
+    void changeStatus(int id, String newStatus) throws SQLException;
 
     List<User> findAllLibrarians();
 }

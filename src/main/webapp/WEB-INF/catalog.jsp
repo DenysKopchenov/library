@@ -17,12 +17,17 @@
                 <form>
                     <select class="form-select" aria-label="Default select example"
                             name="sort" onchange="submit()">
-                        <option value="author" ${sort == "author" ? 'selected' : ''}>By author</option>
-                        <option value="title" ${sort == "title" ? 'selected' : ''}>By title</option>
-                        <option value="publisher" ${sort == "publisher" ? 'selected' : ''}>By publisher</option>
-                        <option value="publishingDate" ${sort == "publishingDate" ? 'selected' : ''}>By publishing date</option>
+                        <option value="title" ${sort==
+                        "title" ? 'selected' : ''}>By title</option>
+                        <option value="author" ${sort==
+                        "author" ? 'selected' : ''}>By author</option>
+                        <option value="publisher" ${sort==
+                        "publisher" ? 'selected' : ''}>By publisher</option>
+                        <option value="publishing_date" ${sort==
+                        "publishing_date" ? 'selected' : ''}>By publishing date</option>
                     </select>
                 </form>
+                <h3><font style="color:hsl(0,100%,50%);">${errorMessage}</font></h3>
         <c:forEach var="book" items="${catalog}">
         <li>${book}</li>
         </c:forEach>

@@ -152,6 +152,8 @@ public class AdminCommand implements Command {
             } catch (NotFoundException e) {
                 request.setAttribute("errorMessage", e.getMessage());
             }
+        } else {
+            request.setAttribute("errorMessage", "ID may contains only digits");
         }
     }
 
@@ -179,6 +181,8 @@ public class AdminCommand implements Command {
             } catch (NotFoundException e) {
                 request.setAttribute("errorMessage", e.getMessage());
             }
+        } else {
+            request.setAttribute("errorMessage", "ID may contains only digits");
         }
     }
 
@@ -204,6 +208,8 @@ public class AdminCommand implements Command {
             } catch (NotFoundException e) {
                 request.setAttribute("errorMessage", e.getMessage());
             }
+        } else {
+            request.setAttribute("errorMessage", "ID may contains only digits");
         }
     }
 
@@ -231,17 +237,32 @@ public class AdminCommand implements Command {
     }
 
     private void unblockUserOperation(HttpServletRequest request) {
+        String userId = request.getParameter("userId");
+        if (StringUtils.isNumeric(userId)) {
+            try {
+                userService.changeStatus(Integer.parseInt(userId), "active");
+                request.setAttribute("successMessage", "Successfully unblocked");
+                showAllUsersOperation(request);
+            } catch (NotFoundException e) {
+                request.setAttribute("errorMessage", e.getMessage());
+            }
+        } else {
+            request.setAttribute("errorMessage", "ID may contains only digits");
+        }
     }
 
     private void blockUserOperation(HttpServletRequest request) {
         String userId = request.getParameter("userId");
         if (StringUtils.isNumeric(userId)) {
             try {
-                userService.blockUser(Integer.parseInt(userId));
+                userService.changeStatus(Integer.parseInt(userId), "blocked");
                 request.setAttribute("successMessage", "Successfully blocked");
+                showAllUsersOperation(request);
             } catch (NotFoundException e) {
                 request.setAttribute("errorMessage", e.getMessage());
             }
+        } else {
+            request.setAttribute("errorMessage", "ID may contains only digits");
         }
     }
 

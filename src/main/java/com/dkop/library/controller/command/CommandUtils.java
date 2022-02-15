@@ -3,7 +3,7 @@ package com.dkop.library.controller.command;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.HashSet;
+import java.util.Set;
 
 public class CommandUtils {
     public static void setUserRole(HttpServletRequest request, String email, String role) {
@@ -14,14 +14,12 @@ public class CommandUtils {
     }
 
     public static boolean checkIsLogged(HttpServletRequest request, String email) {
-            HashSet<String> loggedUsers = (HashSet<String>) request.getServletContext().getAttribute("loggedUsers");
+        Set<String> loggedUsers = (Set<String>) request.getServletContext().getAttribute("loggedUsers");
 
-            if (loggedUsers.contains(email)) {
-                return true;
-            }
-            loggedUsers.add(email);
-            request.getServletContext().setAttribute("loggedUsers", loggedUsers);
+        if (loggedUsers.contains(email)) {
+            return true;
+        }
+        loggedUsers.add(email);
         return false;
     }
-
 }

@@ -41,7 +41,5 @@
             <font style="color:hsl(0,100%,50%);">${validation.get("amount")}</font>
         </c:if>
         <br><input class="btn btn-primary" type="submit" name="updateCurrentBook" value="Update Book"/>
-        <h3><font style="color:hsl(0,100%,50%);">${errorMessage}</font></h3>
-        <h3><font style="color:hsl(100, 100%, 50%);">${successMessage}</font></h3>
     </form>
 </div>

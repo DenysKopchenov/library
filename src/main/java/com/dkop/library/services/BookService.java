@@ -4,7 +4,6 @@ import com.dkop.library.dao.BooksDao;
 import com.dkop.library.dao.DaoFactory;
 import com.dkop.library.model.Book;
 import com.dkop.library.model.exceptions.AlreadyExistException;
-import com.dkop.library.model.exceptions.IllegalParameterException;
 import com.dkop.library.model.exceptions.NotFoundException;
 
 import java.sql.SQLException;

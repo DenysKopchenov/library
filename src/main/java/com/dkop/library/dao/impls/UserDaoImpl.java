@@ -73,10 +73,10 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public void blockUserById(int id) throws SQLException {
+    public void changeStatus(int id, String newStatus) throws SQLException {
         String BLOCK_USER = "UPDATE users SET status = ? WHERE id = ?;";
         try (PreparedStatement preparedStatement = connection.prepareStatement(BLOCK_USER)) {
-            preparedStatement.setString(1, "blocked");
+            preparedStatement.setString(1, newStatus);
             preparedStatement.setInt(2, id);
             preparedStatement.executeUpdate();
         }
@@ -89,7 +89,6 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public void update(User user) {
-
     }
 
     @Override

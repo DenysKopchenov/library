@@ -10,8 +10,6 @@ import java.io.IOException;
 import java.util.Set;
 
 public class AuthenticationFilter implements Filter {
-
-    //    LogOutCommand logOutCommand = new LogOutCommand();
     private static final String HOME_PAGE = "/app/library/";
 
     @Override

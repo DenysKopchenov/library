@@ -1,4 +1,4 @@
-package com.dkop.library.dao;
+package com.dkop.library.dao.impls;
 
 import org.apache.commons.dbcp.BasicDataSource;
 
@@ -13,8 +13,8 @@ public class ConnectionPool {
         ds.setUsername("root");
         ds.setPassword("ghbdtnltybc");
         ds.setMinIdle(5);
-        ds.setMaxIdle(10);
-        ds.setMaxOpenPreparedStatements(100);
+        ds.setMaxIdle(15);
+        ds.setMaxOpenPreparedStatements(50);
     }
 
     public static Connection getConnection() throws SQLException {
