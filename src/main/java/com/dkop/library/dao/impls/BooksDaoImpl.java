@@ -2,6 +2,7 @@ package com.dkop.library.dao.impls;
 
 import com.dkop.library.dao.BooksDao;
 import com.dkop.library.model.Book;
+import com.dkop.library.model.exceptions.NotFoundException;
 import org.apache.commons.lang3.StringUtils;
 
 import java.sql.*;
@@ -130,7 +131,7 @@ public class BooksDaoImpl implements BooksDao {
         return books;
     }
 
-    public Book findById(int id) throws SQLException {
+    public Book findById(int id) throws NotFoundException {
         String SELECT_BOOK = "SELECT * FROM books WHERE id = ?;";
         Book book = null;
         try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_BOOK)) {
@@ -145,10 +146,14 @@ public class BooksDaoImpl implements BooksDao {
                             .publishingDate(resultSet.getDate("publishing_date").toLocalDate())
                             .amount(resultSet.getInt("amount"))
                             .build();
+                } else {
+                    throw new NotFoundException("Book not found");
                 }
             }
-            return book;
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
+        return book;
     }
 
     @Override

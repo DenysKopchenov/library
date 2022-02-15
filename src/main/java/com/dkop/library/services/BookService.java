@@ -82,8 +82,6 @@ public class BookService {
     public Book findById(int id) throws NotFoundException {
         try (BooksDao booksDao = DaoFactory.getInstance().createBooksDao()) {
             return booksDao.findById(id);
-        } catch (SQLException e) {
-            throw new NotFoundException("Book not found");
         }
     }
 
