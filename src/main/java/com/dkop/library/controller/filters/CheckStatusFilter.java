@@ -20,27 +20,30 @@ public class CheckStatusFilter implements Filter {
     }
 
     @Override
-    public void destroy() {
-
-    }
-
-    @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse resp = (HttpServletResponse) response;
 
-        try {
-            String status = userService.getUserInfo((String) request.getServletContext().getAttribute("email")).getStatus();
-            if (status.equals("blocked")) {
-                logout.execute(req);
-                resp.sendRedirect("/app/library");
-            } else {
-                chain.doFilter(request, response);
+        String email = (String) request.getServletContext().getAttribute("email");
+        if (email != null) {
+            try {
+                String status = userService.getUserInfo(email).getStatus();
+                if (status.equals("blocked")) {
+                    logout.execute(req);
+                    resp.sendRedirect("/app/library");
+                } else {
+                    chain.doFilter(req, resp);
+                }
+            } catch (DoesNotExistException e) {
+                e.printStackTrace();
             }
-        } catch (DoesNotExistException e) {
-            e.printStackTrace();
+        } else {
+            chain.doFilter(req, resp);
         }
+    }
 
+    @Override
+    public void destroy() {
 
     }
 }
