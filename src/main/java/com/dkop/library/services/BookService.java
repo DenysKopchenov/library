@@ -1,10 +1,10 @@
 package com.dkop.library.services;
 
 import com.dkop.library.dao.BooksDao;
-import com.dkop.library.dao.impls.BooksDaoImpl;
 import com.dkop.library.dao.DaoFactory;
 import com.dkop.library.model.Book;
 import com.dkop.library.model.exceptions.AlreadyExistException;
+import com.dkop.library.model.exceptions.IllegalParameterException;
 import com.dkop.library.model.exceptions.NotFoundException;
 
 import java.sql.SQLException;
@@ -81,6 +81,12 @@ public class BookService {
             return booksDao.findById(id);
         } catch (SQLException e) {
             throw new NotFoundException("Book not found");
+        }
+    }
+
+    public List<Book> findAllSorted(String sortBy) {
+        try (BooksDao booksDao = DaoFactory.getInstance().createBooksDao()) {
+            return booksDao.findAllSorted(sortBy);
         }
     }
 

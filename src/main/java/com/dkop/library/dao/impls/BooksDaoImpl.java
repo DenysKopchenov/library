@@ -2,6 +2,8 @@ package com.dkop.library.dao.impls;
 
 import com.dkop.library.dao.BooksDao;
 import com.dkop.library.model.Book;
+import com.dkop.library.model.exceptions.IllegalParameterException;
+import org.apache.commons.lang3.StringUtils;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -16,26 +18,24 @@ public class BooksDaoImpl implements BooksDao {
     }
 
     public List<Book> findAll() {
-        return findAllSorted("author");
+        return findAllSorted("title");
     }
 
     public List<Book> findAllSorted(String sortBy) {
         List<Book> allBooks = new ArrayList<>();
-        String SELECT_BOOKS = "SELECT * FROM books ORDER BY ?;";
-        try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_BOOKS)) {
-            preparedStatement.setString(1, sortBy);
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                while (resultSet.next()) {
-                    Book book = Book.newBuilder()
-                            .id(resultSet.getInt("id"))
-                            .title(resultSet.getString("title"))
-                            .author(resultSet.getString("author"))
-                            .publisher(resultSet.getString("publisher"))
-                            .publishingDate(resultSet.getDate("publishing_date").toLocalDate())
-                            .amount(resultSet.getInt("amount"))
-                            .build();
-                    allBooks.add(book);
-                }
+        String SELECT_BOOKS = String.format("SELECT * FROM books ORDER BY %s;", sortBy);
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_BOOKS);
+             ResultSet resultSet = preparedStatement.executeQuery()) {
+            while (resultSet.next()) {
+                Book book = Book.newBuilder()
+                        .id(resultSet.getInt("id"))
+                        .title(resultSet.getString("title"))
+                        .author(resultSet.getString("author"))
+                        .publisher(resultSet.getString("publisher"))
+                        .publishingDate(resultSet.getDate("publishing_date").toLocalDate())
+                        .amount(resultSet.getInt("amount"))
+                        .build();
+                allBooks.add(book);
             }
         } catch (SQLException e) {
             e.printStackTrace();
