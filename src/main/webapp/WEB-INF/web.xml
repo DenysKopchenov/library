@@ -37,6 +37,16 @@
     </filter-mapping>
 
     <filter>
+        <filter-name>CheckStatusFilter</filter-name>
+        <filter-class>com.dkop.library.controller.filters.CheckStatusFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>CheckStatusFilter</filter-name>
+        <url-pattern>/library/reader</url-pattern>
+
+    </filter-mapping>
+
+    <filter>
         <filter-name>LocaleFilter</filter-name>
         <filter-class>com.dkop.library.controller.filters.LocaleFilter</filter-class>
     </filter>

@@ -2,17 +2,15 @@ package com.dkop.library.controller.filters;
 
 import com.dkop.library.controller.command.Command;
 import com.dkop.library.controller.command.LogOutCommand;
-import com.dkop.library.controller.command.LoginCommand;
 import com.dkop.library.model.exceptions.DoesNotExistException;
 import com.dkop.library.services.UserService;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-public class ProfileStatusFilter implements Filter {
+public class CheckStatusFilter implements Filter {
     private final Command logout = new LogOutCommand();
     private final UserService userService = new UserService();
 
