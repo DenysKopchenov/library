@@ -3,6 +3,7 @@ package com.dkop.library.dao.impls;
 import com.dkop.library.dao.UserDao;
 import com.dkop.library.model.User;
 import com.dkop.library.model.exceptions.DoesNotExistException;
+import com.dkop.library.model.exceptions.NotFoundException;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -16,9 +17,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     public void create(User user) throws SQLException {
-        String INSERT_USERS_SQL = "INSERT INTO users" +
-                " (first_name, last_name, email, password, role, status) VALUES " +
-                " (?, ?, ?, ?, ?, ?);";
+        String INSERT_USERS_SQL = "INSERT INTO users (first_name, last_name, email, password, role, status) VALUES (?, ?, ?, ?, ?, ?);";
         try (PreparedStatement preparedStatement = connection.prepareStatement(INSERT_USERS_SQL)) {
             preparedStatement.setString(1, user.getFirstName());
             preparedStatement.setString(2, user.getLastName());
@@ -83,7 +82,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public User findById(int id) throws SQLException {
+    public User findById(int id) throws NotFoundException {
         throw new UnsupportedOperationException();
     }
 

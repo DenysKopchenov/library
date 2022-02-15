@@ -2,8 +2,11 @@ package com.dkop.library.controller.command;
 
 import com.dkop.library.model.Book;
 import com.dkop.library.model.User;
+import com.dkop.library.model.exceptions.AlreadyExistException;
 import com.dkop.library.model.exceptions.DoesNotExistException;
+import com.dkop.library.model.exceptions.NotFoundException;
 import com.dkop.library.services.BookService;
+import com.dkop.library.services.OrderService;
 import com.dkop.library.services.UserService;
 import org.apache.commons.lang3.StringUtils;
 
@@ -17,6 +20,7 @@ public class ReaderCommand implements Command {
     private final Map<String, Consumer<HttpServletRequest>> operations = new HashMap<>();
     private final BookService bookService = new BookService();
     private final UserService userService = new UserService();
+    private final OrderService orderService = new OrderService();
 
     public ReaderCommand() {
         init();
@@ -25,6 +29,7 @@ public class ReaderCommand implements Command {
     private void init() {
         operations.put("catalog", this::showCatalogBookOperation);
         operations.put("userInfo", this::showUserInfo);
+        operations.put("orderBook", this::orderBookOperation);
     }
 
     @Override
@@ -49,6 +54,28 @@ public class ReaderCommand implements Command {
     private void handleOperations(String operation, HttpServletRequest request) {
         if (operations.containsKey(operation)) {
             operations.get(operation).accept(request);
+        }
+    }
+
+    private void orderBookOperation(HttpServletRequest request) {
+        if (StringUtils.isNotBlank(request.getParameter("order"))) {
+            String orderType = request.getParameter("order");
+            String email = (String) request.getServletContext().getAttribute("email");
+            try {
+                int userId = userService.getUserInfo(email).getId();
+                int bookId = Integer.parseInt(request.getParameter("bookId"));
+                switch (orderType) {
+                    case "readingRoom":
+                        orderService.createOrderReadingRoom(bookId, userId, "readingRoom");
+                        break;
+                    case "home":
+                        orderService.createOrderHome();
+                        break;
+                }
+            } catch (AlreadyExistException | NotFoundException | DoesNotExistException e) {
+                request.setAttribute("errorMessage", e.getMessage());
+                showCatalogBookOperation(request);
+            }
         }
     }
 

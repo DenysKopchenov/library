@@ -30,7 +30,7 @@ public class User {
 //        this.status = status;
 //    }
 
-    public long getId() {
+    public int getId() {
         return id;
     }
 

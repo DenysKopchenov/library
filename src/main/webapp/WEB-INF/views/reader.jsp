@@ -16,8 +16,8 @@ hello form READER page
 <c:forEach var="book" items="${foundedBooks}">
     <li>
         ${book}
-        <br> <a href="?orderBook=reading-room&bookId=${book.getId()}"> Order to reading room</a>
-        <br> <a href="?orderBook=home&bookId=${book.getId()}"> Order to home</a>
+        <br> <a href="?operations=orderBook&order=readingRoom&bookId=${book.getId()}"> Order to reading room</a>
+        <br> <a href="?operations=orderBook&order=home&bookId=${book.getId()}"> Order to home</a>
     </li>
 </c:forEach>
 </div>
@@ -48,8 +48,8 @@ hello form READER page
     <c:forEach var="book" items="${catalog}">
         <li>
             ${book}
-            <br> <a href="?orderBook=reading-room"> Order to reading room</a>
-            <br> <a href="?orderBook=home"> Order to home</a>
+        <br> <a href="?operations=orderBook&order=readingRoom&bookId=${book.getId()}"> Order to reading room</a>
+        <br> <a href="?operations=orderBook&order=home&bookId=${book.getId()}"> Order to home</a>
         </li>
     </c:forEach>
 </div>

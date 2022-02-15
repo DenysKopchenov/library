@@ -13,10 +13,14 @@ public abstract class DaoFactory {
                     daoFactory = temp;
                 }
             }
-        }   return daoFactory;
+        }
+        return daoFactory;
 
     }
 
     public abstract UserDao createUserDao();
+
     public abstract BooksDao createBooksDao();
+
+    public abstract OrderDao createOrderDao();
 }
