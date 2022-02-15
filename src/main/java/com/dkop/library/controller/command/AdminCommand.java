@@ -44,61 +44,6 @@ public class AdminCommand implements Command {
         if (StringUtils.isNotBlank(request.getParameter("operations"))) {
             String operation = request.getParameter("operations");
             handleOperations(operation, request);
-
-//        if (StringUtils.isNotBlank(request.getParameter("searchByAuthor"))) {
-//            bookService.searchByAuthor(request);
-//
-//        } else if (StringUtils.isNotBlank(request.getParameter("searchByTitle"))) {
-//            bookService.searchByTitle(request);
-//        }
-//        if (StringUtils.isNotBlank(request.getParameter("profile"))) {
-//            showUserInfo(request);
-//        }
-//            switch (operation) {
-//                case "catalog":
-//                    try (BooksDao booksDao = DaoFactory.getInstance().createBooksDao()) {
-//                        List<Book> catalog = booksDao.getAllBooks();
-//                        request.setAttribute("catalog", catalog);
-//                    }
-//                    break;
-//                case "deleteBook":
-//                    bookService.deleteBook(request, Integer.parseInt(request.getParameter("bookId")));
-//                    try (BooksDao booksDao = DaoFactory.getInstance().createBooksDao()) {
-//                        List<Book> catalog = booksDao.getAllBooks();
-//                        request.setAttribute("catalog", catalog);
-//                    }
-//                    break;
-//                case "updateBook":
-//                    try (BooksDao booksDao = DaoFactory.getInstance().createBooksDao()) {
-//                        Book book = booksDao.getBookById(Integer.parseInt(request.getParameter("bookId")));
-//                        request.setAttribute("operation", "updateBook");
-//                        request.setAttribute("updatingBook", book);
-//                        if (request.getParameter("updateCurrentBook") != null) {
-//                            bookService.updateBook(request, Integer.parseInt(request.getParameter("bookId")));
-//                        }
-//                    }
-//                    break;
-//                case "listUsers":
-//                    try (UserDao userDao = DaoFactory.getInstance().createUserDao()) {
-//                        List<User> users = userDao.getAllUsers();
-//                        request.setAttribute("allUsers", users);
-//                    }
-//                    break;
-//                case "createLibrarian":
-//                    request.setAttribute("operation", "createLibrarian");
-//                    //TODO: createLibrarian
-//                    break;
-//                case "deleteLibrarian":
-//                    request.setAttribute("operation", "deleteLibrarian");
-//                    //TODO: deleteLibrarian
-//                    break;
-//                case "blockUser":
-//                    //TODO block user
-//                    break;
-//                case "unblockUser":
-//                    // todo unblock user
-//                    break;
-//            }
         }
         return "/WEB-INF/views/admin.jsp";
     }
@@ -265,5 +210,4 @@ public class AdminCommand implements Command {
             request.setAttribute("errorMessage", "ID may contains only digits");
         }
     }
-
 }

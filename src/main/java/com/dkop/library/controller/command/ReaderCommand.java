@@ -1,7 +1,5 @@
 package com.dkop.library.controller.command;
 
-import com.dkop.library.dao.BooksDao;
-import com.dkop.library.dao.DaoFactory;
 import com.dkop.library.model.Book;
 import com.dkop.library.model.User;
 import com.dkop.library.model.exceptions.DoesNotExistException;
@@ -10,34 +8,64 @@ import com.dkop.library.services.UserService;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Consumer;
 
 public class ReaderCommand implements Command {
+    private final Map<String, Consumer<HttpServletRequest>> operations = new HashMap<>();
     private final BookService bookService = new BookService();
     private final UserService userService = new UserService();
 
+    public ReaderCommand() {
+        init();
+    }
+
+    private void init() {
+        operations.put("catalog", this::showCatalogBookOperation);
+    }
+
     @Override
     public String execute(HttpServletRequest request) {
+        if (StringUtils.isNotBlank(request.getParameter("searchByAuthor"))) {
+            String author = (request.getParameter("searchByAuthor"));
+            List<Book> books = bookService.findAllBooksByAuthor(author);
+            isAnyFounded(books, request, "by Author", author);
+        }
+        if (StringUtils.isNotBlank(request.getParameter("searchByTitle"))) {
+            String title = request.getParameter("searchByTitle");
+            List<Book> books = bookService.findAllBooksByTitle(title);
+            isAnyFounded(books, request, "by Title", title);
+        }
 
-//        if (StringUtils.isNotBlank(request.getParameter("searchByAuthor"))){
-//            bookService.searchByAuthor(request);
-//        }
-//        if (StringUtils.isNotBlank(request.getParameter("searchByTitle"))){
-//            bookService.searchByTitle(request);
-//        }
         if (StringUtils.isNotBlank(request.getParameter("profile"))) {
             showUserInfo(request);
         }
         if (StringUtils.isNotBlank(request.getParameter("operations"))) {
             String operations = request.getParameter("operations");
-            if (operations.equals("catalog")) {
-                try (BooksDao booksDao = DaoFactory.getInstance().createBooksDao()) {
-                    List<Book> catalog = booksDao.findAll();
-                    request.setAttribute("catalog", catalog);
-                }
-            }
+            handleOperations(operations, request);
         }
         return "/WEB-INF/views/reader.jsp";
+    }
+
+    private void handleOperations(String operation, HttpServletRequest request) {
+        if (operations.containsKey(operation)) {
+            operations.get(operation).accept(request);
+        }
+    }
+
+    private void showCatalogBookOperation(HttpServletRequest request) {
+        request.setAttribute("catalog", bookService.findAll());
+    }
+
+    private void isAnyFounded(List<Book> books, HttpServletRequest request, String by, String parameter) {
+        if (!books.isEmpty()) {
+            request.setAttribute("foundedBooks", books);
+            request.setAttribute("successMessage", String.format("Books founded %s '%s':", by, parameter));
+        } else {
+            request.setAttribute("errorMessage", String.format("No books found %s '%s':", by, parameter));
+        }
     }
 
     private void showUserInfo(HttpServletRequest request) {

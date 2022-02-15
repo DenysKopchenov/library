@@ -30,6 +30,23 @@ public class BookService {
         }
     }
 
+    public void updateBook(int id, String title, String author, String publisher, String publishingDate, String amount) throws NotFoundException {
+        LocalDate date = LocalDate.parse(publishingDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        Book updatingBook = Book.newBuilder()
+                .id(id)
+                .title(title)
+                .author(author)
+                .publisher(publisher)
+                .publishingDate(date)
+                .amount(Integer.parseInt(amount))
+                .build();
+        try (BooksDao booksDao = DaoFactory.getInstance().createBooksDao()) {
+            booksDao.update(updatingBook);
+        } catch (SQLException e) {
+            throw new NotFoundException("Book not found");
+        }
+    }
+
     public void deleteBook(int id) throws NotFoundException {
         try (BooksDao booksDao = DaoFactory.getInstance().createBooksDao()) {
             try {
@@ -38,36 +55,23 @@ public class BookService {
                 throw new NotFoundException("Book not found");
             }
         }
-
     }
 
-//    public void searchByAuthor(HttpServletRequest request) {
-//        String author = request.getParameter("searchByAuthor");
-//        List<Book> booksByAuthor;
-//        try (BooksDao booksDao = DaoFactory.getInstance().createBooksDao()) {
-//            booksByAuthor = booksDao.searchByAuthor(author);
-//            if (booksByAuthor.isEmpty()) {
-//                request.setAttribute("notFound", String.format("%s was not found", author));
-//            } else {
-//                request.setAttribute("booksByAuthor", booksByAuthor);
-//            }
-//        }
-//
-//    }
-//
-//    public void searchByTitle(HttpServletRequest request) {
-//        String title = request.getParameter("searchByTitle");
-//        List<Book> booksByTitle;
-//        try (BooksDao booksDao = DaoFactory.getInstance().createBooksDao()) {
-//            booksByTitle = booksDao.searchByTitle(title);
-//            if (booksByTitle.isEmpty()) {
-//                request.setAttribute("notFound", String.format("%s was not found", title));
-//            } else {
-//                request.setAttribute("booksByTitle", booksByTitle);
-//            }
-//        }
-//
-//    }
+    public List<Book> findAllBooksByAuthor(String author) {
+        List<Book> books;
+        try (BooksDao booksDao = DaoFactory.getInstance().createBooksDao()) {
+            books = booksDao.findAllByAuthor(author);
+        }
+        return books;
+    }
+
+    public List<Book> findAllBooksByTitle(String title) {
+        List<Book> books;
+        try (BooksDao booksDao = DaoFactory.getInstance().createBooksDao()) {
+            books = booksDao.findAllByTitle(title);
+        }
+        return books;
+    }
 
     public List<Book> findAll() {
         try (BooksDao booksDao = DaoFactory.getInstance().createBooksDao()) {
@@ -86,23 +90,6 @@ public class BookService {
     public List<Book> findAllSorted(String sortBy) {
         try (BooksDao booksDao = DaoFactory.getInstance().createBooksDao()) {
             return booksDao.findAllSorted(sortBy);
-        }
-    }
-
-    public void updateBook(int id, String title, String author, String publisher, String publishingDate, String amount) throws NotFoundException {
-        LocalDate date = LocalDate.parse(publishingDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-        Book updatingBook = Book.newBuilder()
-                .id(id)
-                .title(title)
-                .author(author)
-                .publisher(publisher)
-                .publishingDate(date)
-                .amount(Integer.parseInt(amount))
-                .build();
-        try (BooksDao booksDao = DaoFactory.getInstance().createBooksDao()) {
-            booksDao.update(updatingBook);
-        } catch (SQLException e) {
-            throw new NotFoundException("Book not found");
         }
     }
 }

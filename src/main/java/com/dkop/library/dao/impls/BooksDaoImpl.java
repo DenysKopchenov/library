@@ -80,15 +80,15 @@ public class BooksDaoImpl implements BooksDao {
         }
     }
 
-    public List<Book> findAllByAuthor(String author) {//todo!
-        List<Book> booksByAuthor = new ArrayList<>();
-        Book book;
+    @Override
+    public List<Book> findAllByAuthor(String author) {
+        List<Book> books = new ArrayList<>();
         String SELECT_BOOK = "SELECT * FROM books WHERE author LIKE ?;";
         try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_BOOK)) {
             preparedStatement.setString(1, "%" + author + "%");
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 while (resultSet.next()) {
-                    book = Book.newBuilder()
+                    Book book = Book.newBuilder()
                             .id(resultSet.getInt("id"))
                             .title(resultSet.getString("title"))
                             .author(resultSet.getString("author"))
@@ -96,17 +96,18 @@ public class BooksDaoImpl implements BooksDao {
                             .publishingDate(resultSet.getDate("publishing_date").toLocalDate())
                             .amount(resultSet.getInt("amount"))
                             .build();
-                    booksByAuthor.add(book);
+                    books.add(book);
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return booksByAuthor;
+        return books;
     }
 
+    @Override
     public List<Book> findAllByTitle(String title) {
-        List<Book> booksByTitle = new ArrayList<>();
+        List<Book> books = new ArrayList<>();
         String SELECT_BOOK = "SELECT * FROM books WHERE title LIKE ?;";
         try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_BOOK)) {
             preparedStatement.setString(1, "%" + title + "%");
@@ -120,13 +121,13 @@ public class BooksDaoImpl implements BooksDao {
                             .publishingDate(resultSet.getDate("publishing_date").toLocalDate())
                             .amount(resultSet.getInt("amount"))
                             .build();
-                    booksByTitle.add(book);
+                    books.add(book);
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return booksByTitle;
+        return books;
     }
 
     public Book findById(int id) throws SQLException {
