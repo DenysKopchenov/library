@@ -65,7 +65,7 @@ public class OrderService {
     public void returnBook(int orderId) throws NotFoundException {
         try (OrderDao orderDao = daoFactory.createOrderDao()) {
             Order order = orderDao.findById(orderId);
-            order.setActualReturnDate(LocalDate.now());
+//            order.setActualReturnDate(LocalDate.now());
             order.setStatus("completed");
             orderDao.update(order);
         } catch (SQLException e) {

@@ -49,8 +49,8 @@ hello form READER page
         <li>
         <c:if test="${book.getAmount() > 0}">
         <c:out value="${book}"/>
-        <a class="btn btn-primary me-2" href="?operations=orderBook&order=readingRoom&bookId=${book.getId()}"> Order to reading room</a>
-        <a href="?operations=orderBook&order=home&bookId=${book.getId()}"> Order to home</a>
+        <a class="btn btn-primary" href="?operations=orderBook&order=readingRoom&bookId=${book.getId()}"> Order to reading room</a>
+        <a class="btn btn-primary" href="?operations=orderBook&order=home&bookId=${book.getId()}"> Order to home</a>
         </c:if>
         </li>
     </c:forEach>
@@ -60,6 +60,7 @@ hello form READER page
     <c:forEach var="userOrder" items="${userOrders}">
         <li>
         ${userOrder}
+        <a class="btn btn-primary" href="?operations=returnBook&orderId=${userOrder.getOrderId()}"> Return book</a>
         </li>
     </c:forEach>
 </div>

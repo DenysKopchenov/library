@@ -82,13 +82,13 @@ public class OrderDaoImpl implements OrderDao {
 
     @Override
     public void update(Order order) throws SQLException {
-        String UPDATE_ORDER = "UPDATE orders SET status = ? , approved_date = ?, expected_return_date = ?, actual_return_date = ? WHERE id = ?;";
+        String UPDATE_ORDER = "UPDATE orders SET status = ? , approved_date = ?, expected_return_date = ? WHERE id = ?;";
         try (PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_ORDER)) {
             preparedStatement.setString(1, order.getStatus());
             preparedStatement.setDate(2, Date.valueOf(order.getApprovedDate()));
             preparedStatement.setDate(3, Date.valueOf(order.getExpectedReturnDate()));
-            preparedStatement.setDate(4, Date.valueOf(order.getActualReturnDate()));
-            preparedStatement.setInt(5, order.getId());
+//            preparedStatement.setDate(4, Date.valueOf(order.getActualReturnDate()));
+            preparedStatement.setInt(4, order.getId());
             preparedStatement.executeUpdate();
         }
     }
