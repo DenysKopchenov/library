@@ -8,6 +8,9 @@ import com.dkop.library.model.exceptions.AlreadyExistException;
 import com.dkop.library.model.exceptions.NotFoundException;
 
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.Period;
+import java.util.List;
 
 public class OrderService {
     private static OrderService instance;
@@ -34,7 +37,7 @@ public class OrderService {
     }
 
 
-    public void createOrderReadingRoom(int bookId, int userId, String type) throws AlreadyExistException, NotFoundException {
+    public void createOrder(int bookId, int userId, String type) throws AlreadyExistException, NotFoundException {
         Order order = Order.newBuilder()
                 .userId(userId)
                 .bookId(bookId)
@@ -51,7 +54,21 @@ public class OrderService {
         }
     }
 
-    public void createOrderHome() {
+    public List<Order> findAllApprovedUserOrders(int userId) {
+        try (OrderDao orderDao = daoFactory.createOrderDao()) {
+            return orderDao.findAllApprovedUserOrders(userId);
+        }
+    }
 
+    public long checkForPenalty(Order order) {
+        LocalDate expectedReturnDate = order.getExpectedReturnDate();
+        LocalDate now = LocalDate.now();
+        if (expectedReturnDate.isBefore(now)) {
+            int daysDifference = Period.between(expectedReturnDate, now).getDays();
+            long penalty = daysDifference * 487;
+            return penalty;
+        } else {
+            return 0;
+        }
     }
 }

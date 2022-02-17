@@ -6,7 +6,9 @@ import com.dkop.library.model.exceptions.NotFoundException;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class OrderDaoImpl implements OrderDao {
@@ -54,5 +56,27 @@ public class OrderDaoImpl implements OrderDao {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public List<Order> findAllApprovedUserOrders(int userId) {
+        String SELECT_ORDERS = "SELECT book_id, user_id, expected_return_date FROM orders WHERE user_id = ? AND status = 'approved';";
+        List<Order> allApprovedOrders = new ArrayList<>();
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ORDERS)) {
+            preparedStatement.setInt(1, userId);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    Order order = Order.newBuilder()
+                            .bookId(resultSet.getInt("book_id"))
+                            .userId(resultSet.getInt("user_id"))
+                            .expectedReturnDate(resultSet.getDate("expected_return_date").toLocalDate())
+                            .build();
+                    allApprovedOrders.add(order);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return allApprovedOrders;
     }
 }

@@ -8,14 +8,11 @@ public class Order {
     private int userId;
     private int bookId;
     private String type;
-
-    public String getType() {
-        return type;
-    }
-
     private String status;
     private LocalDate approvedDate;
     private LocalDate expectedReturnDate;
+    private LocalDate actualReturnDate;
+
 
     private Order() {
     }
@@ -30,6 +27,10 @@ public class Order {
 
     public int getBookId() {
         return bookId;
+    }
+
+    public String getType() {
+        return type;
     }
 
     public String getStatus() {
@@ -47,8 +48,6 @@ public class Order {
     public LocalDate getActualReturnDate() {
         return actualReturnDate;
     }
-
-    private LocalDate actualReturnDate;
 
     @Override
     public String toString() {
@@ -80,8 +79,8 @@ public class Order {
     public static Builder newBuilder() {
         return new Order().new Builder();
     }
-
     public class Builder {
+
         private Builder() {
         }
 

@@ -15,9 +15,16 @@ hello form READER page
 <h3><font style="color:hsl(100,100%,50%);">${successMessage}</font></h3>
 <c:forEach var="book" items="${foundedBooks}">
     <li>
-        ${book}
+        <c:out value="${book}"/>
+        <c:choose>
+        <c:when test="${book.getAmount() > 0}">
         <br> <a href="?operations=orderBook&order=readingRoom&bookId=${book.getId()}"> Order to reading room</a>
         <br> <a href="?operations=orderBook&order=home&bookId=${book.getId()}"> Order to home</a>
+        </c:when>
+        <c:otherwise>
+        Unable to order, all books are on abonements
+        </c:otherwise>
+        </c:choose>
     </li>
 </c:forEach>
 </div>
@@ -38,12 +45,21 @@ hello form READER page
     <a class="dropdown-item" href="?operations=catalog&sort=publishing_date">publishing date</a>
   </div>
 </div>
-</c:if>
     <c:forEach var="book" items="${catalog}">
         <li>
-            ${book}
-        <br> <a href="?operations=orderBook&order=readingRoom&bookId=${book.getId()}"> Order to reading room</a>
-        <br> <a href="?operations=orderBook&order=home&bookId=${book.getId()}"> Order to home</a>
+        <c:if test="${book.getAmount() > 0}">
+        <c:out value="${book}"/>
+        <a class="btn btn-primary me-2" href="?operations=orderBook&order=readingRoom&bookId=${book.getId()}"> Order to reading room</a>
+        <a href="?operations=orderBook&order=home&bookId=${book.getId()}"> Order to home</a>
+        </c:if>
+        </li>
+    </c:forEach>
+</c:if>
+</div>
+<div>
+    <c:forEach var="userOrder" items="${userOrders}">
+        <li>
+        ${userOrder}
         </li>
     </c:forEach>
 </div>

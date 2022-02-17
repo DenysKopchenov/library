@@ -1,7 +1,9 @@
 package com.dkop.library.controller.command;
 
 import com.dkop.library.model.Book;
+import com.dkop.library.model.Order;
 import com.dkop.library.model.User;
+import com.dkop.library.model.UserOrder;
 import com.dkop.library.model.exceptions.AlreadyExistException;
 import com.dkop.library.model.exceptions.DoesNotExistException;
 import com.dkop.library.model.exceptions.NotFoundException;
@@ -11,6 +13,7 @@ import com.dkop.library.services.UserService;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,6 +36,7 @@ public class ReaderCommand implements Command {
         operations.put("catalog", this::showCatalogBookOperation);
         operations.put("userInfo", this::showUserInfo);
         operations.put("orderBook", this::orderBookOperation);
+        operations.put("showApprovedOrders", this::showApprovedOrders);
     }
 
     @Override
@@ -69,10 +73,10 @@ public class ReaderCommand implements Command {
                 int bookId = Integer.parseInt(request.getParameter("bookId"));
                 switch (orderType) {
                     case "readingRoom":
-                        orderService.createOrderReadingRoom(bookId, userId, "readingRoom");
+                        orderService.createOrder(bookId, userId, "readingRoom");
                         break;
                     case "home":
-                        orderService.createOrderHome();
+                        orderService.createOrder(bookId, userId, "home");
                         break;
                 }
             } catch (AlreadyExistException | NotFoundException | DoesNotExistException e) {
@@ -105,6 +109,30 @@ public class ReaderCommand implements Command {
             catalog = bookService.findAll();
         }
         request.setAttribute("catalog", catalog);
+    }
+
+    private void showApprovedOrders(HttpServletRequest request) {
+        try {
+            User user = userService.getUserInfo((String) request.getServletContext().getAttribute("email"));
+            List<UserOrder> userApprovedOrders = new ArrayList<>();
+            List<Order> allApproved = orderService.findAllApprovedUserOrders(user.getId());
+            allApproved.forEach(order -> {
+                try {
+                    UserOrder userOrder = new UserOrder();
+                    long penalty = orderService.checkForPenalty(order);
+                    userOrder.setPenalty(String.valueOf(penalty));
+                    userOrder.setExpectedReturnDate(order.getExpectedReturnDate());
+                    userOrder.setBook(bookService.findById(order.getBookId()));
+                    userApprovedOrders.add(userOrder);
+                } catch (NotFoundException e) {
+                    request.setAttribute("errorMessage", e.getMessage());
+                }
+            });
+            request.setAttribute("userOrders", userApprovedOrders);
+        } catch (DoesNotExistException e) {
+            request.setAttribute("errorMessage", e.getMessage());
+        }
+
     }
 
     private void isAnyFounded(List<Book> books, HttpServletRequest request, String by, String parameter) {
