@@ -20,8 +20,8 @@ public class BookService {
         if (instance == null) {
             synchronized (BookService.class) {
                 if (instance == null) {
-                    BookService temp = new BookService();
-                    instance = temp;
+                    BookService bookService = new BookService();
+                    instance = bookService;
                 }
             }
         }

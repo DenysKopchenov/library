@@ -84,10 +84,22 @@ public class ReaderCommand implements Command {
 
     private void showCatalogBookOperation(HttpServletRequest request) {
         request.setAttribute("operation", "catalog");
-        request.setAttribute("sort", request.getParameter("sort"));
         String sortBy = request.getParameter("sort");
         List<Book> catalog;
         if (sortBy != null) {
+            switch (sortBy) {
+                case "author":
+                    request.setAttribute("sort", "By Author");
+                    break;
+                case "publisher":
+                    request.setAttribute("sort", "By Publisher");
+                    break;
+                case "publishing_date":
+                    request.setAttribute("sort", "By Publishing date");
+                    break;
+                default:
+                    request.setAttribute("sort", "By Title");
+            }
             catalog = bookService.findAllSorted(sortBy);
         } else {
             catalog = bookService.findAll();

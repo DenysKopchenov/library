@@ -3,19 +3,18 @@ package com.dkop.library.dao;
 import com.dkop.library.dao.impls.JDBCDaoFactory;
 
 public abstract class DaoFactory {
-    private static DaoFactory daoFactory;
+    private static DaoFactory instance;
 
     public static DaoFactory getInstance() {
-        if (daoFactory == null) {
+        if (instance == null) {
             synchronized (DaoFactory.class) {
-                if (daoFactory == null) {
-                    DaoFactory temp = new JDBCDaoFactory();
-                    daoFactory = temp;
+                if (instance == null) {
+                    DaoFactory daoFactory = new JDBCDaoFactory();
+                    instance = daoFactory;
                 }
             }
         }
-        return daoFactory;
-
+        return instance;
     }
 
     public abstract UserDao createUserDao();

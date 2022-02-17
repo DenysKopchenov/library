@@ -27,23 +27,17 @@ hello form READER page
 </div>
 </div>
 <c:if test="${operation eq 'catalog'}">
-    <!--    <form>
-            <select class="form-select" aria-label="Default select example"
-                    name="sort" onchange="submit()">
-                <option value="title" ${sort==
-                "title" ? 'selected' : ''}>By title</option>
-                <option value="author" ${sort==
-                "author" ? 'selected' : ''}>By author</option>
-                <option value="publisher" ${sort==
-                "publisher" ? 'selected' : ''}>By publisher</option>
-                <option value="publishing_date" ${sort==
-                "publishing_date" ? 'selected' : ''}>By publishing date</option>
-            </select>
-        </form>-->
-    <a class="nav-link" href="?operations=catalog&sort=title"> by title </a>
-    <a class="nav-link" href="?operations=catalog&sort=author"> by author </a>
-    <a class="nav-link" href="?operations=catalog&sort=publisher"> by publisher </a>
-    <a class="nav-link" href="?operations=catalog&sort=publishing_date"> by publishing date </a>
+<div class="btn-group">
+  <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    ${sort == null ? "By Title" : sort}
+    </button>
+  <div class="dropdown-menu">
+    <a class="dropdown-item" href="?operations=catalog&sort=title">title</a>
+    <a class="dropdown-item" href="?operations=catalog&sort=author">author</a>
+    <a class="dropdown-item" href="?operations=catalog&sort=publisher">publisher</a>
+    <a class="dropdown-item" href="?operations=catalog&sort=publishing_date">publishing date</a>
+  </div>
+</div>
 </c:if>
     <c:forEach var="book" items="${catalog}">
         <li>
