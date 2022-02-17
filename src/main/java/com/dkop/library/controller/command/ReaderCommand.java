@@ -13,6 +13,7 @@ import com.dkop.library.services.UserService;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -37,6 +38,7 @@ public class ReaderCommand implements Command {
         operations.put("userInfo", this::showUserInfo);
         operations.put("orderBook", this::orderBookOperation);
         operations.put("showApprovedOrders", this::showApprovedOrders);
+        operations.put("returnBook", this::returnBookOperation);
     }
 
     @Override
@@ -74,9 +76,11 @@ public class ReaderCommand implements Command {
                 switch (orderType) {
                     case "readingRoom":
                         orderService.createOrder(bookId, userId, "readingRoom");
+                        request.setAttribute("successMessage", "Order created, after approve you can see it on 'Show orders'");
                         break;
                     case "home":
                         orderService.createOrder(bookId, userId, "home");
+                        request.setAttribute("successMessage", "Order created, after approve you can see it on 'Show orders'");
                         break;
                 }
             } catch (AlreadyExistException | NotFoundException | DoesNotExistException e) {
@@ -115,7 +119,7 @@ public class ReaderCommand implements Command {
         try {
             User user = userService.getUserInfo((String) request.getSession().getAttribute("email"));
             List<UserOrder> userApprovedOrders = new ArrayList<>();
-            List<Order> allApproved = orderService.findAllApprovedUserOrders(user.getId());
+            List<Order> allApproved = orderService.findAllOrdersBasedOnStatus(user.getId(), "approved");
             allApproved.forEach(order -> {
                 try {
                     UserOrder userOrder = new UserOrder();
@@ -123,6 +127,7 @@ public class ReaderCommand implements Command {
                     userOrder.setPenalty(String.valueOf(penalty));
                     userOrder.setExpectedReturnDate(order.getExpectedReturnDate());
                     userOrder.setBook(bookService.findById(order.getBookId()));
+                    userOrder.setOrderId(order.getId());
                     userApprovedOrders.add(userOrder);
                 } catch (NotFoundException e) {
                     request.setAttribute("errorMessage", e.getMessage());
@@ -133,6 +138,19 @@ public class ReaderCommand implements Command {
             request.setAttribute("errorMessage", e.getMessage());
         }
 
+    }
+
+    private void returnBookOperation(HttpServletRequest request) {
+        String orderId = request.getParameter("orderId");
+        if (StringUtils.isNumeric(orderId)) {
+            try {
+                orderService.returnBook(Integer.parseInt(orderId));
+                request.setAttribute("successMessage", "Successfully returned");
+                showApprovedOrders(request);
+            } catch (NotFoundException e) {
+                request.setAttribute("errorMessage", e.getMessage());
+            }
+        }
     }
 
     private void isAnyFounded(List<Book> books, HttpServletRequest request, String by, String parameter) {

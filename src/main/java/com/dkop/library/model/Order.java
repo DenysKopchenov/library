@@ -79,6 +79,23 @@ public class Order {
     public static Builder newBuilder() {
         return new Order().new Builder();
     }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public void setApprovedDate(LocalDate approvedDate) {
+        this.approvedDate = approvedDate;
+    }
+
+    public void setExpectedReturnDate(LocalDate expectedReturnDate) {
+        this.expectedReturnDate = expectedReturnDate;
+    }
+
+    public void setActualReturnDate(LocalDate actualReturnDate) {
+        this.actualReturnDate = actualReturnDate;
+    }
+
     public class Builder {
 
         private Builder() {

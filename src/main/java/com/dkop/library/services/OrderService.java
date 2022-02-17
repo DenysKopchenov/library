@@ -7,8 +7,10 @@ import com.dkop.library.model.Order;
 import com.dkop.library.model.exceptions.AlreadyExistException;
 import com.dkop.library.model.exceptions.NotFoundException;
 
+import java.sql.Date;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.Period;
 import java.util.List;
 
@@ -54,9 +56,26 @@ public class OrderService {
         }
     }
 
-    public List<Order> findAllApprovedUserOrders(int userId) {
+    public List<Order> findAllOrdersBasedOnStatus(int userId, String status) {
         try (OrderDao orderDao = daoFactory.createOrderDao()) {
-            return orderDao.findAllApprovedUserOrders(userId);
+            return orderDao.findAllOrdersBasedOnStatus(userId, status);
+        }
+    }
+
+    public void returnBook(int orderId) throws NotFoundException {
+        try (OrderDao orderDao = daoFactory.createOrderDao()) {
+            Order order = orderDao.findById(orderId);
+            order.setActualReturnDate(LocalDate.now());
+            order.setStatus("completed");
+            orderDao.update(order);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public Order findById(int orderId) throws NotFoundException {
+        try (OrderDao orderDao = daoFactory.createOrderDao()) {
+            return orderDao.findById(orderId);
         }
     }
 
@@ -65,8 +84,7 @@ public class OrderService {
         LocalDate now = LocalDate.now();
         if (expectedReturnDate.isBefore(now)) {
             int daysDifference = Period.between(expectedReturnDate, now).getDays();
-            long penalty = daysDifference * 487;
-            return penalty;
+            return daysDifference * 487L;
         } else {
             return 0;
         }
