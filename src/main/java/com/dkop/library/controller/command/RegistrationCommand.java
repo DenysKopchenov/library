@@ -10,7 +10,7 @@ import java.util.Map;
 
 public class RegistrationCommand implements Command {
     private static final String REGISTRATION_JSP = "/WEB-INF/registration.jsp";
-    private final UserService userService = new UserService();
+    private final UserService userService = UserService.getInstance();
 
     @Override
     public String execute(HttpServletRequest request) {

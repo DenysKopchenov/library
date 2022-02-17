@@ -43,19 +43,12 @@
                             </a>
                             <a class="nav-link" href="?operations=catalog"> Catalog
                             </a>
-                            book operations : create, delete, update
-                            (search or catalog)??
-                            <br>
                             <a class="nav-link" href="?operations=createLibrarian"> Create Librarian
                             </a>
                             <a class="nav-link" href="?operations=showAllLibrarians"> List Librarians
                             </a>
-                            librarian operations : create, delete
-                            <br>
                             <a class="nav-link" href="?operations=showAllUsers"> List Users
                             </a>
-                            add search user to block or unblock
-                            user operations : block, unblock
                             <br>
                             <!--                            <form class="d-flex">-->
                             <!--                                <input class="form-control me-2" name="searchByAuthor" type="search"-->

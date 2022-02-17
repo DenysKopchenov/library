@@ -12,14 +12,33 @@ import java.sql.SQLException;
 import java.util.List;
 
 public class UserService {
+    private static UserService instance;
+    private final DaoFactory daoFactory;
+
+    public static UserService getInstance() {
+        if (instance == null) {
+            synchronized (LoginService.class) {
+                if (instance == null) {
+                    UserService userService = new UserService();
+                    instance = userService;
+                }
+            }
+        }
+        return instance;
+    }
+
+    private UserService() {
+        daoFactory = DaoFactory.getInstance();
+    }
+
     public List<User> findAll() {
-        try (UserDao userDao = DaoFactory.getInstance().createUserDao()) {
+        try (UserDao userDao = daoFactory.createUserDao()) {
             return userDao.findAll();
         }
     }
 
     public List<User> findAllLibrarians() {
-        try (UserDao userDao = DaoFactory.getInstance().createUserDao()) {
+        try (UserDao userDao = daoFactory.createUserDao()) {
             return userDao.findAllLibrarians();
         }
     }
@@ -27,14 +46,14 @@ public class UserService {
     //return user
     public User getUserInfo(String email) throws DoesNotExistException {
         User user;
-        try (UserDao userDao = DaoFactory.getInstance().createUserDao()) {
+        try (UserDao userDao = daoFactory.createUserDao()) {
             user = userDao.findByEmail(email);
         }
         return user;
     }
 
     public void createUser(String firstName, String lastName, String email, String password, String role, String status) throws AlreadyExistException {
-        try (UserDao userDao = DaoFactory.getInstance().createUserDao()) {
+        try (UserDao userDao = daoFactory.createUserDao()) {
             User user = User.newBuilder()
                     .firstName(firstName)
                     .lastName(lastName)
@@ -50,7 +69,7 @@ public class UserService {
     }
 
     public void deleteUser(int id) throws NotFoundException {
-        try (UserDao userDao = DaoFactory.getInstance().createUserDao()) {
+        try (UserDao userDao = daoFactory.createUserDao()) {
             userDao.delete(id);
         } catch (SQLException e) {
             throw new NotFoundException(id + " not found");
@@ -58,7 +77,7 @@ public class UserService {
     }
 
     public void changeStatus(int id, String newStatus) throws NotFoundException {
-        try (UserDao userDao = DaoFactory.getInstance().createUserDao()) {
+        try (UserDao userDao = daoFactory.createUserDao()) {
             userDao.changeStatus(id, newStatus);
         } catch (SQLException e) {
             throw new NotFoundException(id + " not found");

@@ -12,7 +12,7 @@ import java.io.IOException;
 
 public class CheckStatusFilter implements Filter {
     private final Command logout = new LogOutCommand();
-    private final UserService userService = new UserService();
+    private final UserService userService = UserService.getInstance();
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
