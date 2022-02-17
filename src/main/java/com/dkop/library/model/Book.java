@@ -153,6 +153,11 @@ public class Book {
             return this;
         }
 
+        public Builder onOrder(int onOrder) {
+            Book.this.onOrder = onOrder;
+            return this;
+        }
+
         public Book build() {
             return Book.this;
         }

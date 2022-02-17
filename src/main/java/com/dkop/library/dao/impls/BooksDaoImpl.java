@@ -145,6 +145,7 @@ public class BooksDaoImpl implements BooksDao {
                             .publisher(resultSet.getString("publisher"))
                             .publishingDate(resultSet.getDate("publishing_date").toLocalDate())
                             .amount(resultSet.getInt("amount"))
+                            .onOrder(resultSet.getInt("on_order"))
                             .build();
                 } else {
                     throw new NotFoundException("Book not found");
