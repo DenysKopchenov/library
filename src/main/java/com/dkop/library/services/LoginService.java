@@ -13,6 +13,24 @@ import org.apache.commons.codec.digest.DigestUtils;
 import javax.servlet.http.HttpServletRequest;
 
 public class LoginService {
+    private static LoginService instance;
+    private DaoFactory daoFactory;
+
+    public static LoginService getInstance() {
+        if (instance == null) {
+            synchronized (LoginService.class) {
+                if (instance == null) {
+                    LoginService loginService = new LoginService();
+                    instance = loginService;
+                }
+            }
+        }
+        return instance;
+    }
+
+    private LoginService() {
+        daoFactory = DaoFactory.getInstance();
+    }
 
     public String login(String email, String password, HttpServletRequest request) {
         try {
@@ -40,7 +58,7 @@ public class LoginService {
      * @throws WasBlockedException    if status is blocked
      */
     public String authenticateUser(String email, String password) throws DoesNotExistException, WrongPasswordException, WasBlockedException {
-        try (UserDao userDao = DaoFactory.getInstance().createUserDao()) {
+        try (UserDao userDao = daoFactory.createUserDao()) {
             User user = userDao.findByEmail(email);
             if (user.getStatus().equals("active")) {
                 if (user.getPassword().equals(DigestUtils.sha256Hex(password))) {

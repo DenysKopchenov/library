@@ -8,7 +8,7 @@ import java.util.Map;
 
 public class LoginCommand implements Command {
     private static final String LOGIN_JSP = "/WEB-INF/login.jsp";
-    private final LoginService loginService = new LoginService();
+    private final LoginService loginService = LoginService.getInstance();
 
     @Override
     public String execute(HttpServletRequest request) {
