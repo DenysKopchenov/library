@@ -18,11 +18,14 @@ import java.util.function.Consumer;
 
 public class ReaderCommand implements Command {
     private final Map<String, Consumer<HttpServletRequest>> operations = new HashMap<>();
-    private final BookService bookService = BookService.getInstance();
-    private final UserService userService = UserService.getInstance();
-    private final OrderService orderService = new OrderService();
+    private final BookService bookService;
+    private final UserService userService;
+    private final OrderService orderService;
 
     public ReaderCommand() {
+        bookService = BookService.getInstance();
+        userService = UserService.getInstance();
+        orderService = OrderService.getInstance();
         init();
     }
 

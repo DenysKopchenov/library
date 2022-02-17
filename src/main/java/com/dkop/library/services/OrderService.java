@@ -1,6 +1,5 @@
 package com.dkop.library.services;
 
-import com.dkop.library.dao.BooksDao;
 import com.dkop.library.dao.DaoFactory;
 import com.dkop.library.dao.OrderDao;
 import com.dkop.library.model.Book;
@@ -11,7 +10,29 @@ import com.dkop.library.model.exceptions.NotFoundException;
 import java.sql.SQLException;
 
 public class OrderService {
-    BookService bookService = BookService.getInstance();
+    private static OrderService instance;
+    private final BookService bookService;
+    private final UserService userService;
+    private final DaoFactory daoFactory;
+
+    public static OrderService getInstance() {
+        if (instance == null) {
+            synchronized (LoginService.class) {
+                if (instance == null) {
+                    OrderService orderService = new OrderService();
+                    instance = orderService;
+                }
+            }
+        }
+        return instance;
+    }
+
+    private OrderService() {
+        daoFactory = DaoFactory.getInstance();
+        bookService = BookService.getInstance();
+        userService = UserService.getInstance();
+    }
+
 
     public void createOrderReadingRoom(int bookId, int userId, String type) throws AlreadyExistException, NotFoundException {
         Order order = Order.newBuilder()
@@ -20,7 +41,7 @@ public class OrderService {
                 .type(type)
                 .build();
         Book book = null;
-        try (OrderDao orderDao = DaoFactory.getInstance().createOrderDao()) {
+        try (OrderDao orderDao = daoFactory.createOrderDao()) {
             book = bookService.findById(bookId);
             orderDao.create(order);
         } catch (SQLException e) {
