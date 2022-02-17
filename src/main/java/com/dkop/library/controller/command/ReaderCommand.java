@@ -67,7 +67,7 @@ public class ReaderCommand implements Command {
     private void orderBookOperation(HttpServletRequest request) {
         if (StringUtils.isNotBlank(request.getParameter("order"))) {
             String orderType = request.getParameter("order");
-            String email = (String) request.getServletContext().getAttribute("email");
+            String email = (String) request.getSession().getAttribute("email");
             try {
                 int userId = userService.getUserInfo(email).getId();
                 int bookId = Integer.parseInt(request.getParameter("bookId"));
@@ -113,7 +113,7 @@ public class ReaderCommand implements Command {
 
     private void showApprovedOrders(HttpServletRequest request) {
         try {
-            User user = userService.getUserInfo((String) request.getServletContext().getAttribute("email"));
+            User user = userService.getUserInfo((String) request.getSession().getAttribute("email"));
             List<UserOrder> userApprovedOrders = new ArrayList<>();
             List<Order> allApproved = orderService.findAllApprovedUserOrders(user.getId());
             allApproved.forEach(order -> {
@@ -145,7 +145,7 @@ public class ReaderCommand implements Command {
     }
 
     private void showUserInfo(HttpServletRequest request) {
-        String email = (String) request.getServletContext().getAttribute("email");
+        String email = (String) request.getSession().getAttribute("email");
         try {
             User user = userService.getUserInfo(email);
             request.setAttribute("userInfo", user);

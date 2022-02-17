@@ -13,7 +13,7 @@ public class SessionListener implements HttpSessionListener {
     public void sessionDestroyed(HttpSessionEvent se) {
         Set<String> loggedUsers = (Set<String>) se.getSession().getServletContext().getAttribute("loggedUsers");
 
-        String email = (String) se.getSession().getServletContext().getAttribute("email");
+        String email = (String) se.getSession().getAttribute("email");
         if (loggedUsers != null) {
             loggedUsers.remove(email);
         }

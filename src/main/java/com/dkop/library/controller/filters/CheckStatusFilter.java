@@ -24,7 +24,7 @@ public class CheckStatusFilter implements Filter {
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse resp = (HttpServletResponse) response;
 
-        String email = (String) request.getServletContext().getAttribute("email");
+        String email = (String) req.getSession().getAttribute("email");
         if (email != null) {
             try {
                 String status = userService.getUserInfo(email).getStatus();

@@ -55,7 +55,7 @@ public class AdminCommand implements Command {
     }
 
     private void showUserInfo(HttpServletRequest request) {
-        String email = (String) request.getServletContext().getAttribute("email");
+        String email = (String) request.getSession().getAttribute("email");
         try {
             User user = userService.getUserInfo(email);
             request.setAttribute("userInfo", user);
@@ -119,6 +119,8 @@ public class AdminCommand implements Command {
                     if (errors.isEmpty()) {
                         bookService.updateBook(Integer.parseInt(id), title, author, publisher, publishingDate, amount);
                         request.setAttribute("successMessage", "Successfully updated");
+                        book = bookService.findById(Integer.parseInt(id));
+                        request.setAttribute("updatingBook", book);
                     } else {
                         request.setAttribute("validation", errors);
                     }

@@ -8,8 +8,7 @@ import java.util.Set;
 public class CommandUtils {
     public static void setUserRole(HttpServletRequest request, String email, String role) {
         HttpSession session = request.getSession();
-        ServletContext context = request.getServletContext();
-        context.setAttribute("email", email);
+        session.setAttribute("email", email);
         session.setAttribute("role", role);
     }
 
