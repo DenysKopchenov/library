@@ -6,13 +6,12 @@ import com.dkop.library.dao.OrderDao;
 import com.dkop.library.model.Book;
 import com.dkop.library.model.Order;
 import com.dkop.library.model.exceptions.AlreadyExistException;
-import com.dkop.library.model.exceptions.DoesNotExistException;
 import com.dkop.library.model.exceptions.NotFoundException;
 
 import java.sql.SQLException;
 
 public class OrderService {
-    BookService bookService = new BookService();
+    BookService bookService = BookService.getInstance();
 
     public void createOrderReadingRoom(int bookId, int userId, String type) throws AlreadyExistException, NotFoundException {
         Order order = Order.newBuilder()

@@ -13,6 +13,24 @@ import java.util.List;
 
 
 public class BookService {
+    private final DaoFactory daoFactory;
+    private static BookService instance;
+
+    public static BookService getInstance() {
+        if (instance == null) {
+            synchronized (BookService.class) {
+                if (instance == null) {
+                    BookService temp = new BookService();
+                    instance = temp;
+                }
+            }
+        }
+        return instance;
+    }
+
+    private BookService() {
+        daoFactory = DaoFactory.getInstance();
+    }
 
     public void createBook(String title, String author, String publisher, String publishingDate, String amount) throws AlreadyExistException {
         LocalDate date = LocalDate.parse(publishingDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
@@ -23,7 +41,7 @@ public class BookService {
                 .publishingDate(date)
                 .amount(Integer.parseInt(amount))
                 .build();
-        try (BooksDao booksDao = DaoFactory.getInstance().createBooksDao()) {
+        try (BooksDao booksDao = daoFactory.createBooksDao()) {
             booksDao.create(book);
         } catch (SQLException e) {
             throw new AlreadyExistException("Book already exist, you can update it!");

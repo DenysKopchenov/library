@@ -18,7 +18,7 @@ import java.util.function.Consumer;
 
 public class AdminCommand implements Command {
     private final Map<String, Consumer<HttpServletRequest>> operations = new HashMap<>();
-    private final BookService bookService = new BookService();
+    private final BookService bookService = BookService.getInstance();
     private final UserService userService = new UserService();
 
     public AdminCommand() {

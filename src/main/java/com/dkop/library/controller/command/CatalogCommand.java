@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 public class CatalogCommand implements Command {
-    private final BookService bookService = new BookService();
+    private final BookService bookService = BookService.getInstance();
     @Override
     public String execute(HttpServletRequest request) {
         request.setAttribute("sort", request.getParameter("sort"));
