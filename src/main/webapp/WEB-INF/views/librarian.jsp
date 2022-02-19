@@ -1,4 +1,5 @@
-
+<%@page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html lang=${language}>
 <head>
@@ -8,9 +9,39 @@
     <title>Title</title>
 </head>
 <body>
-<%@ include file="/WEB-INF/jspf/navigation_bar.jspf" %>
 hello from LIBRARIAN page
-<a class="btn btn-primary" href="${pageContext.request.contextPath}/library/logout" role="button">LogOut</a>
+<%@ include file="/WEB-INF/jspf/nav_bar_librarian.jspf" %>
+<h3><font style="color:hsl(0,100%,50%);">${errorMessage}</font></h3>
+<h3><font style="color:hsl(100,100%,50%);">${successMessage}</font></h3>
+<div>
+    <c:out value="${userInfo}"/>
+    <h3><font style="color:hsl(0,100%,50%);">${successDelete}</font></h3>
+</div>
+<div>
+    <c:forEach var="pendingOrder" items="${pendingOrders}">
+        <li>
+        ${pendingOrder}
+        <a class="btn btn-primary" href="?operations=acceptOrder&orderId=${pendingOrder.getOrderId()}"> Accept </a>
+        <a class="btn btn-primary" href="?operations=showReadersApprovedOrders&userId=${pendingOrder.getUserId()}"> Show user approved orders</a>
+        <a class="btn btn-danger" href="?operations=rejectOrder&orderId=${pendingOrder.getOrderId()}"> Reject </a>
+        </li>
+    </c:forEach>
+</div>
+<div>
+    <c:forEach var="reader" items="${allReaders}">
+        <li>
+        ${reader}
+        <a class="btn btn-primary" href="?operations=showReadersApprovedOrders&userId=${reader.getId()}"> Show approved orders </a>
+        </li>
+    </c:forEach>
+</div>
+<div>
+    <c:forEach var="approvedOrder" items="${userApprovedOrders}">
+        <li>
+        ${approvedOrder}
+        </li>
+    </c:forEach>
+</div>
 <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
         integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
         crossorigin="anonymous"></script>
