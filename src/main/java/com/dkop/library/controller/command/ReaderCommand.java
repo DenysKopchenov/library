@@ -1,19 +1,18 @@
 package com.dkop.library.controller.command;
 
-import com.dkop.library.model.Book;
-import com.dkop.library.model.Order;
-import com.dkop.library.model.User;
-import com.dkop.library.model.UserOrder;
-import com.dkop.library.model.exceptions.AlreadyExistException;
-import com.dkop.library.model.exceptions.DoesNotExistException;
-import com.dkop.library.model.exceptions.NotFoundException;
+import com.dkop.library.entity.Book;
+import com.dkop.library.entity.Order;
+import com.dkop.library.entity.User;
+import com.dkop.library.entity.UserOrder;
+import com.dkop.library.exceptions.AlreadyExistException;
+import com.dkop.library.exceptions.DoesNotExistException;
+import com.dkop.library.exceptions.NotFoundException;
 import com.dkop.library.services.BookService;
 import com.dkop.library.services.OrderService;
 import com.dkop.library.services.UserService;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

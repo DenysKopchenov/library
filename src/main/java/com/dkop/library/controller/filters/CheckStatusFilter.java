@@ -2,7 +2,7 @@ package com.dkop.library.controller.filters;
 
 import com.dkop.library.controller.command.Command;
 import com.dkop.library.controller.command.LogOutCommand;
-import com.dkop.library.model.exceptions.DoesNotExistException;
+import com.dkop.library.exceptions.DoesNotExistException;
 import com.dkop.library.services.UserService;
 
 import javax.servlet.*;

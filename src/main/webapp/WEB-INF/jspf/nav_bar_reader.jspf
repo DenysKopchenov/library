@@ -8,9 +8,7 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <a class="nav-link" href="?operations=catalog"> Catalog </a>
-                search : by author, by title
-                make order for book (abonement or reading room) (order duration (20 days - then penalty))
-                catalog
+                <a class="nav-link" href="?operations=showApprovedOrders"> Show abonement </a>
                 <form class="d-flex">
                     <input class="form-control me-2" name="searchByAuthor" type="search"
                            placeholder="Search by author" aria-label="Search by author">

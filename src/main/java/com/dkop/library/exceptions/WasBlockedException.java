@@ -1,4 +1,4 @@
-package com.dkop.library.model.exceptions;
+package com.dkop.library.exceptions;
 
 public class WasBlockedException extends Exception{
     public WasBlockedException(String message) {

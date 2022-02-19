@@ -2,15 +2,13 @@ package com.dkop.library.services;
 
 import com.dkop.library.dao.DaoFactory;
 import com.dkop.library.dao.OrderDao;
-import com.dkop.library.model.Book;
-import com.dkop.library.model.Order;
-import com.dkop.library.model.exceptions.AlreadyExistException;
-import com.dkop.library.model.exceptions.NotFoundException;
+import com.dkop.library.entity.Book;
+import com.dkop.library.entity.Order;
+import com.dkop.library.exceptions.AlreadyExistException;
+import com.dkop.library.exceptions.NotFoundException;
 
-import java.sql.Date;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.Period;
 import java.util.List;
 
@@ -40,19 +38,16 @@ public class OrderService {
 
 
     public void createOrder(int bookId, int userId, String type) throws AlreadyExistException, NotFoundException {
+        Book book = bookService.findById(bookId);
         Order order = Order.newBuilder()
                 .userId(userId)
                 .bookId(bookId)
                 .type(type)
                 .build();
-        Book book = null;
         try (OrderDao orderDao = daoFactory.createOrderDao()) {
-            book = bookService.findById(bookId);
             orderDao.create(order);
         } catch (SQLException e) {
             throw new AlreadyExistException("You already order " + book);
-        } catch (NotFoundException e) {
-            throw new NotFoundException("Book not found");
         }
     }
 
@@ -68,8 +63,6 @@ public class OrderService {
 //            order.setActualReturnDate(LocalDate.now());
             order.setStatus("completed");
             orderDao.update(order);
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
     }
 

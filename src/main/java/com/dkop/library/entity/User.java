@@ -1,4 +1,4 @@
-package com.dkop.library.model;
+package com.dkop.library.entity;
 
 import java.util.Objects;
 

@@ -1,8 +1,8 @@
 package com.dkop.library.dao.impls;
 
 import com.dkop.library.dao.BooksDao;
-import com.dkop.library.model.Book;
-import com.dkop.library.model.exceptions.NotFoundException;
+import com.dkop.library.entity.Book;
+import com.dkop.library.exceptions.NotFoundException;
 import org.apache.commons.lang3.StringUtils;
 
 import java.sql.*;
@@ -60,15 +60,17 @@ public class BooksDaoImpl implements BooksDao {
         }
     }
 
-    public void delete(int id) throws SQLException {
+    public void delete(int id) {
         String DELETE_BOOK = "DELETE FROM books WHERE id = ?;";
         try (PreparedStatement preparedStatement = connection.prepareStatement(DELETE_BOOK)) {
             preparedStatement.setInt(1, id);
             preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 
-    public void update(Book book) throws SQLException {
+    public void update(Book book) {
         String UPDATE_BOOK = "UPDATE books SET title = ?, author = ?, publisher = ?, publishing_date = ?, amount = ? WHERE id = ?;";
         try (PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_BOOK)) {
             preparedStatement.setString(1, book.getTitle());
@@ -78,6 +80,8 @@ public class BooksDaoImpl implements BooksDao {
             preparedStatement.setInt(5, book.getAmount());
             preparedStatement.setInt(6, book.getId());
             preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 

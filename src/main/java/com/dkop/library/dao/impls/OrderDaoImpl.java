@@ -1,10 +1,11 @@
 package com.dkop.library.dao.impls;
 
 import com.dkop.library.dao.OrderDao;
-import com.dkop.library.model.Order;
-import com.dkop.library.model.exceptions.NotFoundException;
+import com.dkop.library.entity.Order;
+import com.dkop.library.exceptions.NotFoundException;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,11 +18,12 @@ public class OrderDaoImpl implements OrderDao {
 
     @Override
     public void create(Order order) throws SQLException {
-        String CREATE_ORDER = "INSERT INTO orders (book_id, user_id, type) VALUES (?, ?, ?);";
+        String CREATE_ORDER = "INSERT INTO orders (book_id, user_id, type, create_date) VALUES (?, ?, ?, ?);";
         try (PreparedStatement preparedStatement = connection.prepareStatement(CREATE_ORDER)) {
             preparedStatement.setInt(1, order.getBookId());
             preparedStatement.setInt(2, order.getUserId());
             preparedStatement.setString(3, order.getType());
+            preparedStatement.setDate(4, Date.valueOf(LocalDate.now()));
             preparedStatement.executeUpdate();
         }
     }
@@ -39,6 +41,7 @@ public class OrderDaoImpl implements OrderDao {
                             .userId(resultSet.getInt("user_id"))
                             .type(resultSet.getString("type"))
                             .status(resultSet.getString("status"))
+                            .createDate(resultSet.getDate("create_date").toLocalDate())
                             .approvedDate(resultSet.getDate("approved_date").toLocalDate())
                             .expectedReturnDate(resultSet.getDate("expected_return_date").toLocalDate())
                             .actualReturnDate(resultSet.getDate("actual_return_date").toLocalDate())
@@ -66,6 +69,7 @@ public class OrderDaoImpl implements OrderDao {
                             .userId(resultSet.getInt("user_id"))
                             .type(resultSet.getString("type"))
                             .status(resultSet.getString("status"))
+                            .createDate(resultSet.getDate("create_date").toLocalDate())
                             .approvedDate(resultSet.getDate("approved_date").toLocalDate())
                             .expectedReturnDate(resultSet.getDate("expected_return_date").toLocalDate())
                             .actualReturnDate(resultSet.getDate("actual_return_date").toLocalDate())
@@ -81,20 +85,22 @@ public class OrderDaoImpl implements OrderDao {
     }
 
     @Override
-    public void update(Order order) throws SQLException {
+    public void update(Order order) {
         String UPDATE_ORDER = "UPDATE orders SET status = ? , approved_date = ?, expected_return_date = ? WHERE id = ?;";
         try (PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_ORDER)) {
             preparedStatement.setString(1, order.getStatus());
             preparedStatement.setDate(2, Date.valueOf(order.getApprovedDate()));
             preparedStatement.setDate(3, Date.valueOf(order.getExpectedReturnDate()));
-//            preparedStatement.setDate(4, Date.valueOf(order.getActualReturnDate()));
+            preparedStatement.setDate(4, Date.valueOf(order.getActualReturnDate()));
             preparedStatement.setInt(4, order.getId());
             preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 
     @Override
-    public void delete(int id) throws SQLException {
+    public void delete(int id) {
 
     }
 
@@ -113,8 +119,10 @@ public class OrderDaoImpl implements OrderDao {
                             .userId(resultSet.getInt("user_id"))
                             .type(resultSet.getString("type"))
                             .status(resultSet.getString("status"))
+                            .createDate(resultSet.getDate("create_date").toLocalDate())
                             .approvedDate(resultSet.getDate("approved_date").toLocalDate())
                             .expectedReturnDate(resultSet.getDate("expected_return_date").toLocalDate())
+                            .actualReturnDate(resultSet.getDate("actual_return_date").toLocalDate())
                             .build();
                     allApprovedOrders.add(order);
                 }

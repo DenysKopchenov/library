@@ -2,10 +2,10 @@ package com.dkop.library.services;
 
 import com.dkop.library.dao.DaoFactory;
 import com.dkop.library.dao.UserDao;
-import com.dkop.library.model.User;
-import com.dkop.library.model.exceptions.AlreadyExistException;
-import com.dkop.library.model.exceptions.DoesNotExistException;
-import com.dkop.library.model.exceptions.NotFoundException;
+import com.dkop.library.entity.User;
+import com.dkop.library.exceptions.AlreadyExistException;
+import com.dkop.library.exceptions.DoesNotExistException;
+import com.dkop.library.exceptions.NotFoundException;
 import org.apache.commons.codec.digest.DigestUtils;
 
 import java.sql.SQLException;
@@ -70,14 +70,14 @@ public class UserService {
 
     public void deleteUser(int id) throws NotFoundException {
         try (UserDao userDao = daoFactory.createUserDao()) {
+            userDao.findById(id);
             userDao.delete(id);
-        } catch (SQLException e) {
-            throw new NotFoundException(id + " not found");
         }
     }
 
     public void changeStatus(int id, String newStatus) throws NotFoundException {
         try (UserDao userDao = daoFactory.createUserDao()) {
+            userDao.findById(id);
             userDao.changeStatus(id, newStatus);
         } catch (SQLException e) {
             throw new NotFoundException(id + " not found");

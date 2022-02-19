@@ -28,6 +28,7 @@ public class LocaleFilter implements Filter {
         } else {
             locale = new Locale((String) req.getSession().getAttribute(LANGUAGE));
         }
+
         ResourceBundle resourceBundle = ResourceBundle.getBundle("localization", locale);
         req.setAttribute("bundle", resourceBundle);
         filterChain.doFilter(servletRequest, servletResponse);

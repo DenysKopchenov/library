@@ -1,6 +1,6 @@
 package com.dkop.library.dao;
 
-import com.dkop.library.model.Book;
+import com.dkop.library.entity.Book;
 
 import java.util.List;
 

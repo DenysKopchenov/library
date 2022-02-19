@@ -1,9 +1,10 @@
 package com.dkop.library.dao.impls;
 
 import com.dkop.library.dao.UserDao;
-import com.dkop.library.model.User;
-import com.dkop.library.model.exceptions.DoesNotExistException;
-import com.dkop.library.model.exceptions.NotFoundException;
+import com.dkop.library.entity.Book;
+import com.dkop.library.entity.User;
+import com.dkop.library.exceptions.DoesNotExistException;
+import com.dkop.library.exceptions.NotFoundException;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -72,18 +73,42 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public void changeStatus(int id, String newStatus) throws SQLException {
+    public void changeStatus(int id, String newStatus) {
         String BLOCK_USER = "UPDATE users SET status = ? WHERE id = ?;";
         try (PreparedStatement preparedStatement = connection.prepareStatement(BLOCK_USER)) {
             preparedStatement.setString(1, newStatus);
             preparedStatement.setInt(2, id);
             preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 
     @Override
     public User findById(int id) throws NotFoundException {
-        throw new UnsupportedOperationException();
+        String SELECT_USER = "SELECT * FROM users WHERE id = ?;";
+        User user = null;
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_USER)) {
+            preparedStatement.setInt(1, id);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    user = User.newBuilder()
+                            .firstName(resultSet.getString("first_name"))
+                            .lastName(resultSet.getString("last_name"))
+                            .email(resultSet.getString("email"))
+                            .password(resultSet.getString("password"))
+                            .role(resultSet.getString("role"))
+                            .status(resultSet.getString("status"))
+                            .id(resultSet.getInt("id"))
+                            .build();
+                } else {
+                    throw new NotFoundException("User not found");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return user;
     }
 
     @Override
@@ -91,11 +116,13 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public void delete(int id) throws SQLException {
+    public void delete(int id) {
         String DELETE_USER = "DELETE FROM users WHERE id = ?;";
         try (PreparedStatement preparedStatement = connection.prepareStatement(DELETE_USER)) {
             preparedStatement.setInt(1, id);
             preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 

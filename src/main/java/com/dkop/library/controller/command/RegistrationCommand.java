@@ -1,11 +1,10 @@
 package com.dkop.library.controller.command;
 
-import com.dkop.library.model.exceptions.AlreadyExistException;
+import com.dkop.library.exceptions.AlreadyExistException;
 import com.dkop.library.services.UserService;
 import com.dkop.library.services.Validator;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
 import java.util.Map;
 
 public class RegistrationCommand implements Command {

@@ -1,6 +1,6 @@
 package com.dkop.library.dao;
 
-import com.dkop.library.model.Order;
+import com.dkop.library.entity.Order;
 
 import java.util.List;
 

@@ -1,6 +1,6 @@
 package com.dkop.library.controller.command;
 
-import com.dkop.library.model.Book;
+import com.dkop.library.entity.Book;
 import com.dkop.library.services.BookService;
 
 import javax.servlet.http.HttpServletRequest;

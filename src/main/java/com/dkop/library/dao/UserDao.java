@@ -1,7 +1,7 @@
 package com.dkop.library.dao;
 
-import com.dkop.library.model.User;
-import com.dkop.library.model.exceptions.DoesNotExistException;
+import com.dkop.library.entity.User;
+import com.dkop.library.exceptions.DoesNotExistException;
 
 import java.sql.SQLException;
 import java.util.List;

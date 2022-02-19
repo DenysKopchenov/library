@@ -1,4 +1,4 @@
-package com.dkop.library.model;
+package com.dkop.library.entity;
 
 import java.time.LocalDate;
 import java.util.Objects;
@@ -9,6 +9,7 @@ public class Order {
     private int bookId;
     private String type;
     private String status;
+    private LocalDate createDate;
     private LocalDate approvedDate;
     private LocalDate expectedReturnDate;
     private LocalDate actualReturnDate;
@@ -123,6 +124,11 @@ public class Order {
 
         public Builder status(String status) {
             Order.this.status = status;
+            return this;
+        }
+
+        public Builder createDate(LocalDate createDate) {
+            Order.this.createDate = createDate;
             return this;
         }
 

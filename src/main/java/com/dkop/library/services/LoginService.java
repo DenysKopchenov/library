@@ -3,11 +3,11 @@ package com.dkop.library.services;
 import com.dkop.library.controller.command.CommandUtils;
 import com.dkop.library.dao.DaoFactory;
 import com.dkop.library.dao.UserDao;
-import com.dkop.library.model.User;
-import com.dkop.library.model.exceptions.AlreadyLoggedException;
-import com.dkop.library.model.exceptions.DoesNotExistException;
-import com.dkop.library.model.exceptions.WasBlockedException;
-import com.dkop.library.model.exceptions.WrongPasswordException;
+import com.dkop.library.entity.User;
+import com.dkop.library.exceptions.AlreadyLoggedException;
+import com.dkop.library.exceptions.DoesNotExistException;
+import com.dkop.library.exceptions.WasBlockedException;
+import com.dkop.library.exceptions.WrongPasswordException;
 import org.apache.commons.codec.digest.DigestUtils;
 
 import javax.servlet.http.HttpServletRequest;

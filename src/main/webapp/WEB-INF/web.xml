@@ -7,10 +7,15 @@
 
     <display-name>Web Application</display-name>
 
-    <!--    <context-param>
-            <param-name>javax.servlet.jsp.jstl.fmt.localizationContext</param-name>
-            <param-value>messages</param-value>
-        </context-param>-->
+<!--    <context-param>
+        <param-name>bundleName</param-name>
+        <param-value>localization</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>javax.servlet.jsp.jstl.fmt.localizationContext</param-name>
+        <param-value>localization</param-value>
+    </context-param>-->
 
 
     <welcome-file-list>

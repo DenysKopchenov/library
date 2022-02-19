@@ -1,11 +1,11 @@
 package com.dkop.library.controller.command;
 
 
-import com.dkop.library.model.Book;
-import com.dkop.library.model.User;
-import com.dkop.library.model.exceptions.AlreadyExistException;
-import com.dkop.library.model.exceptions.DoesNotExistException;
-import com.dkop.library.model.exceptions.NotFoundException;
+import com.dkop.library.entity.Book;
+import com.dkop.library.entity.User;
+import com.dkop.library.exceptions.AlreadyExistException;
+import com.dkop.library.exceptions.DoesNotExistException;
+import com.dkop.library.exceptions.NotFoundException;
 import com.dkop.library.services.BookService;
 import com.dkop.library.services.UserService;
 import com.dkop.library.services.Validator;
@@ -192,6 +192,7 @@ public class AdminCommand implements Command {
                 showAllUsersOperation(request);
             } catch (NotFoundException e) {
                 request.setAttribute("errorMessage", e.getMessage());
+                showAllUsersOperation(request);
             }
         } else {
             request.setAttribute("errorMessage", "ID may contains only digits");
@@ -207,6 +208,7 @@ public class AdminCommand implements Command {
                 showAllUsersOperation(request);
             } catch (NotFoundException e) {
                 request.setAttribute("errorMessage", e.getMessage());
+                showAllUsersOperation(request);
             }
         } else {
             request.setAttribute("errorMessage", "ID may contains only digits");

@@ -1,4 +1,4 @@
-package com.dkop.library.model;
+package com.dkop.library.entity;
 
 
 import java.time.LocalDate;
@@ -72,22 +72,6 @@ public class Book {
 //        this.amount = amount;
 //    }
 
-//    public Book(int id, String title, String author, String publisher, LocalDate publishingDate, int amount) {
-//        this.id = id;
-//        this.title = title;
-//        this.author = author;
-//        this.publisher = publisher;
-//        this.publishingDate = publishingDate;
-//        this.amount = amount;
-//    }
-//
-//    public Book(String title, String author, String publisher, LocalDate publishingDate, int amount) {
-//        this.title = title;
-//        this.author = author;
-//        this.publisher = publisher;
-//        this.publishingDate = publishingDate;
-//        this.amount = amount;
-//    }
 
     @Override
     public boolean equals(Object o) {
