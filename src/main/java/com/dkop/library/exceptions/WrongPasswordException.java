@@ -1,4 +1,4 @@
-package com.dkop.library.model.exceptions;
+package com.dkop.library.exceptions;
 
 public class WrongPasswordException extends Exception{
     public WrongPasswordException(String message) {
