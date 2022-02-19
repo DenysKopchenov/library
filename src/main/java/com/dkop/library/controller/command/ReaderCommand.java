@@ -84,7 +84,6 @@ public class ReaderCommand implements Command {
                 }
             } catch (AlreadyExistException | NotFoundException | DoesNotExistException e) {
                 request.setAttribute("errorMessage", e.getMessage());
-                showCatalogBookOperation(request);
             }
         }
     }
@@ -118,7 +117,7 @@ public class ReaderCommand implements Command {
         try {
             User user = userService.getUserInfo((String) request.getSession().getAttribute("email"));
             List<UserOrder> userApprovedOrders = new ArrayList<>();
-            List<Order> allApproved = orderService.findAllOrdersBasedOnStatus(user.getId(), "approved");
+            List<Order> allApproved = orderService.findAllUserApprovedOrders(user.getId());
             allApproved.forEach(order -> {
                 try {
                     UserOrder userOrder = new UserOrder();
@@ -136,7 +135,6 @@ public class ReaderCommand implements Command {
         } catch (DoesNotExistException e) {
             request.setAttribute("errorMessage", e.getMessage());
         }
-
     }
 
     private void returnBookOperation(HttpServletRequest request) {

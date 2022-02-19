@@ -3,10 +3,28 @@ package com.dkop.library.entity;
 import java.time.LocalDate;
 
 public class UserOrder {
+    private LocalDate createDate;
     private LocalDate expectedReturnDate;
     private Book book;
     private String penalty;
     private int orderId;
+    private int userId;
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
+    public LocalDate getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(LocalDate createDate) {
+        this.createDate = createDate;
+    }
 
     public LocalDate getExpectedReturnDate() {
         return expectedReturnDate;
@@ -40,17 +58,22 @@ public class UserOrder {
         this.orderId = orderId;
     }
 
+
+    //todo not like this!
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("UserOrder{");
-        sb.append("expectedReturnDate=").append(expectedReturnDate);
+        sb.append("createDate=").append(createDate);
+        sb.append(", expectedReturnDate=").append(expectedReturnDate);
         sb.append(", book=").append(book);
-        sb.append(", penalty=").append(penaltyFormatter(penalty));
+        sb.append(", penalty='").append(penalty).append('\'');
+        sb.append(", orderId=").append(orderId);
+        sb.append(", userId=").append(userId);
         sb.append('}');
         return sb.toString();
     }
 
-    //todo not like this!
     private String penaltyFormatter(String penalty) {
         StringBuilder builder = new StringBuilder();
         if (penalty.length() < 3) {

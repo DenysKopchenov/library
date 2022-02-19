@@ -31,40 +31,26 @@ public class UserDaoImpl implements UserDao {
     }
 
     public List<User> findAll() {
-        List<User> allUsers = new ArrayList<>();
-        String SELECT_USERS = "SELECT * FROM users WHERE role = 'reader';";
-        try (ResultSet resultSet = connection.createStatement().executeQuery(SELECT_USERS)) {
-            while (resultSet.next()) {
-                User user = User.newBuilder()
-                        .firstName(resultSet.getString("first_name"))
-                        .lastName(resultSet.getString("last_name"))
-                        .email(resultSet.getString("email"))
-                        .role(resultSet.getString("role"))
-                        .status(resultSet.getString("status"))
-                        .id(resultSet.getInt("id"))
-                        .build();
-                allUsers.add(user);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return allUsers;
+        return findAllByRole("reader");
     }
 
-    public List<User> findAllLibrarians() {
+    public List<User> findAllByRole(String role) {
         List<User> allUsers = new ArrayList<>();
-        String SELECT_USERS = "SELECT * FROM users WHERE role = 'librarian';";
-        try (ResultSet resultSet = connection.createStatement().executeQuery(SELECT_USERS)) {
-            while (resultSet.next()) {
-                User user = User.newBuilder()
-                        .firstName(resultSet.getString("first_name"))
-                        .lastName(resultSet.getString("last_name"))
-                        .email(resultSet.getString("email"))
-                        .role(resultSet.getString("role"))
-                        .status(resultSet.getString("status"))
-                        .id(resultSet.getInt("id"))
-                        .build();
-                allUsers.add(user);
+        String SELECT_USERS = "SELECT * FROM users WHERE role = ? ORDER BY id;";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_USERS)) {
+            preparedStatement.setString(1, role);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    User user = User.newBuilder()
+                            .firstName(resultSet.getString("first_name"))
+                            .lastName(resultSet.getString("last_name"))
+                            .email(resultSet.getString("email"))
+                            .role(resultSet.getString("role"))
+                            .status(resultSet.getString("status"))
+                            .id(resultSet.getInt("id"))
+                            .build();
+                    allUsers.add(user);
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();

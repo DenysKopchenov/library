@@ -47,7 +47,7 @@
     </filter>
     <filter-mapping>
         <filter-name>CheckStatusFilter</filter-name>
-        <url-pattern>/library/reader</url-pattern>
+        <url-pattern>/library/*</url-pattern>
 
     </filter-mapping>
 
