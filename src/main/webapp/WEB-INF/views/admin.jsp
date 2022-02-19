@@ -14,10 +14,8 @@
 <h3><font style="color:hsl(0,100%,50%);">${errorMessage}</font></h3>
 <h3><font style="color:hsl(100, 100%, 50%);">${successMessage}</font></h3>
 <c:if test="${operation eq 'createLibrarian'}">
-    <c:set var="button" value="Create"/>
+    <c:set var="button" value="Create librarian"/>
     <%@ include file="/WEB-INF/forms/reg_form.jspf" %>
-    <!--    <h3><font style="color:hsl(0,100%,50%);">${errorMessage}</font></h3>
-        <h3><font style="color:hsl(100, 100%, 50%);">${successMessage}</font></h3>-->
 </c:if>
 <c:if test="${operation eq 'createBook'}">
     <%@ include file="/WEB-INF/forms/create_book_form.jspf" %>
@@ -46,15 +44,13 @@
     </c:forEach>
 </div>
 <div>
-    <c:forEach var="user" items="${allUsers}">
-        <!--        <h3><font style="color:hsl(0,100%,50%);">${errorMessage}</font></h3>
-                <h3><font style="color:hsl(100, 100%, 50%);">${successMessage}</font></h3>-->
+    <c:forEach var="reader" items="${allReaders}">
         <li>
             ${user}
-            <c:if test="${user.getStatus() eq 'blocked'}">
+            <c:if test="${reader.getStatus() eq 'blocked'}">
                 <a href="?operations=unblockUser&userId=${user.getId()}"> unblock </a>
             </c:if>
-            <c:if test="${user.getStatus() eq 'active'}">
+            <c:if test="${reader.getStatus() eq 'active'}">
                 <a href="?operations=blockUser&userId=${user.getId()}"> block </a>
             </c:if>
         </li>
@@ -65,8 +61,6 @@
         <c:forEach var="book" items="${booksByAuthor}">
             <li>
                 ${book}
-                <!--                <h3><font style="color:hsl(0,100%,50%);">${errorMessage}</font></h3>
-                                <h3><font style="color:hsl(100, 100%, 50%);">${successMessage}</font></h3>-->
                 <a href="?operations=deleteBook&bookId=${book.getId()}"> delete</a>
                 <a href="?operations=updateBook&bookId=${book.getId()}"> update</a>
             </li>
@@ -78,8 +72,6 @@
         <c:forEach var="book" items="${booksByTitle}">
             <li>
                 ${book}
-                <!--                <h3><font style="color:hsl(0,100%,50%);">${errorMessage}</font></h3>
-                                <h3><font style="color:hsl(100, 100%, 50%);">${successMessage}</font></h3>-->
                 <a href="?operations=deleteBook&bookId=${book.getId()}"> delete</a>
                 <a href="?operations=updateBook&bookId=${book.getId()}"> update</a>
             </li>

@@ -30,7 +30,7 @@ public class AdminCommand implements Command {
         operations.put("deleteBook", this::deleteBookOperation);
         operations.put("updateBook", this::updateBookOperation);
         operations.put("catalog", this::showCatalogBookOperation);
-        operations.put("showAllUsers", this::showAllUsersOperation);
+        operations.put("showAllUsers", this::showAllReadersOperation);
         operations.put("showAllLibrarians", this::showAllLibrariansOperation);
         operations.put("userInfo", this::showUserInfo);
         operations.put("blockUser", this::blockUserOperation);
@@ -119,8 +119,7 @@ public class AdminCommand implements Command {
                     if (errors.isEmpty()) {
                         bookService.updateBook(Integer.parseInt(id), title, author, publisher, publishingDate, amount);
                         request.setAttribute("successMessage", "Successfully updated");
-                        book = bookService.findById(Integer.parseInt(id));
-                        request.setAttribute("updatingBook", book);
+                        request.setAttribute("operation", "");
                     } else {
                         request.setAttribute("validation", errors);
                     }
@@ -133,12 +132,12 @@ public class AdminCommand implements Command {
         }
     }
 
-    private void showAllUsersOperation(HttpServletRequest request) {
-        request.setAttribute("allUsers", userService.findAll());
+    private void showAllReadersOperation(HttpServletRequest request) {
+        request.setAttribute("allReaders", userService.findAll());
     }
 
     private void showAllLibrariansOperation(HttpServletRequest request) {
-        request.setAttribute("allLibrarians", userService.findAllLibrarians());
+        request.setAttribute("allLibrarians", userService.findAllByRole("librarian"));
     }
 
     private void showCatalogBookOperation(HttpServletRequest request) {
@@ -189,10 +188,10 @@ public class AdminCommand implements Command {
             try {
                 userService.changeStatus(Integer.parseInt(userId), "active");
                 request.setAttribute("successMessage", "Successfully unblocked");
-                showAllUsersOperation(request);
+                showAllReadersOperation(request);
             } catch (NotFoundException e) {
                 request.setAttribute("errorMessage", e.getMessage());
-                showAllUsersOperation(request);
+                showAllReadersOperation(request);
             }
         } else {
             request.setAttribute("errorMessage", "ID may contains only digits");
@@ -205,10 +204,10 @@ public class AdminCommand implements Command {
             try {
                 userService.changeStatus(Integer.parseInt(userId), "blocked");
                 request.setAttribute("successMessage", "Successfully blocked");
-                showAllUsersOperation(request);
+                showAllReadersOperation(request);
             } catch (NotFoundException e) {
                 request.setAttribute("errorMessage", e.getMessage());
-                showAllUsersOperation(request);
+                showAllReadersOperation(request);
             }
         } else {
             request.setAttribute("errorMessage", "ID may contains only digits");
