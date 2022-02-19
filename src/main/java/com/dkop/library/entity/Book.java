@@ -16,62 +16,61 @@ public class Book {
     private Book() {
     }
 
-    public int getOnOrder() {
-        return onOrder;
-    }
-
-//    public void setOnOrder(int onOrder) {
-//        this.onOrder = onOrder;
-//    }
-
     public int getId() {
         return id;
     }
 
-//    public void setId(int id) {
-//        this.id = id;
-//    }
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getTitle() {
         return title;
     }
 
-//    public void setTitle(String title) {
-//        this.title = title;
-//    }
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
     public String getAuthor() {
         return author;
     }
 
-//    public void setAuthor(String author) {
-//        this.author = author;
-//    }
+    public void setAuthor(String author) {
+        this.author = author;
+    }
 
     public String getPublisher() {
         return publisher;
     }
 
-//    public void setPublisher(String publisher) {
-//        this.publisher = publisher;
-//    }
+    public void setPublisher(String publisher) {
+        this.publisher = publisher;
+    }
 
     public LocalDate getPublishingDate() {
         return publishingDate;
     }
 
-//    public void setPublishingDate(LocalDate publishingDate) {
-//        this.publishingDate = publishingDate;
-//    }
+    public void setPublishingDate(LocalDate publishingDate) {
+        this.publishingDate = publishingDate;
+    }
 
     public int getAmount() {
         return amount;
     }
 
-//    public void setAmount(int amount) {
-//        this.amount = amount;
-//    }
+    public void setAmount(int amount) {
+        this.amount = amount;
+    }
 
+    public int getOnOrder() {
+        return onOrder;
+    }
+
+    public void setOnOrder(int onOrder) {
+        this.onOrder = onOrder;
+    }
 
     @Override
     public boolean equals(Object o) {

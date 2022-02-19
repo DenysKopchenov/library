@@ -46,7 +46,6 @@ public class BooksDaoImpl implements BooksDao {
         return allBooks;
     }
 
-
     public void create(Book book) throws SQLException {
         String INSERT_BOOK = "INSERT INTO books (title, author, publisher, publishing_date, amount) VALUES (?, ?, ?, ?, ?);";
         try (PreparedStatement preparedStatement = connection.prepareStatement(INSERT_BOOK)) {
@@ -71,14 +70,15 @@ public class BooksDaoImpl implements BooksDao {
     }
 
     public void update(Book book) {
-        String UPDATE_BOOK = "UPDATE books SET title = ?, author = ?, publisher = ?, publishing_date = ?, amount = ? WHERE id = ?;";
+        String UPDATE_BOOK = "UPDATE books SET title = ?, author = ?, publisher = ?, publishing_date = ?, amount = ?, on_order = ? WHERE id = ?;";
         try (PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_BOOK)) {
             preparedStatement.setString(1, book.getTitle());
             preparedStatement.setString(2, book.getAuthor());
             preparedStatement.setString(3, book.getPublisher());
             preparedStatement.setDate(4, Date.valueOf(book.getPublishingDate()));
             preparedStatement.setInt(5, book.getAmount());
-            preparedStatement.setInt(6, book.getId());
+            preparedStatement.setInt(6, book.getOnOrder());
+            preparedStatement.setInt(7, book.getId());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
