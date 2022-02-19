@@ -1,6 +1,7 @@
 package com.dkop.library.dao.impls;
 
 import com.dkop.library.dao.OrderDao;
+import com.dkop.library.entity.Book;
 import com.dkop.library.entity.Order;
 import com.dkop.library.exceptions.NotFoundException;
 
@@ -86,13 +87,13 @@ public class OrderDaoImpl implements OrderDao {
 
     @Override
     public void update(Order order) {
-        String UPDATE_ORDER = "UPDATE orders SET status = ? , approved_date = ?, expected_return_date = ? WHERE id = ?;";
+        String UPDATE_ORDER = "UPDATE orders SET status = ? , approved_date = ?, expected_return_date = ?, actual_return_date = ? WHERE id = ?;";
         try (PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_ORDER)) {
             preparedStatement.setString(1, order.getStatus());
             preparedStatement.setDate(2, Date.valueOf(order.getApprovedDate()));
             preparedStatement.setDate(3, Date.valueOf(order.getExpectedReturnDate()));
             preparedStatement.setDate(4, Date.valueOf(order.getActualReturnDate()));
-            preparedStatement.setInt(4, order.getId());
+            preparedStatement.setInt(5, order.getId());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -105,12 +106,39 @@ public class OrderDaoImpl implements OrderDao {
     }
 
     @Override
-    public List<Order> findAllOrdersBasedOnStatus(int userId, String status) {
-        String SELECT_ORDERS = "SELECT * FROM orders WHERE user_id = ? AND status = ?;";
+    public List<Order> findAllOrdersByStatus(String status) {
+        String SELECT_ORDERS = "SELECT * FROM orders WHERE status = ?;";
+        List<Order> ordersByStatus = new ArrayList<>();
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ORDERS)) {
+            preparedStatement.setString(1, status);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    Order order = Order.newBuilder()
+                            .id(resultSet.getInt("id"))
+                            .bookId(resultSet.getInt("book_id"))
+                            .userId(resultSet.getInt("user_id"))
+                            .type(resultSet.getString("type"))
+                            .status(resultSet.getString("status"))
+                            .createDate(resultSet.getDate("create_date").toLocalDate())
+                            .approvedDate(resultSet.getDate("approved_date").toLocalDate())
+                            .expectedReturnDate(resultSet.getDate("expected_return_date").toLocalDate())
+                            .actualReturnDate(resultSet.getDate("actual_return_date").toLocalDate())
+                            .build();
+                    ordersByStatus.add(order);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return ordersByStatus;
+    }
+
+    @Override
+    public List<Order> findAllUserApprovedOrders(int userId) {
+        String SELECT_ORDERS = "SELECT * FROM orders WHERE user_id = ? AND status = 'approved'";
         List<Order> allApprovedOrders = new ArrayList<>();
         try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ORDERS)) {
             preparedStatement.setInt(1, userId);
-            preparedStatement.setString(2, status);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 while (resultSet.next()) {
                     Order order = Order.newBuilder()
@@ -132,6 +160,79 @@ public class OrderDaoImpl implements OrderDao {
         }
         return allApprovedOrders;
     }
+
+    @Override
+    public void processOrder(Order order, Book book) {
+        String UPDATE_ORDER = "UPDATE orders SET status = ? , approved_date = ?, expected_return_date = ?, actual_return_date = ? WHERE id = ?;";
+        String UPDATE_BOOK = "UPDATE books SET title = ?, author = ?, publisher = ?, publishing_date = ?, amount = ?, on_order = ? WHERE id = ?;";
+        try (PreparedStatement updateBook = connection.prepareStatement(UPDATE_BOOK);
+             PreparedStatement updateOrder = connection.prepareStatement(UPDATE_ORDER)) {
+            connection.setAutoCommit(false);
+            updateOrder.setString(1, order.getStatus());
+            updateOrder.setDate(2, Date.valueOf(order.getApprovedDate()));
+            updateOrder.setDate(3, Date.valueOf(order.getExpectedReturnDate()));
+            updateOrder.setDate(4, Date.valueOf(order.getActualReturnDate()));
+            updateOrder.setInt(5, order.getId());
+            updateOrder.executeUpdate();
+
+            updateBook.setString(1, book.getTitle());
+            updateBook.setString(2, book.getAuthor());
+            updateBook.setString(3, book.getPublisher());
+            updateBook.setDate(4, Date.valueOf(book.getPublishingDate()));
+            updateBook.setInt(5, book.getAmount());
+            updateBook.setInt(6, book.getOnOrder());
+            updateBook.setInt(7, book.getId());
+            updateBook.executeUpdate();
+
+            connection.commit();
+        } catch (SQLException e) {
+            try {
+                connection.rollback();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+            e.printStackTrace();
+        }
+    }
+
+//    @Override
+//    public void rejectOrder(Order order) {
+//        update(order);
+//    }
+//
+//    @Override
+//    public void returnOrder(Order order, Book book) {
+//        String UPDATE_ORDER = "UPDATE orders SET status = ? , approved_date = ?, expected_return_date = ?, actual_return_date = ? WHERE id = ?;";
+//        String UPDATE_BOOK = "UPDATE books SET title = ?, author = ?, publisher = ?, publishing_date = ?, amount = ?, on_order = ? WHERE id = ?;";
+//        try (PreparedStatement updateBook = connection.prepareStatement(UPDATE_BOOK);
+//             PreparedStatement updateOrder = connection.prepareStatement(UPDATE_ORDER)) {
+//            connection.setAutoCommit(false);
+//            updateOrder.setString(1, order.getStatus());
+//            updateOrder.setDate(2, Date.valueOf(order.getApprovedDate()));
+//            updateOrder.setDate(3, Date.valueOf(order.getExpectedReturnDate()));
+//            updateOrder.setDate(4, Date.valueOf(order.getActualReturnDate()));
+//            updateOrder.setInt(5, order.getId());
+//            updateOrder.executeUpdate();
+//
+//            updateBook.setString(1, book.getTitle());
+//            updateBook.setString(2, book.getAuthor());
+//            updateBook.setString(3, book.getPublisher());
+//            updateBook.setDate(4, Date.valueOf(book.getPublishingDate()));
+//            updateBook.setInt(5, book.getAmount());
+//            updateBook.setInt(6, book.getOnOrder());
+//            updateBook.setInt(7, book.getId());
+//            updateBook.executeUpdate();
+//
+//            connection.commit();
+//        } catch (SQLException e) {
+//            try {
+//                connection.rollback();
+//            } catch (SQLException ex) {
+//                ex.printStackTrace();
+//            }
+//            e.printStackTrace();
+//        }
+//    }
 
     @Override
     public void close() {

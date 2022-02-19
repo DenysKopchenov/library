@@ -50,6 +50,10 @@ public class Order {
         return actualReturnDate;
     }
 
+    public LocalDate getCreateDate() {
+        return createDate;
+    }
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("Order{");

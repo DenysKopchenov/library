@@ -13,6 +13,10 @@ hello form READER page
 <%@ include file="/WEB-INF/jspf/nav_bar_reader.jspf" %>
 <h3><font style="color:hsl(0,100%,50%);">${errorMessage}</font></h3>
 <h3><font style="color:hsl(100,100%,50%);">${successMessage}</font></h3>
+<div>
+    <c:out value="${userInfo}"/>
+    <h3><font style="color:hsl(0,100%,50%);">${successDelete}</font></h3>
+</div>
 <c:forEach var="book" items="${foundedBooks}">
     <li>
         <c:out value="${book}"/>
@@ -27,10 +31,6 @@ hello form READER page
         </c:choose>
     </li>
 </c:forEach>
-</div>
-<div>
-    <c:out value="${userInfo}"/>
-    <h3><font style="color:hsl(0,100%,50%);">${successDelete}</font></h3>
 </div>
 </div>
 <c:if test="${operation eq 'catalog'}">

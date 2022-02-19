@@ -51,17 +51,48 @@ public class OrderService {
         }
     }
 
-    public List<Order> findAllOrdersBasedOnStatus(int userId, String status) {
+    public List<Order> findAllUserApprovedOrders(int userId) {
         try (OrderDao orderDao = daoFactory.createOrderDao()) {
-            return orderDao.findAllOrdersBasedOnStatus(userId, status);
+            return orderDao.findAllUserApprovedOrders(userId);
         }
     }
 
-    public void returnBook(int orderId) throws NotFoundException {
+    public List<Order> findAllOrdersByStatus(String status) {
+        try (OrderDao orderDao = daoFactory.createOrderDao()) {
+            return orderDao.findAllOrdersByStatus(status);
+        }
+    }
+
+
+    public void returnBook(int orderId) throws NotFoundException {//todo!
         try (OrderDao orderDao = daoFactory.createOrderDao()) {
             Order order = orderDao.findById(orderId);
-//            order.setActualReturnDate(LocalDate.now());
+            order.setActualReturnDate(LocalDate.now());
             order.setStatus("completed");
+            Book book = bookService.findById(order.getBookId());
+            book.setAmount(book.getAmount() + 1);
+            book.setOnOrder(book.getOnOrder() - 1);
+
+            orderDao.processOrder(order, book);
+        }
+    }
+
+    public void acceptOrder(Order order) throws NotFoundException {
+        Book book = bookService.findById(order.getBookId());
+        book.setAmount(book.getAmount() - 1);
+        book.setOnOrder(book.getOnOrder() + 1);
+        order.setApprovedDate(LocalDate.now());
+        order.setExpectedReturnDate(LocalDate.now().plusDays(25));
+        order.setStatus("approved");
+        
+        try (OrderDao orderDao = daoFactory.createOrderDao()) {
+            orderDao.processOrder(order, book);
+        }
+    }
+
+    public void rejectOrder(Order order) {
+        order.setStatus("rejected");
+        try (OrderDao orderDao = daoFactory.createOrderDao()) {
             orderDao.update(order);
         }
     }
