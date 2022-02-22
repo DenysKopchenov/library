@@ -87,13 +87,13 @@ public class OrderDaoImpl implements OrderDao {
 
     @Override
     public void update(Order order) {
-        String UPDATE_ORDER = "UPDATE orders SET status = ? , approved_date = ?, expected_return_date = ?, actual_return_date = ? WHERE id = ?;";
+        String UPDATE_ORDER = "UPDATE orders SET status = ? , approved_date = ?, expected_return_date = ? WHERE id = ?;";
         try (PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_ORDER)) {
             preparedStatement.setString(1, order.getStatus());
             preparedStatement.setDate(2, Date.valueOf(order.getApprovedDate()));
             preparedStatement.setDate(3, Date.valueOf(order.getExpectedReturnDate()));
-            preparedStatement.setDate(4, Date.valueOf(order.getActualReturnDate()));
-            preparedStatement.setInt(5, order.getId());
+//            preparedStatement.setDate(4, Date.valueOf(order.getActualReturnDate()));
+            preparedStatement.setInt(4, order.getId());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -163,25 +163,25 @@ public class OrderDaoImpl implements OrderDao {
 
     @Override
     public void processOrder(Order order, Book book) {
-        String UPDATE_ORDER = "UPDATE orders SET status = ? , approved_date = ?, expected_return_date = ?, actual_return_date = ? WHERE id = ?;";
-        String UPDATE_BOOK = "UPDATE books SET title = ?, author = ?, publisher = ?, publishing_date = ?, amount = ?, on_order = ? WHERE id = ?;";
+        String UPDATE_ORDER = "UPDATE orders SET status = ? , approved_date = ?, expected_return_date = ? WHERE id = ?;";
+        String UPDATE_BOOK = "UPDATE books SET amount = ?, on_order = ? WHERE id = ?;";
         try (PreparedStatement updateBook = connection.prepareStatement(UPDATE_BOOK);
              PreparedStatement updateOrder = connection.prepareStatement(UPDATE_ORDER)) {
             connection.setAutoCommit(false);
             updateOrder.setString(1, order.getStatus());
             updateOrder.setDate(2, Date.valueOf(order.getApprovedDate()));
             updateOrder.setDate(3, Date.valueOf(order.getExpectedReturnDate()));
-            updateOrder.setDate(4, Date.valueOf(order.getActualReturnDate()));
-            updateOrder.setInt(5, order.getId());
+//            updateOrder.setDate(4, Date.valueOf(order.getActualReturnDate()));
+            updateOrder.setInt(4, order.getId());
             updateOrder.executeUpdate();
 
-            updateBook.setString(1, book.getTitle());
-            updateBook.setString(2, book.getAuthor());
-            updateBook.setString(3, book.getPublisher());
-            updateBook.setDate(4, Date.valueOf(book.getPublishingDate()));
-            updateBook.setInt(5, book.getAmount());
-            updateBook.setInt(6, book.getOnOrder());
-            updateBook.setInt(7, book.getId());
+//            updateBook.setString(1, book.getTitle());
+//            updateBook.setString(2, book.getAuthor());
+//            updateBook.setString(3, book.getPublisher());
+//            updateBook.setDate(4, Date.valueOf(book.getPublishingDate()));
+            updateBook.setInt(1, book.getAmount());
+            updateBook.setInt(2, book.getOnOrder());
+            updateBook.setInt(3, book.getId());
             updateBook.executeUpdate();
 
             connection.commit();
@@ -195,44 +195,24 @@ public class OrderDaoImpl implements OrderDao {
         }
     }
 
-//    @Override
-//    public void rejectOrder(Order order) {
-//        update(order);
-//    }
-//
-//    @Override
-//    public void returnOrder(Order order, Book book) {
-//        String UPDATE_ORDER = "UPDATE orders SET status = ? , approved_date = ?, expected_return_date = ?, actual_return_date = ? WHERE id = ?;";
-//        String UPDATE_BOOK = "UPDATE books SET title = ?, author = ?, publisher = ?, publishing_date = ?, amount = ?, on_order = ? WHERE id = ?;";
-//        try (PreparedStatement updateBook = connection.prepareStatement(UPDATE_BOOK);
-//             PreparedStatement updateOrder = connection.prepareStatement(UPDATE_ORDER)) {
-//            connection.setAutoCommit(false);
-//            updateOrder.setString(1, order.getStatus());
-//            updateOrder.setDate(2, Date.valueOf(order.getApprovedDate()));
-//            updateOrder.setDate(3, Date.valueOf(order.getExpectedReturnDate()));
-//            updateOrder.setDate(4, Date.valueOf(order.getActualReturnDate()));
-//            updateOrder.setInt(5, order.getId());
-//            updateOrder.executeUpdate();
-//
-//            updateBook.setString(1, book.getTitle());
-//            updateBook.setString(2, book.getAuthor());
-//            updateBook.setString(3, book.getPublisher());
-//            updateBook.setDate(4, Date.valueOf(book.getPublishingDate()));
-//            updateBook.setInt(5, book.getAmount());
-//            updateBook.setInt(6, book.getOnOrder());
-//            updateBook.setInt(7, book.getId());
-//            updateBook.executeUpdate();
-//
-//            connection.commit();
-//        } catch (SQLException e) {
-//            try {
-//                connection.rollback();
-//            } catch (SQLException ex) {
-//                ex.printStackTrace();
-//            }
-//            e.printStackTrace();
-//        }
-//    }
+    @Override
+    public boolean isOrderExist(Order order) {
+        String CHECK_ORDER = "SELECT count(id) AS count FROM orders WHERE status = 'approved' OR status = 'pending' AND book_id = ? AND user_id = ? AND type = ?;";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(CHECK_ORDER)) {
+            preparedStatement.setInt(1, order.getBookId());
+            preparedStatement.setInt(2, order.getUserId());
+            preparedStatement.setString(3, order.getType());
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    long count = resultSet.getLong("count");
+                    return count > 0;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 
     @Override
     public void close() {

@@ -4,8 +4,8 @@ import com.dkop.library.dao.DaoFactory;
 import com.dkop.library.dao.OrderDao;
 import com.dkop.library.entity.Book;
 import com.dkop.library.entity.Order;
-import com.dkop.library.exceptions.AlreadyExistException;
 import com.dkop.library.exceptions.NotFoundException;
+import com.dkop.library.exceptions.UnableToAcceptOrderException;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -36,9 +36,7 @@ public class OrderService {
         userService = UserService.getInstance();
     }
 
-
-    public void createOrder(int bookId, int userId, String type) throws AlreadyExistException, NotFoundException {
-        Book book = bookService.findById(bookId);
+    public void createOrder(int bookId, int userId, String type) throws NotFoundException {
         Order order = Order.newBuilder()
                 .userId(userId)
                 .bookId(bookId)
@@ -47,7 +45,7 @@ public class OrderService {
         try (OrderDao orderDao = daoFactory.createOrderDao()) {
             orderDao.create(order);
         } catch (SQLException e) {
-            throw new AlreadyExistException("You already order " + book);
+            e.printStackTrace();
         }
     }
 
@@ -64,11 +62,12 @@ public class OrderService {
     }
 
 
-    public void returnBook(int orderId) throws NotFoundException {//todo!
+    public void returnBook(int orderId) throws NotFoundException {
         try (OrderDao orderDao = daoFactory.createOrderDao()) {
             Order order = orderDao.findById(orderId);
-            order.setActualReturnDate(LocalDate.now());
+//            order.setActualReturnDate(LocalDate.now()); sets automatically on db
             order.setStatus("completed");
+
             Book book = bookService.findById(order.getBookId());
             book.setAmount(book.getAmount() + 1);
             book.setOnOrder(book.getOnOrder() - 1);
@@ -77,24 +76,30 @@ public class OrderService {
         }
     }
 
-    public void acceptOrder(Order order) throws NotFoundException {
+    public void acceptOrder(Order order) throws NotFoundException, UnableToAcceptOrderException {
         Book book = bookService.findById(order.getBookId());
+        int amount = book.getAmount();
+        if (amount <= 0) {
+            throw new UnableToAcceptOrderException("Unable to accept order, we have no books, reject please");
+        }
         book.setAmount(book.getAmount() - 1);
         book.setOnOrder(book.getOnOrder() + 1);
+        LocalDate expectedReturnDate = order.getType().equals("home") ? LocalDate.now().plusDays(25) : LocalDate.now();
         order.setApprovedDate(LocalDate.now());
-        order.setExpectedReturnDate(LocalDate.now().plusDays(25));
+        order.setExpectedReturnDate(expectedReturnDate);
         order.setStatus("approved");
-        
+
         try (OrderDao orderDao = daoFactory.createOrderDao()) {
             orderDao.processOrder(order, book);
         }
     }
 
-    public void rejectOrder(Order order) {
+    public void rejectOrder(Order order) throws NotFoundException {
         order.setStatus("rejected");
         try (OrderDao orderDao = daoFactory.createOrderDao()) {
             orderDao.update(order);
         }
+
     }
 
     public Order findById(int orderId) throws NotFoundException {
@@ -102,6 +107,7 @@ public class OrderService {
             return orderDao.findById(orderId);
         }
     }
+
 
     public long checkForPenalty(Order order) {
         LocalDate expectedReturnDate = order.getExpectedReturnDate();
@@ -111,6 +117,17 @@ public class OrderService {
             return daysDifference * 487L;
         } else {
             return 0;
+        }
+    }
+
+    public boolean isOrderExist(int bookId, int userId, String type) {
+        Order order = Order.newBuilder()
+                .userId(userId)
+                .bookId(bookId)
+                .type(type)
+                .build();
+        try (OrderDao orderDao = daoFactory.createOrderDao()) {
+            return orderDao.isOrderExist(order);
         }
     }
 }

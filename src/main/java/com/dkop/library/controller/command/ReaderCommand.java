@@ -3,7 +3,7 @@ package com.dkop.library.controller.command;
 import com.dkop.library.entity.Book;
 import com.dkop.library.entity.Order;
 import com.dkop.library.entity.User;
-import com.dkop.library.entity.UserOrder;
+import com.dkop.library.dto.UserOrderDTO;
 import com.dkop.library.exceptions.AlreadyExistException;
 import com.dkop.library.exceptions.DoesNotExistException;
 import com.dkop.library.exceptions.NotFoundException;
@@ -72,19 +72,19 @@ public class ReaderCommand implements Command {
             try {
                 int userId = userService.getUserInfo(email).getId();
                 int bookId = Integer.parseInt(request.getParameter("bookId"));
-                switch (orderType) {
-                    case "readingRoom":
-                        orderService.createOrder(bookId, userId, "readingRoom");
-                        request.setAttribute("successMessage", "Order created, after approve you can see it on 'Show orders'");
-                        break;
-                    case "home":
-                        orderService.createOrder(bookId, userId, "home");
-                        request.setAttribute("successMessage", "Order created, after approve you can see it on 'Show orders'");
-                        break;
-                }
+                createOrderIfNotExist(bookId, userId, orderType, request);
             } catch (AlreadyExistException | NotFoundException | DoesNotExistException e) {
                 request.setAttribute("errorMessage", e.getMessage());
             }
+        }
+    }
+
+    private void createOrderIfNotExist(int bookId, int userId, String orderType, HttpServletRequest request) throws NotFoundException, AlreadyExistException {
+        if (!orderService.isOrderExist(bookId, userId, orderType)) {
+            orderService.createOrder(bookId, userId, orderType);
+            request.setAttribute("successMessage", "Order created, after approve you find it on 'Show orders'");
+        } else {
+            throw new AlreadyExistException("You already order this book");
         }
     }
 
@@ -116,13 +116,14 @@ public class ReaderCommand implements Command {
     private void showApprovedOrders(HttpServletRequest request) {
         try {
             User user = userService.getUserInfo((String) request.getSession().getAttribute("email"));
-            List<UserOrder> userApprovedOrders = new ArrayList<>();
+            List<UserOrderDTO> userApprovedOrders = new ArrayList<>();
             List<Order> allApproved = orderService.findAllUserApprovedOrders(user.getId());
             allApproved.forEach(order -> {
                 try {
-                    UserOrder userOrder = new UserOrder();
+                    UserOrderDTO userOrder = new UserOrderDTO();
                     long penalty = orderService.checkForPenalty(order);
                     userOrder.setPenalty(String.valueOf(penalty));
+                    userOrder.setCreateDate(order.getCreateDate());
                     userOrder.setExpectedReturnDate(order.getExpectedReturnDate());
                     userOrder.setBook(bookService.findById(order.getBookId()));
                     userOrder.setOrderId(order.getId());

@@ -2,9 +2,10 @@ package com.dkop.library.controller.command;
 
 import com.dkop.library.entity.Order;
 import com.dkop.library.entity.User;
-import com.dkop.library.entity.UserOrder;
+import com.dkop.library.dto.UserOrderDTO;
 import com.dkop.library.exceptions.DoesNotExistException;
 import com.dkop.library.exceptions.NotFoundException;
+import com.dkop.library.exceptions.UnableToAcceptOrderException;
 import com.dkop.library.services.BookService;
 import com.dkop.library.services.OrderService;
 import com.dkop.library.services.UserService;
@@ -71,13 +72,14 @@ public class LibrarianCommand implements Command {
     private void showReadersApprovedOrders(HttpServletRequest request) {
         if (StringUtils.isNumeric(request.getParameter("userId"))) {
             int userId = Integer.parseInt(request.getParameter("userId"));
-            List<UserOrder> userApprovedOrders = new ArrayList<>();
+            List<UserOrderDTO> userApprovedOrders = new ArrayList<>();
             List<Order> allApproved = orderService.findAllUserApprovedOrders(userId);
             allApproved.forEach(order -> {
                 try {
-                    UserOrder userOrder = new UserOrder();
+                    UserOrderDTO userOrder = new UserOrderDTO();
                     long penalty = orderService.checkForPenalty(order);
                     userOrder.setPenalty(String.valueOf(penalty));
+                    userOrder.setCreateDate(order.getCreateDate());
                     userOrder.setExpectedReturnDate(order.getExpectedReturnDate());
                     userOrder.setBook(bookService.findById(order.getBookId()));
                     userOrder.setOrderId(order.getId());
@@ -91,11 +93,11 @@ public class LibrarianCommand implements Command {
     }
 
     private void showPendingOrders(HttpServletRequest request) {
-        List<UserOrder> pendingOrders = new ArrayList<>();
+        List<UserOrderDTO> pendingOrders = new ArrayList<>();
         List<Order> orders = orderService.findAllOrdersByStatus("pending");
         orders.forEach(order -> {
             try {
-                UserOrder userOrder = new UserOrder();
+                UserOrderDTO userOrder = new UserOrderDTO();
                 userOrder.setCreateDate(order.getCreateDate());
                 userOrder.setBook(bookService.findById(order.getBookId()));
                 userOrder.setUserId(order.getUserId());
@@ -114,7 +116,7 @@ public class LibrarianCommand implements Command {
             try {
                 Order order = orderService.findById(orderId);
                 orderService.acceptOrder(order);
-            } catch (NotFoundException e) {
+            } catch (NotFoundException | UnableToAcceptOrderException e) {
                 request.setAttribute("errorMessage", e.getMessage());
             }
         }

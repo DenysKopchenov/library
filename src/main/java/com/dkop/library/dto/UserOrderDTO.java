@@ -1,8 +1,10 @@
-package com.dkop.library.entity;
+package com.dkop.library.dto;
+
+import com.dkop.library.entity.Book;
 
 import java.time.LocalDate;
 
-public class UserOrder {
+public class UserOrderDTO {
     private LocalDate createDate;
     private LocalDate expectedReturnDate;
     private Book book;

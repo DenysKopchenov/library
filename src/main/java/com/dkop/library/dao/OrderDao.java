@@ -11,4 +11,6 @@ public interface OrderDao extends GenericDao<Order> {
     List<Order> findAllOrdersByStatus(String status);
 
     void processOrder(Order order, Book book);
+
+    boolean isOrderExist(Order order);
 }
