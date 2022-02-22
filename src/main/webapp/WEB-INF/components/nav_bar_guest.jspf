@@ -24,7 +24,7 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="${pageContext.request.contextPath}/library/login">
-                        <fmt:message key="navbar.login"/>
+                        <fmt:message key="login"/>
                     </a>
                 </li>
                 <form>

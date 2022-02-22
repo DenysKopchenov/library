@@ -1,4 +1,32 @@
-<c:out value="You updating book ${updatingBook}"/>
+<div>
+    <div class="row">
+        <div class="col-6 mx-auto">
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th>id</th>
+                    <th>Title</th>
+                    <th>Author</th>
+                    <th>Publisher</th>
+                    <th>Publishing date</th>
+                    <th>Amount</th>
+                    <th>On order</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>${updatingBook.getId()}</td>
+                    <td>${updatingBook.getTitle()}</td>
+                    <td>${updatingBook.getAuthor()}</td>
+                    <td>${updatingBook.getPublisher()}</td>
+                    <td>${updatingBook.getPublishingDate()}</td>
+                    <td>${updatingBook.getAmount()}</td>
+                    <td>${updatingBook.getOnOrder()}</td>
+                </tr>
+                </tbody>
+        </div>
+    </div>
+</div>
 <div>
     <form method="post">
         <br><label for="title"><b>Title</b></label><br>

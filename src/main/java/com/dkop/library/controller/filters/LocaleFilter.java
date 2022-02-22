@@ -31,6 +31,7 @@ public class LocaleFilter implements Filter {
             req.getSession().setAttribute(LANGUAGE, "en");
 //            Validator.setLocale(new Locale("en"));
         } else {
+            req.getSession().setAttribute(LANGUAGE, req.getSession().getAttribute(LANGUAGE));
 //            locale = new Locale((String) req.getSession().getAttribute(LANGUAGE));
         }
 

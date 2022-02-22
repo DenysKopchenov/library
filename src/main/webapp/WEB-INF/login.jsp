@@ -1,9 +1,7 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page isELIgnored="false"%>
-<%@ page session="true"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <c:set var="title" value="Login"/>
 
 
@@ -18,19 +16,19 @@
 <%-- <h1>Login</h1> --%>
 <h3> <font style="color:hsl(0,100%,50%);">${errorMessage}</font></h3>
 <form method="post">
-                <br><label for="email"><b><fmt:message key="login.email"/></b></label><br>
-                <input type="text" name="email" placeholder="<fmt:message key="login.email"/>" value="${email}"/>
+                <br><label for="email"><b><fmt:message key="email"/></b></label><br>
+                <input type="text" name="email" placeholder="<fmt:message key="email"/>" value="${email}"/>
                 <br><c:if test="${validation.containsKey('email')}">    
                 <font style="color:hsl(0,100%,50%);">${validation.get("email")}</font>
                 </c:if>
 
-                <br><label for="password"><b><fmt:message key="login.password"/></b></label><br>
-                <input type="password" name="password" placeholder="<fmt:message key="login.password"/>"/>
+                <br><label for="password"><b><fmt:message key="password"/></b></label><br>
+                <input type="password" name="password" placeholder="<fmt:message key="password"/>"/>
                 <br><c:if test="${validation.containsKey('password')}">
                         <font style="color:hsl(0,100%,50%);">${validation.get("password")}</font>
                         </c:if>
                 <font style="color:hsl(0,100%,50%);">${wrongPassword}</font>
-                <br><input class="btn btn-primary" type="submit" value="<fmt:message key="login.login"/>"/>
+                <br><input class="btn btn-primary" type="submit" value="<fmt:message key="login"/>"/>
                 <a class="btn btn-primary" href="${pageContext.request.contextPath}/library/" role="button"><fmt:message key="home"/></a>
 </form>
 <h1><font style="color:hsl(0,100%,50%);">${wasBlocked}</font></h1>

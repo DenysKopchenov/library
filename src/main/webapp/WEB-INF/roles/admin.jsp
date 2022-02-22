@@ -1,5 +1,7 @@
 <%@page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <c:set var="title" value="Admin"/>
 
 <!DOCTYPE html>
@@ -13,7 +15,7 @@
 <h3 style="text-align:center"><font style="color:hsl(100, 100%, 50%);">${successMessage}</font></h3>
 <c:if test="${operation eq 'createLibrarian'}">
     <c:set var="button" value="Create librarian"/>
-    <%@ include file="/WEB-INF/forms/reg_form.jspf" %>
+    <%@ include file="/WEB-INF/forms/create_librarian_form.jspf" %>
 </c:if>
 <c:if test="${operation eq 'createBook'}">
     <%@ include file="/WEB-INF/forms/create_book_form.jspf" %>
@@ -147,19 +149,6 @@
 </div>
 </div>
 </c:if>
-<%-- <div>
-    <c:forEach var="reader" items="${allReaders}">
-        <li>
-            ${reader}
-            <c:if test="${reader.getStatus() eq 'blocked'}">
-                <a href="?operations=unblockUser&userId=${reader.getId()}"> unblock </a>
-            </c:if>
-            <c:if test="${reader.getStatus() eq 'active'}">
-                <a href="?operations=blockUser&userId=${reader.getId()}"> block </a>
-            </c:if>
-        </li>
-    </c:forEach>
-</div> --%>
 <div>
     <c:if test="${!booksByAuthor.isEmpty()}">
         <c:forEach var="book" items="${booksByAuthor}">

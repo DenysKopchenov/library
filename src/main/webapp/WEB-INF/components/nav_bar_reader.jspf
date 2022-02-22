@@ -1,3 +1,5 @@
+<fmt:setLocale value="${language}"/>
+
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid">
         <a class="navbar-brand" href="${pageContext.request.contextPath}/library/reader">Library</a>
@@ -7,31 +9,47 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <a class="nav-link" href="?operations=catalog"> Catalog </a>
-                <a class="nav-link" href="?operations=showApprovedOrders"> Show abonement </a>
+                <a class="nav-link" href="?operations=catalog">
+                    <fmt:message key="navbar.catalog"/>
+                </a>
+                <a class="nav-link" href="?operations=showApprovedOrders">
+                    <fmt:message key="navbar.approved.orders"/>
+                </a>
                 <form class="d-flex">
                     <input class="form-control me-2" name="searchByAuthor" type="search"
                            placeholder="Search by author" aria-label="Search by author">
-                    <button class="btn btn-outline-success" type="submit">Search</button>
+                    <button class="btn btn-outline-success" type="submit">
+                        <fmt:message key="navbar.search"/>
+                    </button>
                 </form>
                 <form class="d-flex">
                     <input class="form-control me-2" name="searchByTitle" type="search"
                            placeholder="Search by title" aria-label="Search by title">
-                    <button class="btn btn-outline-success" type="submit">Search</button>
+                    <button class="btn btn-outline-success" type="submit">
+                        <fmt:message key="navbar.search"/>
+                    </button>
                 </form>
                 <li class="nav-item">
-                    <a class="nav-link" href="?operations=userInfo">View Profile</a>
+                    <a class="nav-link" href="?operations=userInfo">
+                        <fmt:message key="navbar.profile"/>
+                    </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="${pageContext.request.contextPath}/library/logout">LogOut</a>
+                    <a class="nav-link" href="${pageContext.request.contextPath}/library/logout">
+                        <fmt:message key="navbar.logout"/>
+                    </a>
                 </li>
                 <form>
                     <select class="form-select" aria-label="Default select example"
                             name="lang" onchange="submit()">
                         <option value="en" ${language==
-                        "en" ? 'selected' : ''}>en</option>
+                        "en" ? 'selected' : ''}>
+                        <fmt:message key="language.en"/>
+                        </option>
                         <option value="uk" ${language==
-                        "uk" ? 'selected' : ''}>ua</option>
+                        "uk" ? 'selected' : ''}>
+                        <fmt:message key="language.ua"/>
+                        </option>
                     </select>
                 </form>
                 </li>

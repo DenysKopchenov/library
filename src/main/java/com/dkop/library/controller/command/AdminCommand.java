@@ -30,7 +30,7 @@ public class AdminCommand implements Command {
         operations.put("deleteBook", this::deleteBookOperation);
         operations.put("updateBook", this::updateBookOperation);
         operations.put("catalog", this::showCatalogBookOperation);
-        operations.put("showAllUsers", this::showAllReadersOperation);
+        operations.put("showAllReaders", this::showAllReadersOperation);
         operations.put("showAllLibrarians", this::showAllLibrariansOperation);
         operations.put("userInfo", this::showUserInfo);
         operations.put("blockUser", this::blockUserOperation);
