@@ -173,6 +173,7 @@ public class AdminCommand implements Command {
                 try {
                     userService.createUser(firstName, lastName, email, password, "librarian", "active");
                     request.setAttribute("successMessage", "Successfully created");
+                    request.setAttribute("operation", "");
                 } catch (AlreadyExistException e) {
                     request.setAttribute("errorMessage", e.getMessage());
                 }

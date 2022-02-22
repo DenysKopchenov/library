@@ -116,6 +116,7 @@ public class LibrarianCommand implements Command {
             try {
                 Order order = orderService.findById(orderId);
                 orderService.acceptOrder(order);
+                showPendingOrders(request);
             } catch (NotFoundException | UnableToAcceptOrderException e) {
                 request.setAttribute("errorMessage", e.getMessage());
             }
@@ -128,6 +129,7 @@ public class LibrarianCommand implements Command {
             try {
                 Order order = orderService.findById(orderId);
                 orderService.rejectOrder(order);
+                showPendingOrders(request);
             } catch (NotFoundException e) {
                 request.setAttribute("errorMessage", e.getMessage());
             }

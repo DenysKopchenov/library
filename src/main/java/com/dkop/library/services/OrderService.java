@@ -4,9 +4,12 @@ import com.dkop.library.dao.DaoFactory;
 import com.dkop.library.dao.OrderDao;
 import com.dkop.library.entity.Book;
 import com.dkop.library.entity.Order;
+import com.dkop.library.entity.User;
+import com.dkop.library.exceptions.DoesNotExistException;
 import com.dkop.library.exceptions.NotFoundException;
 import com.dkop.library.exceptions.UnableToAcceptOrderException;
 
+import javax.servlet.http.HttpServletRequest;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.Period;
@@ -36,7 +39,7 @@ public class OrderService {
         userService = UserService.getInstance();
     }
 
-    public void createOrder(int bookId, int userId, String type) throws NotFoundException {
+    public void createOrder(int bookId, int userId, String type) {
         Order order = Order.newBuilder()
                 .userId(userId)
                 .bookId(bookId)

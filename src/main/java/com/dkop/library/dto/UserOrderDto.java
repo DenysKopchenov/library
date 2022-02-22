@@ -75,17 +75,4 @@ public class UserOrderDto {
         sb.append('}');
         return sb.toString();
     }
-
-    private String penaltyFormatter(String penalty) {
-        StringBuilder builder = new StringBuilder();
-        if (penalty.length() < 3) {
-            builder.append("0.").append(penalty);
-            return penalty;
-        } else {
-            builder.append(penalty, 0, penalty.length() - 2)
-                    .append(".")
-                    .append(penalty, penalty.length() - 2, penalty.length());
-        }
-        return builder.toString();
-    }
 }

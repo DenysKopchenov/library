@@ -42,6 +42,7 @@ public class ReaderCommand implements Command {
 
     @Override
     public String execute(HttpServletRequest request) {
+        totalPenalty(request);
         if (StringUtils.isNotBlank(request.getParameter("searchByAuthor"))) {
             String author = (request.getParameter("searchByAuthor"));
             List<Book> books = bookService.findAllBooksByAuthor(author);
@@ -122,7 +123,7 @@ public class ReaderCommand implements Command {
                 try {
                     UserOrderDto userOrder = new UserOrderDto();
                     long penalty = orderService.checkForPenalty(order);
-                    userOrder.setPenalty(String.valueOf(penalty));
+                    userOrder.setPenalty(penaltyFormatter(String.valueOf(penalty)));
                     userOrder.setCreateDate(order.getCreateDate());
                     userOrder.setExpectedReturnDate(order.getExpectedReturnDate());
                     userOrder.setBook(bookService.findById(order.getBookId()));
@@ -168,5 +169,29 @@ public class ReaderCommand implements Command {
         } catch (DoesNotExistException e) {
             request.setAttribute("errorMessage", e.getMessage());
         }
+    }
+
+    private void totalPenalty(HttpServletRequest request) {
+        try {
+            User user = userService.getUserInfo((String) request.getSession().getAttribute("email"));
+            List<Order> allApproved = orderService.findAllUserApprovedOrders(user.getId());
+            long totalPenalty = allApproved.stream().mapToLong(orderService::checkForPenalty).sum();
+            request.setAttribute("totalPenalty", penaltyFormatter(String.valueOf(totalPenalty)));
+        } catch (DoesNotExistException e) {
+            request.setAttribute("errorMessage", e.getMessage());
+        }
+    }
+
+    private String penaltyFormatter(String penalty) {
+        StringBuilder builder = new StringBuilder();
+        if (penalty.length() < 3) {
+            builder.append("0.").append(penalty);
+            return builder.toString();
+        } else {
+            builder.append(penalty, 0, penalty.length() - 2)
+                    .append(".")
+                    .append(penalty, penalty.length() - 2, penalty.length());
+        }
+        return builder.toString();
     }
 }
