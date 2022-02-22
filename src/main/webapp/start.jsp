@@ -1,19 +1,18 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<c:set var="title" value="Library"/>
 
+<!DOCTYPE html>
             <html lang=${language}>
 
             <head>
-<%@ include file="/WEB-INF/jspf/head.jspf" %>
+<%@ include file="/WEB-INF/components/head.jspf" %>
             </head>
-
             <body>
                 <div>
-                    <h1>Привет</h1>
-                    <%@ include file="/WEB-INF/jspf/nav_bar_guest.jspf" %>
+                    <%@ include file="/WEB-INF/components/nav_bar_guest.jspf" %>
                 </div>
-                
                 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
                     integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
                     crossorigin="anonymous"></script>

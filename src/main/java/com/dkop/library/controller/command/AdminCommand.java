@@ -45,7 +45,7 @@ public class AdminCommand implements Command {
             String operation = request.getParameter("operations");
             handleOperations(operation, request);
         }
-        return "/WEB-INF/views/admin.jsp";
+        return "/WEB-INF/roles/admin.jsp";
     }
 
     private void handleOperations(String operation, HttpServletRequest request) {
@@ -58,7 +58,7 @@ public class AdminCommand implements Command {
         String email = (String) request.getSession().getAttribute("email");
         try {
             User user = userService.getUserInfo(email);
-            request.setAttribute("userInfo", user);
+            request.setAttribute("user", user);
         } catch (DoesNotExistException e) {
             request.setAttribute("errorMessage", e.getMessage());
         }

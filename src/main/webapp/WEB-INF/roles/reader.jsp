@@ -1,17 +1,18 @@
 <%@page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<c:set var="title" value="Reader"/>
 <!DOCTYPE html>
 <html lang=${language}>
 <head>
-<%@ include file="/WEB-INF/jspf/head.jspf" %>
+<%@ include file="/WEB-INF/components/head.jspf" %>
 </head>
 <body>
 hello form READER page
-<%@ include file="/WEB-INF/jspf/nav_bar_reader.jspf" %>
+<%@ include file="/WEB-INF/components/nav_bar_reader.jspf" %>
 <h3><font style="color:hsl(0,100%,50%);">${errorMessage}</font></h3>
 <h3><font style="color:hsl(100,100%,50%);">${successMessage}</font></h3>
 <div>
-    <c:out value="${userInfo}"/>
+    <c:out value="${user}"/>
     <h3><font style="color:hsl(0,100%,50%);">${successDelete}</font></h3>
 </div>
 <c:forEach var="book" items="${foundedBooks}">

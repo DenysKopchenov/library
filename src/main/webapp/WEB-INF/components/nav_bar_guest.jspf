@@ -1,7 +1,10 @@
 <fmt:setLocale value="${language}"/>
+
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid">
-        <a class="navbar-brand" href="${pageContext.request.contextPath}/library/">Library</a>
+        <a class="navbar-brand" href="${pageContext.request.contextPath}/library/">
+            <fmt:message key="navbar.name"/>
+        </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -11,30 +14,32 @@
                 <li class="nav-item">
                     <a class="nav-link" aria-current="page"
                        href="${pageContext.request.contextPath}/library/catalog">
-                        <fmt:message key="catalog"/>
+                        <fmt:message key="navbar.catalog"/>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="${pageContext.request.contextPath}/library/registration">
-                        <fmt:message key="registration"/>
+                        <fmt:message key="navbar.registration"/>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="${pageContext.request.contextPath}/library/login">
-                        <fmt:message key="login"/>
+                        <fmt:message key="navbar.login"/>
                     </a>
                 </li>
                 <form>
-                    <select class="form-select" aria-label="Default select example"
+                    <select class="form-select" style="width:auto" aria-label="Default select example"
                             name="lang" onchange="submit()">
                         <option value="en" ${language==
-                        "en" ? 'selected' : ''}>en</option>
+                        "en" ? 'selected' : ''}>
+                        <fmt:message key="language.en"/>
+                        </option>
                         <option value="uk" ${language==
-                        "uk" ? 'selected' : ''}>ua</option>
+                        "uk" ? 'selected' : ''}>
+                        <fmt:message key="language.ua"/>
+                        </option>
                     </select>
                 </form>
-                </li>
-            </ul>
         </div>
     </div>
 </nav>

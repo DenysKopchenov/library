@@ -1,3 +1,5 @@
+<fmt:setLocale value="${language}"/>
+
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid">
         <a class="navbar-brand" href="${pageContext.request.contextPath}/library/reader">Library</a>
@@ -7,8 +9,12 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <a class="nav-link" href="?operations=showPendingOrders"> Pending orders </a>
-                <a class="nav-link" href="?operations=showAllReaders"> All readers </a>
+                <li class="nav-item">
+                    <a class="nav-link" href="?operations=showPendingOrders"> Pending orders </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="?operations=showAllReaders"> All readers </a>
+                </li>
                 <li class="nav-item">
                     <a class="nav-link" href="?operations=userInfo">View Profile</a>
                 </li>

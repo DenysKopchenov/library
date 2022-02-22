@@ -3,12 +3,12 @@ package com.dkop.library.entity;
 import java.util.Objects;
 
 public class User {
+    private int id;
     private String firstName;
     private String lastName;
     private String email;
     private String password;
     private String role;
-    private int id;
     private String status;
 
     private User() {

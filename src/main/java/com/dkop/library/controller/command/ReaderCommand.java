@@ -3,7 +3,7 @@ package com.dkop.library.controller.command;
 import com.dkop.library.entity.Book;
 import com.dkop.library.entity.Order;
 import com.dkop.library.entity.User;
-import com.dkop.library.dto.UserOrderDTO;
+import com.dkop.library.dto.UserOrderDto;
 import com.dkop.library.exceptions.AlreadyExistException;
 import com.dkop.library.exceptions.DoesNotExistException;
 import com.dkop.library.exceptions.NotFoundException;
@@ -56,7 +56,7 @@ public class ReaderCommand implements Command {
             String operation = request.getParameter("operations");
             handleOperations(operation, request);
         }
-        return "/WEB-INF/views/reader.jsp";
+        return "/WEB-INF/roles/reader.jsp";
     }
 
     private void handleOperations(String operation, HttpServletRequest request) {
@@ -116,11 +116,11 @@ public class ReaderCommand implements Command {
     private void showApprovedOrders(HttpServletRequest request) {
         try {
             User user = userService.getUserInfo((String) request.getSession().getAttribute("email"));
-            List<UserOrderDTO> userApprovedOrders = new ArrayList<>();
+            List<UserOrderDto> userApprovedOrders = new ArrayList<>();
             List<Order> allApproved = orderService.findAllUserApprovedOrders(user.getId());
             allApproved.forEach(order -> {
                 try {
-                    UserOrderDTO userOrder = new UserOrderDTO();
+                    UserOrderDto userOrder = new UserOrderDto();
                     long penalty = orderService.checkForPenalty(order);
                     userOrder.setPenalty(String.valueOf(penalty));
                     userOrder.setCreateDate(order.getCreateDate());

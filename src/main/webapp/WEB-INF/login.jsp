@@ -4,33 +4,34 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<c:set var="title" value="Login"/>
 
 
 <!DOCTYPE html>
 <html lang=${language}>
 <head>
-<%@ include file="/WEB-INF/jspf/head.jspf" %>
+<%@ include file="/WEB-INF/components/head.jspf" %>
 </head>
 <body>
-<%@ include file="/WEB-INF/jspf/nav_bar_guest.jspf" %>
-<div align="center">
-<h1>Login</h1>
+<%@ include file="/WEB-INF/components/nav_bar_guest.jspf" %>
+<div>
+<%-- <h1>Login</h1> --%>
 <h3> <font style="color:hsl(0,100%,50%);">${errorMessage}</font></h3>
 <form method="post">
-                <br><label for="email"><b>E-mail</b></label><br>
-                <input type="text" name="email" placeholder="E-mail" value="${email}"/>
-                <br><c:if test="${validation.containsKey('email')}">
+                <br><label for="email"><b><fmt:message key="login.email"/></b></label><br>
+                <input type="text" name="email" placeholder="<fmt:message key="login.email"/>" value="${email}"/>
+                <br><c:if test="${validation.containsKey('email')}">    
                 <font style="color:hsl(0,100%,50%);">${validation.get("email")}</font>
                 </c:if>
 
-                <br><label for="password"><b>Password</b></label><br>
-                <input type="password" name="password" placeholder="Password"/>
+                <br><label for="password"><b><fmt:message key="login.password"/></b></label><br>
+                <input type="password" name="password" placeholder="<fmt:message key="login.password"/>"/>
                 <br><c:if test="${validation.containsKey('password')}">
                         <font style="color:hsl(0,100%,50%);">${validation.get("password")}</font>
                         </c:if>
                 <font style="color:hsl(0,100%,50%);">${wrongPassword}</font>
-                <br><input class="btn btn-primary" type="submit" value="Login"/>
-                <a class="btn btn-primary" href="${pageContext.request.contextPath}/library/" role="button">Go back</a>
+                <br><input class="btn btn-primary" type="submit" value="<fmt:message key="login.login"/>"/>
+                <a class="btn btn-primary" href="${pageContext.request.contextPath}/library/" role="button"><fmt:message key="home"/></a>
 </form>
 <h1><font style="color:hsl(0,100%,50%);">${wasBlocked}</font></h1>
 </div>

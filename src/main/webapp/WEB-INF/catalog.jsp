@@ -4,32 +4,33 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<c:set var="title" value="Catalog"/>
 
 
 <!DOCTYPE html>
 <html lang=${language}>
 <head>
-<%@ include file="/WEB-INF/jspf/head.jspf" %>
+<%@ include file="/WEB-INF/components/head.jspf" %>
 </head>
 <body>
-<%@ include file="/WEB-INF/jspf/nav_bar_guest.jspf" %>
+<%@ include file="/WEB-INF/components/nav_bar_guest.jspf" %>
 <form>
     <select class="form-select" style="width:auto" aria-label="Default select example"
             name="sort" onchange="submit()">
         <option value="title" ${sort==
-        "title" ? 'selected' : ''}>By title</option>
+        "title" ? 'selected' : ''}><fmt:message key="catalog.sort.title"/></option>
         <option value="author" ${sort==
-        "author" ? 'selected' : ''}>By author</option>
+        "author" ? 'selected' : ''}><fmt:message key="catalog.sort.author"/></option>
         <option value="publisher" ${sort==
-        "publisher" ? 'selected' : ''}>By publisher</option>
+        "publisher" ? 'selected' : ''}><fmt:message key="catalog.sort.publisher"/></option>
         <option value="publishing_date" ${sort==
-        "publishing_date" ? 'selected' : ''}>By publishing date</option>
+        "publishing_date" ? 'selected' : ''}><fmt:message key="catalog.sort.publishing.date"/></option>
     </select>
 </form>
 <c:forEach var="book" items="${catalog}">
     <li>${book}</li>
 </c:forEach>
-<a class="btn btn-primary" href="${pageContext.request.contextPath}/library/" role="button">Go back</a>
+<a class="btn btn-primary" href="${pageContext.request.contextPath}/library/" role="button"><fmt:message key="home"/></a>
 <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
         integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
         crossorigin="anonymous"></script>

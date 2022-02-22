@@ -2,7 +2,7 @@ package com.dkop.library.controller.command;
 
 import com.dkop.library.entity.Order;
 import com.dkop.library.entity.User;
-import com.dkop.library.dto.UserOrderDTO;
+import com.dkop.library.dto.UserOrderDto;
 import com.dkop.library.exceptions.DoesNotExistException;
 import com.dkop.library.exceptions.NotFoundException;
 import com.dkop.library.exceptions.UnableToAcceptOrderException;
@@ -46,7 +46,7 @@ public class LibrarianCommand implements Command {
             String operation = request.getParameter("operations");
             handleOperations(operation, request);
         }
-        return "/WEB-INF/views/librarian.jsp";
+        return "/WEB-INF/roles/librarian.jsp";
     }
 
     private void handleOperations(String operation, HttpServletRequest request) {
@@ -72,11 +72,11 @@ public class LibrarianCommand implements Command {
     private void showReadersApprovedOrders(HttpServletRequest request) {
         if (StringUtils.isNumeric(request.getParameter("userId"))) {
             int userId = Integer.parseInt(request.getParameter("userId"));
-            List<UserOrderDTO> userApprovedOrders = new ArrayList<>();
+            List<UserOrderDto> userApprovedOrders = new ArrayList<>();
             List<Order> allApproved = orderService.findAllUserApprovedOrders(userId);
             allApproved.forEach(order -> {
                 try {
-                    UserOrderDTO userOrder = new UserOrderDTO();
+                    UserOrderDto userOrder = new UserOrderDto();
                     long penalty = orderService.checkForPenalty(order);
                     userOrder.setPenalty(String.valueOf(penalty));
                     userOrder.setCreateDate(order.getCreateDate());
@@ -93,11 +93,11 @@ public class LibrarianCommand implements Command {
     }
 
     private void showPendingOrders(HttpServletRequest request) {
-        List<UserOrderDTO> pendingOrders = new ArrayList<>();
+        List<UserOrderDto> pendingOrders = new ArrayList<>();
         List<Order> orders = orderService.findAllOrdersByStatus("pending");
         orders.forEach(order -> {
             try {
-                UserOrderDTO userOrder = new UserOrderDTO();
+                UserOrderDto userOrder = new UserOrderDto();
                 userOrder.setCreateDate(order.getCreateDate());
                 userOrder.setBook(bookService.findById(order.getBookId()));
                 userOrder.setUserId(order.getUserId());

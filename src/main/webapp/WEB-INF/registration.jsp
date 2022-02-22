@@ -4,17 +4,18 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
-<c:set var="button" value="Registration"/>
+<c:set var="title" value="Registration"/>
 
 <!DOCTYPE html>
 <html lang=${language}>
 <head>
-<%@ include file="/WEB-INF/jspf/head.jspf" %>
+<%@ include file="/WEB-INF/components/head.jspf" %>
 </head>
 <body>
-<%@ include file="/WEB-INF/jspf/nav_bar_guest.jspf" %>
-    <div align="center">
-        <h1>User Registration Form</h1>
+<%@ include file="/WEB-INF/components/nav_bar_guest.jspf" %>
+    <div>
+        <h1><fmt:message key="registration.form"/>
+        </h1>
         <h3><font style="color:hsl(0,100%,50%);">${errorMessage}</font></h3>
 <%@ include file="/WEB-INF/forms/reg_form.jspf" %>
         </div>

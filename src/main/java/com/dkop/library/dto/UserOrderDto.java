@@ -4,7 +4,7 @@ import com.dkop.library.entity.Book;
 
 import java.time.LocalDate;
 
-public class UserOrderDTO {
+public class UserOrderDto {
     private LocalDate createDate;
     private LocalDate expectedReturnDate;
     private Book book;
