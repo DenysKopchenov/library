@@ -9,14 +9,12 @@
 <!DOCTYPE html>
 <html lang=${language}>
 <head>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <meta http-equiv='Content-Type' content='text/html; charset=UTF-8'/>
-    <title>Catalog</title>
+<%@ include file="/WEB-INF/jspf/head.jspf" %>
 </head>
 <body>
+<%@ include file="/WEB-INF/jspf/nav_bar_guest.jspf" %>
 <form>
-    <select class="form-select" aria-label="Default select example"
+    <select class="form-select" style="width:auto" aria-label="Default select example"
             name="sort" onchange="submit()">
         <option value="title" ${sort==
         "title" ? 'selected' : ''}>By title</option>

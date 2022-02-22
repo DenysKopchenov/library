@@ -3,10 +3,7 @@
 <!DOCTYPE html>
 <html lang=${language}>
 <head>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <meta http-equiv='Content-Type' content='text/html; charset=UTF-8'/>
-    <title>Title</title>
+<%@ include file="/WEB-INF/jspf/head.jspf" %>
 </head>
 <body>
 hello from LIBRARIAN page

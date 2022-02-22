@@ -9,11 +9,10 @@
 <!DOCTYPE html>
 <html lang=${language}>
 <head>
-    <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <title>User Register Form</title>
+<%@ include file="/WEB-INF/jspf/head.jspf" %>
 </head>
 <body>
+<%@ include file="/WEB-INF/jspf/nav_bar_guest.jspf" %>
     <div align="center">
         <h1>User Registration Form</h1>
         <h3><font style="color:hsl(0,100%,50%);">${errorMessage}</font></h3>
