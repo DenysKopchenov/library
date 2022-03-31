@@ -37,23 +37,45 @@ hello form READER page
     </div>
 </div>
 </c:if>
-<c:forEach var="book" items="${foundedBooks}">
-    <li>
-        <c:out value="${book}"/>
-        <c:choose>
-        <c:when test="${book.getAmount() > 0}">
-        <br> <a href="?operations=orderBook&order=readingRoom&bookId=${book.getId()}"> Order to reading room</a>
-        <br> <a href="?operations=orderBook&order=home&bookId=${book.getId()}"> Order to home</a>
-        </c:when>
-        <c:otherwise>
-        Unable to order, all books are on abonements
-        </c:otherwise>
-        </c:choose>
-    </li>
-</c:forEach>
+
+<c:if test="${foundedBooks != null}">
+<div class="row" >
+<div class="col-6 mx-auto">
+<table class="table table-bordered">
+    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Author</th>
+                            <th>Publisher</th>
+                            <th>Publishing date</th>
+                            <th colspan="2" style="text-align:center;">Operations</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+    <c:forEach var="book" items="${foundedBooks}">
+            <c:if test="${book.getAmount() > 0}">
+                        <tr>
+                            <td>${book.getTitle()}</td>
+                            <td>${book.getAuthor()}</td>
+                            <td>${book.getPublisher()}</td>
+                            <td>${book.getPublishingDate()}</td>
+                            <td style="text-align:center;">
+                            <a class="btn btn-info" href="?operations=orderBook&order=readingRoom&bookId=${book.getId()}"> Order to reading room</a>
+                            <a class="btn btn-primary" href="?operations=orderBook&order=home&bookId=${book.getId()}"> Order to home</a>
+                            </td>
+                        </tr>
+                        </c:if>
+    </c:forEach>
+                        </tbody>
 </div>
 </div>
-<c:if test="${operation eq 'catalog'}">
+</c:if>
+
+<c:if test="${catalog != null}">
+<div class="row" >
+<div class="col-6 mx-auto">
+<table class="table table-bordered">
+    <thead>
 <div class="btn-group">
   <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
     ${sort == null ? "By Title" : sort}
@@ -65,17 +87,68 @@ hello form READER page
     <a class="dropdown-item" href="?operations=catalog&sort=publishing_date">publishing date</a>
   </div>
 </div>
+
+                        <tr>
+                            <th>Title</th>
+                            <th>Author</th>
+                            <th>Publisher</th>
+                            <th>Publishing date</th>
+                            <th colspan="2" style="text-align:center;">Operations</th>
+                        </tr>
+                        </thead>
+                        <tbody>
     <c:forEach var="book" items="${catalog}">
-        <li>
-        <c:if test="${book.getAmount() > 0}">
-        <c:out value="${book}"/>
-        <a class="btn btn-primary" href="?operations=orderBook&order=readingRoom&bookId=${book.getId()}"> Order to reading room</a>
-        <a class="btn btn-primary" href="?operations=orderBook&order=home&bookId=${book.getId()}"> Order to home</a>
-        </c:if>
-        </li>
+            <c:if test="${book.getAmount() > 0}">
+                        <tr>
+                            <td>${book.getTitle()}</td>
+                            <td>${book.getAuthor()}</td>
+                            <td>${book.getPublisher()}</td>
+                            <td>${book.getPublishingDate()}</td>
+                            <td style="text-align:center;">
+                            <a class="btn btn-info" href="?operations=orderBook&order=readingRoom&bookId=${book.getId()}"> Order to reading room</a>
+                            <a class="btn btn-primary" href="?operations=orderBook&order=home&bookId=${book.getId()}"> Order to home</a>
+                            </td>
+                        </tr>
+                        </c:if>
     </c:forEach>
-</c:if>
+                        </tbody>
 </div>
+</div>
+</c:if>
+
+<c:if test="${userApprovedOrders != null}">
+<div class="row" >
+<div class="col-6 mx-auto">
+<table class="table table-bordered">
+    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Author</th>
+                            <th>Publisher</th>
+                            <th>Publishing date</th>
+                            <th>Expected return date</th>
+                            <th>Penalty</th>
+                            <th>Operation</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+    <c:forEach var="approvedOrder" items="${userApprovedOrders}">
+                        <tr>
+                            <td>${approvedOrder.getBook().getTitle()}</td>
+                            <td>${approvedOrder.getBook().getAuthor()}</td>
+                            <td>${approvedOrder.getBook().getPublisher()}</td>
+                            <td>${approvedOrder.getBook().getPublishingDate()}</td>
+                            <td>${approvedOrder.getExpectedReturnDate()}</td>
+                            <td>${approvedOrder.getPenalty()}</td>
+                            <td style="text-align:center;">
+                            <a class="btn btn-primary" href="?operations=returnBook&orderId=${approvedOrder.getOrderId()}">Return book</a></td>
+                        </tr>
+    </c:forEach>
+                        </tbody>
+</div>
+</div>
+</c:if>
+
 <div>
     <c:forEach var="userOrder" items="${userOrders}">
         <li>

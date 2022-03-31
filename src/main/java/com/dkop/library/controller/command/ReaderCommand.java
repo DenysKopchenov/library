@@ -83,7 +83,7 @@ public class ReaderCommand implements Command {
     private void createOrderIfNotExist(int bookId, int userId, String orderType, HttpServletRequest request) throws NotFoundException, AlreadyExistException {
         if (!orderService.isOrderExist(bookId, userId, orderType)) {
             orderService.createOrder(bookId, userId, orderType);
-            request.setAttribute("successMessage", "Order created, after approve you find it on 'Show orders'");
+            request.setAttribute("successMessage", "Order created, after approve you can find it on 'Show orders'");
         } else {
             throw new AlreadyExistException("You already order this book");
         }
@@ -133,7 +133,7 @@ public class ReaderCommand implements Command {
                     request.setAttribute("errorMessage", e.getMessage());
                 }
             });
-            request.setAttribute("userOrders", userApprovedOrders);
+            request.setAttribute("userApprovedOrders", userApprovedOrders);
         } catch (DoesNotExistException e) {
             request.setAttribute("errorMessage", e.getMessage());
         }
@@ -185,12 +185,13 @@ public class ReaderCommand implements Command {
     private String penaltyFormatter(String penalty) {
         StringBuilder builder = new StringBuilder();
         if (penalty.length() < 3) {
-            builder.append("0.").append(penalty);
+            builder.append("0.").append(penalty).append("UAH");
             return builder.toString();
         } else {
             builder.append(penalty, 0, penalty.length() - 2)
                     .append(".")
-                    .append(penalty, penalty.length() - 2, penalty.length());
+                    .append(penalty, penalty.length() - 2, penalty.length())
+                    .append("UAH");
         }
         return builder.toString();
     }

@@ -56,4 +56,5 @@
             </ul>
         </div>
     </div>
+    <div> Penalty: ${totalPenalty}</div>
 </nav>

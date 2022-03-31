@@ -197,7 +197,7 @@ public class OrderDaoImpl implements OrderDao {
 
     @Override
     public boolean isOrderExist(Order order) {
-        String CHECK_ORDER = "SELECT count(id) AS count FROM orders WHERE book_id = ? AND user_id = ? AND type = ? AND status = 'approved' OR status = 'pending';";
+        String CHECK_ORDER = "SELECT count(id) AS count FROM orders WHERE book_id = ? AND user_id = ? AND type = ? AND (status = 'approved' OR status = 'pending');";
         try (PreparedStatement preparedStatement = connection.prepareStatement(CHECK_ORDER)) {
             preparedStatement.setInt(1, order.getBookId());
             preparedStatement.setInt(2, order.getUserId());
