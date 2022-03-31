@@ -1,6 +1,7 @@
 package com.dkop.library.dto;
 
 import com.dkop.library.entity.Book;
+import com.dkop.library.entity.User;
 
 import java.time.LocalDate;
 
@@ -8,16 +9,16 @@ public class UserOrderDto {
     private LocalDate createDate;
     private LocalDate expectedReturnDate;
     private Book book;
+    private User user;
     private String penalty;
     private int orderId;
-    private int userId;
 
-    public int getUserId() {
-        return userId;
+    public User getUser() {
+        return user;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public LocalDate getCreateDate() {
@@ -65,13 +66,13 @@ public class UserOrderDto {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("UserOrder{");
+        final StringBuilder sb = new StringBuilder("UserOrderDto{");
         sb.append("createDate=").append(createDate);
         sb.append(", expectedReturnDate=").append(expectedReturnDate);
         sb.append(", book=").append(book);
+        sb.append(", user=").append(user);
         sb.append(", penalty='").append(penalty).append('\'');
         sb.append(", orderId=").append(orderId);
-        sb.append(", userId=").append(userId);
         sb.append('}');
         return sb.toString();
     }

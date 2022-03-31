@@ -149,28 +149,6 @@
 </div>
 </div>
 </c:if>
-<div>
-    <c:if test="${!booksByAuthor.isEmpty()}">
-        <c:forEach var="book" items="${booksByAuthor}">
-            <li>
-                ${book}
-                <a href="?operations=deleteBook&bookId=${book.getId()}"> delete</a>
-                <a href="?operations=updateBook&bookId=${book.getId()}"> update</a>
-            </li>
-        </c:forEach>
-    </c:if>
-</div>
-<div>
-    <c:if test="${!booksByTitle.isEmpty()}">
-        <c:forEach var="book" items="${booksByTitle}">
-            <li>
-                ${book}
-                <a href="?operations=deleteBook&bookId=${book.getId()}"> delete</a>
-                <a href="?operations=updateBook&bookId=${book.getId()}"> update</a>
-            </li>
-        </c:forEach>
-    </c:if>
-</div>
 <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
         integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
         crossorigin="anonymous"></script>

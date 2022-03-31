@@ -78,10 +78,11 @@ public class LibrarianCommand implements Command {
                 try {
                     UserOrderDto userOrder = new UserOrderDto();
                     long penalty = orderService.checkForPenalty(order);
-                    userOrder.setPenalty(String.valueOf(penalty));
+                    userOrder.setPenalty(penaltyFormatter(String.valueOf(penalty)));
                     userOrder.setCreateDate(order.getCreateDate());
                     userOrder.setExpectedReturnDate(order.getExpectedReturnDate());
                     userOrder.setBook(bookService.findById(order.getBookId()));
+                    userOrder.setUser(userService.findById(order.getUserId()));
                     userOrder.setOrderId(order.getId());
                     userApprovedOrders.add(userOrder);
                 } catch (NotFoundException e) {
@@ -92,6 +93,19 @@ public class LibrarianCommand implements Command {
         }
     }
 
+    private String penaltyFormatter(String penalty) {
+        StringBuilder builder = new StringBuilder();
+        if (penalty.length() < 3) {
+            builder.append("0.").append(penalty);
+            return builder.toString();
+        } else {
+            builder.append(penalty, 0, penalty.length() - 2)
+                    .append(".")
+                    .append(penalty, penalty.length() - 2, penalty.length());
+        }
+        return builder.toString();
+    }
+
     private void showPendingOrders(HttpServletRequest request) {
         List<UserOrderDto> pendingOrders = new ArrayList<>();
         List<Order> orders = orderService.findAllOrdersByStatus("pending");
@@ -100,7 +114,7 @@ public class LibrarianCommand implements Command {
                 UserOrderDto userOrder = new UserOrderDto();
                 userOrder.setCreateDate(order.getCreateDate());
                 userOrder.setBook(bookService.findById(order.getBookId()));
-                userOrder.setUserId(order.getUserId());
+                userOrder.setUser(userService.findById(order.getUserId()));
                 userOrder.setOrderId(order.getId());
                 pendingOrders.add(userOrder);
             } catch (NotFoundException e) {

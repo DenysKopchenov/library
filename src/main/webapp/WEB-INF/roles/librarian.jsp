@@ -38,15 +38,41 @@
 </div>
 </c:if>
 <div>
+<c:if test="${pendingOrders != null}">
+<div class="row" >
+<div class="col-6 mx-auto">
+<table class="table table-bordered">
+    <thead>
+                        <tr>
+                            <th>Create date</th>
+                            <th>Title</th>
+                            <th>Author</th>
+                            <th>Publisher</th>
+                            <th>Publishing date</th>
+                            <th>Reader full name</th>
+                            <th colspan="3" style="text-align:center;">Operations</th>
+                        </tr>
+                        </thead>
+                        <tbody>
     <c:forEach var="pendingOrder" items="${pendingOrders}">
-        <li>
-        ${pendingOrder}
-        <a class="btn btn-primary" href="?operations=acceptOrder&orderId=${pendingOrder.getOrderId()}"> Accept </a>
-        <a class="btn btn-primary" href="?operations=showReadersApprovedOrders&userId=${pendingOrder.getUserId()}"> Show user approved orders</a>
-        <a class="btn btn-danger" href="?operations=rejectOrder&orderId=${pendingOrder.getOrderId()}"> Reject </a>
-        </li>
+                        <tr>
+                            <td>${pendingOrder.getCreateDate()}</td>
+                            <td>${pendingOrder.getBook().getTitle()}</td>
+                            <td>${pendingOrder.getBook().getAuthor()}</td>
+                            <td>${pendingOrder.getBook().getPublisher()}</td>
+                            <td>${pendingOrder.getBook().getPublishingDate()}</td>
+                            <td>${pendingOrder.getUser().getFirstName()} ${pendingOrder.getUser().getLastName()}</td>
+                            <td style="text-align:center;">
+                            <a class="btn btn-primary" href="?operations=acceptOrder&orderId=${pendingOrder.getOrderId()}"> Accept </a>
+                            <a class="btn btn-danger" href="?operations=rejectOrder&orderId=${pendingOrder.getOrderId()}"> Reject </a>
+                            <a class="btn btn-primary" href="?operations=showReadersApprovedOrders&userId=${pendingOrder.getUser().getId()}"> Details </a>
+                            </td>
+                        </tr>
     </c:forEach>
+                        </tbody>
 </div>
+</div>
+</c:if>
 
 <c:if test="${allReaders != null}">
 <div class="row" >
@@ -81,14 +107,37 @@
 </div>
 </div>
 </c:if>
-
-<div>
+<c:if test="${userApprovedOrders != null}">
+<div class="row" >
+<div class="col-6 mx-auto">
+<table class="table table-bordered">
+    <thead>
+                        <tr>
+                            <th>Reader full name</th>
+                            <th>Title</th>
+                            <th>Author</th>
+                            <th>Publisher</th>
+                            <th>Publishing date</th>
+                            <th>Expected return date</th>
+                            <th>Penalty</th>
+                        </tr>
+                        </thead>
+                        <tbody>
     <c:forEach var="approvedOrder" items="${userApprovedOrders}">
-        <li>
-        ${approvedOrder}
-        </li>
+                        <tr>
+                            <td>${approvedOrder.getUser().getFirstName()} ${approvedOrder.getUser().getLastName()}</td>
+                            <td>${approvedOrder.getBook().getTitle()}</td>
+                            <td>${approvedOrder.getBook().getAuthor()}</td>
+                            <td>${approvedOrder.getBook().getPublisher()}</td>
+                            <td>${approvedOrder.getBook().getPublishingDate()}</td>
+                            <td>${approvedOrder.getExpectedReturnDate()}</td>
+                            <td>${approvedOrder.getPenalty()}</td>
+                        </tr>
     </c:forEach>
+                        </tbody>
 </div>
+</div>
+</c:if>
 <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
         integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
         crossorigin="anonymous"></script>

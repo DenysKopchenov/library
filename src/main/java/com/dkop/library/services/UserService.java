@@ -37,6 +37,12 @@ public class UserService {
         }
     }
 
+    public User findById(int id) throws NotFoundException {
+        try (UserDao userDao = daoFactory.createUserDao()) {
+            return userDao.findById(id);
+        }
+    }
+
     public List<User> findAllByRole(String role) {
         try (UserDao userDao = daoFactory.createUserDao()) {
             return userDao.findAllByRole(role);
