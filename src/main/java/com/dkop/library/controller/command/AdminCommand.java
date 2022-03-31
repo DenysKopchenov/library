@@ -13,6 +13,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
@@ -133,7 +134,29 @@ public class AdminCommand implements Command {
     }
 
     private void showAllReadersOperation(HttpServletRequest request) {
-        request.setAttribute("allReaders", userService.findAll());
+        int page = 1;
+        int perPage = 1;
+        if (request.getParameter("perPage") != null) {
+            perPage = Integer.parseInt(request.getParameter("perPage"));
+        }
+        if (request.getParameter("page") != null) {
+            page = Integer.parseInt(request.getParameter("page"));
+        }
+
+        List<User> allUsers = userService.findAll();
+        int records = allUsers.size();
+        int numberOfPages = (int) Math.ceil(records * 1.0 / perPage);
+        List<User> usersPerPage = getCurrentRecordsPerPage(allUsers, page, perPage);
+
+        request.setAttribute("numberOfPages", numberOfPages);
+        request.setAttribute("currentPage", page);
+        request.setAttribute("allReaders", usersPerPage);
+    }
+
+    private List<User> getCurrentRecordsPerPage(List<User> allUsers, int currentPageNumber, int perPage) {
+        int startIndex = (currentPageNumber - 1) * perPage;
+        int endIndex = (Math.min(startIndex + perPage, allUsers.size()));
+        return allUsers.subList(startIndex, endIndex);
     }
 
     private void showAllLibrariansOperation(HttpServletRequest request) {

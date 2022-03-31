@@ -2,6 +2,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib uri="http://displaytag.sf.net" prefix="display" %>
 <c:set var="title" value="Admin"/>
 
 <!DOCTYPE html>
@@ -145,7 +146,21 @@
                             </td>
                         </tr>
     </c:forEach>
-                        </tbody>           
+                        </tbody>
+</table>
+<nav aria-label="Page navigation example">
+  <ul class="pagination">
+    <c:if test="${currentPage != 1}">
+    <li class="page-item"><a class="page-link" href="?operations=showAllReaders&page=${currentPage - 1}">Previous</a></li>
+    </c:if>
+    <c:forEach begin="1" end="${numberOfPages}" var="i">
+                    <li class="active"><a class="page-link" href="?operations=showAllReaders&page=${i}">${i}</a></li>
+            </c:forEach>
+                <c:if test="${currentPage < numberOfPages}">
+                <li class="page-item"><a class="page-link" href="?operations=showAllReaders&page=${currentPage + 1}">Next</a></li>
+    </c:if>
+  </ul>
+</nav>
 </div>
 </div>
 </c:if>
