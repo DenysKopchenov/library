@@ -14,6 +14,7 @@ public class CommandContainer {
         commands.put("librarian", new LibrarianCommand());
         commands.put("reader", new ReaderCommand());
         commands.put("catalog", new CatalogCommand());
+
     }
 
     public static Command getCommand(String commandName){

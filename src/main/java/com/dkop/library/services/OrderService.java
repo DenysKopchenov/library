@@ -117,7 +117,7 @@ public class OrderService {
         LocalDate now = LocalDate.now();
         if (expectedReturnDate.isBefore(now)) {
             int daysDifference = Period.between(expectedReturnDate, now).getDays();
-            return daysDifference * 487L;
+            return daysDifference * 500L;
         } else {
             return 0;
         }

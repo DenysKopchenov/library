@@ -12,23 +12,46 @@
 </head>
 <body>
 <%@ include file="/WEB-INF/components/nav_bar_guest.jspf" %>
-<form>
-    <select class="form-select" style="width:auto" aria-label="Default select example"
-            name="sort" onchange="submit()">
-        <option value="title" ${sort==
-        "title" ? 'selected' : ''}><fmt:message key="catalog.sort.title"/></option>
-        <option value="author" ${sort==
-        "author" ? 'selected' : ''}><fmt:message key="catalog.sort.author"/></option>
-        <option value="publisher" ${sort==
-        "publisher" ? 'selected' : ''}><fmt:message key="catalog.sort.publisher"/></option>
-        <option value="publishing_date" ${sort==
-        "publishing_date" ? 'selected' : ''}><fmt:message key="catalog.sort.publishing.date"/></option>
-    </select>
-</form>
-<c:forEach var="book" items="${catalog}">
-    <li>${book}</li>
-</c:forEach>
 <a class="btn btn-primary" href="${pageContext.request.contextPath}/library/" role="button"><fmt:message key="home"/></a>
+<c:if test="${catalog != null}">
+<div class="row" >
+<div class="col-6 mx-auto">
+<table class="table table-bordered">
+    <thead>
+    <form>
+        <select class="form-select" style="width:auto" aria-label="Default select example"
+                name="sort" onchange="submit()">
+            <option value="title" ${sort==
+            "title" ? 'selected' : ''}><fmt:message key="catalog.sort.title"/></option>
+            <option value="author" ${sort==
+            "author" ? 'selected' : ''}><fmt:message key="catalog.sort.author"/></option>
+            <option value="publisher" ${sort==
+            "publisher" ? 'selected' : ''}><fmt:message key="catalog.sort.publisher"/></option>
+            <option value="publishing_date" ${sort==
+            "publishing_date" ? 'selected' : ''}><fmt:message key="catalog.sort.publishing.date"/></option>
+        </select>
+    </form>
+
+                        <tr>
+                            <th>Title</th>
+                            <th>Author</th>
+                            <th>Publisher</th>
+                            <th>Publishing date</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+    <c:forEach var="book" items="${catalog}">
+                        <tr>
+                            <td>${book.getTitle()}</td>
+                            <td>${book.getAuthor()}</td>
+                            <td>${book.getPublisher()}</td>
+                            <td>${book.getPublishingDate()}</td>
+                        </tr>
+    </c:forEach>
+                        </tbody>
+</div>
+</div>
+</c:if>
 <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
         integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
         crossorigin="anonymous"></script>

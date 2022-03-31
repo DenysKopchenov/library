@@ -13,10 +13,30 @@ hello form READER page
 <%@ include file="/WEB-INF/components/nav_bar_reader.jspf" %>
 <h3><font style="color:hsl(0,100%,50%);">${errorMessage}</font></h3>
 <h3><font style="color:hsl(100,100%,50%);">${successMessage}</font></h3>
-<div>
-    <c:out value="${user}"/>
-    <h3><font style="color:hsl(0,100%,50%);">${successDelete}</font></h3>
+<c:if test="${user != null}">
+<div class="row">
+    <div class="col-4 mx-auto">
+    <table class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <th>First name</th>
+                            <th>Last name</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>${user.getFirstName()}</td>
+                            <td>${user.getLastName()}</td>
+                            <td>${user.getEmail()}</td>
+                            <td>${user.getRole()}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+    </div>
 </div>
+</c:if>
 <c:forEach var="book" items="${foundedBooks}">
     <li>
         <c:out value="${book}"/>

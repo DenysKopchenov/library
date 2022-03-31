@@ -10,14 +10,33 @@
 <%@ include file="/WEB-INF/components/head.jspf" %>
 </head>
 <body>
-hello from LIBRARIAN page
 <%@ include file="/WEB-INF/components/nav_bar_librarian.jspf" %>
 <h3><font style="color:hsl(0,100%,50%);">${errorMessage}</font></h3>
 <h3><font style="color:hsl(100,100%,50%);">${successMessage}</font></h3>
-<div>
-    <c:out value="${user}"/>
-    <h3><font style="color:hsl(0,100%,50%);">${successDelete}</font></h3>
+<c:if test="${user != null}">
+<div class="row">
+    <div class="col-4 mx-auto">
+    <table class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <th>First name</th>
+                            <th>Last name</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>${user.getFirstName()}</td>
+                            <td>${user.getLastName()}</td>
+                            <td>${user.getEmail()}</td>
+                            <td>${user.getRole()}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+    </div>
 </div>
+</c:if>
 <div>
     <c:forEach var="pendingOrder" items="${pendingOrders}">
         <li>
@@ -28,14 +47,41 @@ hello from LIBRARIAN page
         </li>
     </c:forEach>
 </div>
-<div>
+
+<c:if test="${allReaders != null}">
+<div class="row" >
+<div class="col-6 mx-auto">
+<table class="table table-bordered">
+    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>First name</th>
+                            <th>Last name</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                            <th>Status</th>
+                            <th>Operations</th>
+                        </tr>
+                        </thead>
+                        <tbody>
     <c:forEach var="reader" items="${allReaders}">
-        <li>
-        ${reader}
-        <a class="btn btn-primary" href="?operations=showReadersApprovedOrders&userId=${reader.getId()}"> Show approved orders </a>
-        </li>
+                        <tr>
+                            <td>${reader.getId()}</td>
+                            <td>${reader.getFirstName()}</td>
+                            <td>${reader.getLastName()}</td>
+                            <td>${reader.getEmail()}</td>
+                            <td>${reader.getRole()}</td>
+                            <td>${reader.getStatus()}</td>
+                            <td style="text-align:center;">
+                            <a class="btn btn-primary" href="?operations=showReadersApprovedOrders&userId=${reader.getId()}"> Show approved orders </a>
+                            </td>
+                        </tr>
     </c:forEach>
+                        </tbody>
 </div>
+</div>
+</c:if>
+
 <div>
     <c:forEach var="approvedOrder" items="${userApprovedOrders}">
         <li>

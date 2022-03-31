@@ -1,6 +1,7 @@
 package com.dkop.library.controller;
 
 import com.dkop.library.controller.command.*;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -19,15 +20,15 @@ public class Servlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        processRequest(req, resp);
+        processRequest(req, resp, "get");
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        processRequest(req, resp);
+        processRequest(req, resp, "post");
     }
 
-    private void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    private void processRequest(HttpServletRequest request, HttpServletResponse response, String type) throws ServletException, IOException {
         String path = request.getRequestURI();
         String pathRegex = ".*/library/";
         path = path.replaceAll(pathRegex, "");
@@ -36,7 +37,11 @@ public class Servlet extends HttpServlet {
         if (pageToGo.contains("redirect:")) {
             response.sendRedirect(pageToGo.replaceAll(".*redirect:", "/app"));
         } else {
-            request.getRequestDispatcher(pageToGo).forward(request, response);
+            if (type.equals("post") && StringUtils.containsAny(pageToGo, "admin", "reader", "librarian")) {
+                response.sendRedirect(request.getContextPath());
+            } else {
+                request.getRequestDispatcher(pageToGo).forward(request, response);
+            }
         }
     }
 }

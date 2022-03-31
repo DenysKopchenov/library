@@ -165,7 +165,7 @@ public class ReaderCommand implements Command {
         String email = (String) request.getSession().getAttribute("email");
         try {
             User user = userService.getUserInfo(email);
-            request.setAttribute("userInfo", user);
+            request.setAttribute("user", user);
         } catch (DoesNotExistException e) {
             request.setAttribute("errorMessage", e.getMessage());
         }
