@@ -6,7 +6,6 @@
 
 <!DOCTYPE html>
             <html lang=${language}>
-
             <head>
 <%@ include file="/WEB-INF/components/head.jspf" %>
             </head>

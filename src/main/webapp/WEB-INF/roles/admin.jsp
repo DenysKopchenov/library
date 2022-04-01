@@ -27,7 +27,7 @@
 <c:if test="${user != null}">
 <div class="row">
     <div class="col-4 mx-auto">
-    <table class="table table-bordered">
+    <table class="table table-bordered table-light">
                         <thead>
                         <tr>
                             <th>First name</th>
@@ -51,7 +51,7 @@
 <c:if test="${catalog != null}">
 <div class="row" >
 <div class="col-6 mx-auto">
-<table class="table table-bordered">
+<table class="table table-bordered table-light">
     <thead>
                         <tr>
                             <th>id</th>
@@ -85,7 +85,7 @@
 <c:if test="${allLibrarians != null}">
 <div class="row" >
 <div class="col-6 mx-auto">
-<table class="table table-bordered">
+<table class="table table-bordered table-light">
     <thead>
                         <tr>
                             <th>Id</th>
@@ -115,7 +115,7 @@
 <c:if test="${allReaders != null}">
 <div class="row" >
 <div class="col-6 mx-auto">
-<table class="table table-bordered">
+<table class="table table-bordered table-light">
 <a class="page-link" href="?operations=showAllReaders&page=${currentPage}&perPage=1">per page 1</a>
 <a class="page-link" href="?operations=showAllReaders&page=${currentPage}&perPage=5">per page 5</a>
 <a class="page-link" href="?operations=showAllReaders&page=${currentPage}&perPage=10">per page 10</a>

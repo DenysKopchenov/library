@@ -12,7 +12,6 @@
 </head>
 <body>
 <%@ include file="/WEB-INF/components/nav_bar_guest.jspf" %>
-<a class="btn btn-primary" href="${pageContext.request.contextPath}/library/" role="button"><fmt:message key="home"/></a>
 <c:if test="${catalog != null}">
 <div class="row" >
 <div class="col-6 mx-auto">

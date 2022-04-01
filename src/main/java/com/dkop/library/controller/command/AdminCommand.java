@@ -157,7 +157,7 @@ public class AdminCommand implements Command {
     private List<?> getCurrentRecordsPerPage(List<?> all, int currentPageNumber, int perPage) {
         int startIndex = (currentPageNumber - 1) * perPage;
         int endIndex = (Math.min(startIndex + perPage, all.size()));
-        if (endIndex > all.size()) {
+        if (endIndex > all.size() || startIndex > all.size()) {
             return all;
         }
         return all.subList(startIndex, endIndex);
