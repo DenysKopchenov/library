@@ -6,6 +6,7 @@ import com.dkop.library.entity.User;
 import com.dkop.library.exceptions.AlreadyExistException;
 import com.dkop.library.exceptions.DoesNotExistException;
 import com.dkop.library.exceptions.NotFoundException;
+import com.dkop.library.exceptions.UnableToDeleteException;
 import org.apache.commons.codec.digest.DigestUtils;
 
 import java.sql.SQLException;
@@ -74,7 +75,7 @@ public class UserService {
         }
     }
 
-    public void deleteUser(int id) throws NotFoundException {
+    public void deleteUser(int id) throws NotFoundException, UnableToDeleteException {
         try (UserDao userDao = daoFactory.createUserDao()) {
             userDao.findById(id);
             userDao.delete(id);

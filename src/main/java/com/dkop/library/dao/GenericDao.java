@@ -1,6 +1,7 @@
 package com.dkop.library.dao;
 
 import com.dkop.library.exceptions.NotFoundException;
+import com.dkop.library.exceptions.UnableToDeleteException;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -14,7 +15,7 @@ public interface GenericDao<E> extends AutoCloseable {
 
     void update(E e);
 
-    void delete(int id);
+    void delete(int id) throws UnableToDeleteException;
 
     void close();
 }

@@ -116,6 +116,10 @@
 <div class="row" >
 <div class="col-6 mx-auto">
 <table class="table table-bordered">
+<a class="page-link" href="?operations=showAllReaders&page=${currentPage}&perPage=1">per page 1</a>
+<a class="page-link" href="?operations=showAllReaders&page=${currentPage}&perPage=5">per page 5</a>
+<a class="page-link" href="?operations=showAllReaders&page=${currentPage}&perPage=10">per page 10</a>
+<a class="page-link" href="?operations=showAllReaders&page=${currentPage}&perPage=20">per page 20</a>
     <thead>
                         <tr>
                             <th>Id</th>

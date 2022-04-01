@@ -3,6 +3,7 @@ package com.dkop.library.dao.impls;
 import com.dkop.library.dao.BooksDao;
 import com.dkop.library.entity.Book;
 import com.dkop.library.exceptions.NotFoundException;
+import com.dkop.library.exceptions.UnableToDeleteException;
 import org.apache.commons.lang3.StringUtils;
 
 import java.sql.*;
@@ -37,6 +38,7 @@ public class BooksDaoImpl implements BooksDao {
                         .publisher(resultSet.getString("publisher"))
                         .publishingDate(resultSet.getDate("publishing_date").toLocalDate())
                         .amount(resultSet.getInt("amount"))
+                        .onOrder(resultSet.getInt("on_order"))
                         .build();
                 allBooks.add(book);
             }
@@ -59,13 +61,13 @@ public class BooksDaoImpl implements BooksDao {
         }
     }
 
-    public void delete(int id) {
+    public void delete(int id) throws UnableToDeleteException {
         String DELETE_BOOK = "DELETE FROM books WHERE id = ?;";
         try (PreparedStatement preparedStatement = connection.prepareStatement(DELETE_BOOK)) {
             preparedStatement.setInt(1, id);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new UnableToDeleteException("Unable to delete", e);
         }
     }
 

@@ -1,11 +1,11 @@
 package com.dkop.library.controller.command;
 
-
 import com.dkop.library.entity.Book;
 import com.dkop.library.entity.User;
 import com.dkop.library.exceptions.AlreadyExistException;
 import com.dkop.library.exceptions.DoesNotExistException;
 import com.dkop.library.exceptions.NotFoundException;
+import com.dkop.library.exceptions.UnableToDeleteException;
 import com.dkop.library.services.BookService;
 import com.dkop.library.services.UserService;
 import com.dkop.library.services.Validator;
@@ -95,8 +95,9 @@ public class AdminCommand implements Command {
                 bookService.deleteBook(Integer.parseInt(bookId));
                 request.setAttribute("successMessage", "Successfully deleted");
                 showCatalogBookOperation(request);
-            } catch (NotFoundException e) {
+            } catch (NotFoundException | UnableToDeleteException e) {
                 request.setAttribute("errorMessage", e.getMessage());
+                e.getCause().printStackTrace();
             }
         } else {
             request.setAttribute("errorMessage", "ID may contains only digits");
@@ -146,17 +147,20 @@ public class AdminCommand implements Command {
         List<User> allUsers = userService.findAll();
         int records = allUsers.size();
         int numberOfPages = (int) Math.ceil(records * 1.0 / perPage);
-        List<User> usersPerPage = getCurrentRecordsPerPage(allUsers, page, perPage);
+        List<User> usersPerPage = (List<User>) getCurrentRecordsPerPage(allUsers, page, perPage);
 
         request.setAttribute("numberOfPages", numberOfPages);
         request.setAttribute("currentPage", page);
         request.setAttribute("allReaders", usersPerPage);
     }
 
-    private List<User> getCurrentRecordsPerPage(List<User> allUsers, int currentPageNumber, int perPage) {
+    private List<?> getCurrentRecordsPerPage(List<?> all, int currentPageNumber, int perPage) {
         int startIndex = (currentPageNumber - 1) * perPage;
-        int endIndex = (Math.min(startIndex + perPage, allUsers.size()));
-        return allUsers.subList(startIndex, endIndex);
+        int endIndex = (Math.min(startIndex + perPage, all.size()));
+        if (endIndex > all.size()) {
+            return all;
+        }
+        return all.subList(startIndex, endIndex);
     }
 
     private void showAllLibrariansOperation(HttpServletRequest request) {
@@ -174,7 +178,7 @@ public class AdminCommand implements Command {
                 userService.deleteUser(Integer.parseInt(userId));
                 request.setAttribute("successMessage", "Successfully deleted");
                 showAllLibrariansOperation(request);
-            } catch (NotFoundException e) {
+            } catch (NotFoundException | UnableToDeleteException e) {
                 request.setAttribute("errorMessage", e.getMessage());
             }
         } else {

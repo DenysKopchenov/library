@@ -1,7 +1,6 @@
 package com.dkop.library.dao.impls;
 
 import com.dkop.library.dao.UserDao;
-import com.dkop.library.entity.Book;
 import com.dkop.library.entity.User;
 import com.dkop.library.exceptions.DoesNotExistException;
 import com.dkop.library.exceptions.NotFoundException;

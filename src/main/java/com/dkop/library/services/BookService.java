@@ -5,6 +5,7 @@ import com.dkop.library.dao.DaoFactory;
 import com.dkop.library.entity.Book;
 import com.dkop.library.exceptions.AlreadyExistException;
 import com.dkop.library.exceptions.NotFoundException;
+import com.dkop.library.exceptions.UnableToDeleteException;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -49,7 +50,7 @@ public class BookService {
     }
 
     public void updateBook(int id, String title, String author, String publisher, String publishingDate, String amount) throws NotFoundException {
-        findById(id);
+        Book bookFromDB = findById(id);
         LocalDate date = LocalDate.parse(publishingDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         Book updatingBook = Book.newBuilder()
                 .id(id)
@@ -58,13 +59,14 @@ public class BookService {
                 .publisher(publisher)
                 .publishingDate(date)
                 .amount(Integer.parseInt(amount))
+                .onOrder(bookFromDB.getOnOrder())
                 .build();
         try (BooksDao booksDao = DaoFactory.getInstance().createBooksDao()) {
             booksDao.update(updatingBook);
         }
     }
 
-    public void deleteBook(int id) throws NotFoundException {
+    public void deleteBook(int id) throws NotFoundException, UnableToDeleteException {
         findById(id);
         try (BooksDao booksDao = DaoFactory.getInstance().createBooksDao()) {
             booksDao.delete(id);
