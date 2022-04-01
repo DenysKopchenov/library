@@ -10,6 +10,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.dkop.library.controller.command.CommandUtils.messagesBundle;
+
 public class OrderDaoImpl implements OrderDao {
     private Connection connection;
 
@@ -76,7 +78,7 @@ public class OrderDaoImpl implements OrderDao {
                             .actualReturnDate(resultSet.getDate("actual_return_date").toLocalDate())
                             .build();
                 } else {
-                    throw new NotFoundException("Order not found");
+                    throw new NotFoundException(messagesBundle.getString("order.not.found"));
                 }
             }
         } catch (SQLException e) {

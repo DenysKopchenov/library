@@ -10,6 +10,8 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.dkop.library.controller.command.CommandUtils.messagesBundle;
+
 public class BooksDaoImpl implements BooksDao {
 
     private Connection connection;
@@ -67,7 +69,7 @@ public class BooksDaoImpl implements BooksDao {
             preparedStatement.setInt(1, id);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            throw new UnableToDeleteException("Unable to delete", e);
+            throw new UnableToDeleteException(messagesBundle.getString("unable.delete"), e);
         }
     }
 
@@ -154,7 +156,7 @@ public class BooksDaoImpl implements BooksDao {
                             .onOrder(resultSet.getInt("on_order"))
                             .build();
                 } else {
-                    throw new NotFoundException("Book not found");
+                    throw new NotFoundException(messagesBundle.getString("book.not.found"));
                 }
             }
         } catch (SQLException e) {

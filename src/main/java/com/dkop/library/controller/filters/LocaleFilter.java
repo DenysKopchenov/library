@@ -1,5 +1,6 @@
 package com.dkop.library.controller.filters;
 
+import com.dkop.library.controller.command.CommandUtils;
 import com.dkop.library.services.Validator;
 
 import javax.servlet.*;
@@ -22,21 +23,19 @@ public class LocaleFilter implements Filter {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest req = (HttpServletRequest) servletRequest;
         String userSelectedLanguage = req.getParameter("lang");
-//        Locale locale = DEFAULT_LOCALE;
+        Locale locale = DEFAULT_LOCALE;
         if (userSelectedLanguage != null) {
             req.getSession().setAttribute(LANGUAGE, userSelectedLanguage);
-//            locale = new Locale(userSelectedLanguage);
-//            Validator.setLocale(new Locale(userSelectedLanguage));
+            locale = new Locale(userSelectedLanguage);
         } else if (req.getSession().getAttribute(LANGUAGE) == null) {
             req.getSession().setAttribute(LANGUAGE, "en");
-//            Validator.setLocale(new Locale("en"));
         } else {
             req.getSession().setAttribute(LANGUAGE, req.getSession().getAttribute(LANGUAGE));
-//            locale = new Locale((String) req.getSession().getAttribute(LANGUAGE));
+            locale = new Locale((String) req.getSession().getAttribute(LANGUAGE));
         }
 
-//        ResourceBundle resourceBundle = ResourceBundle.getBundle("localization", locale);
-//        req.setAttribute("bundle", resourceBundle);
+        CommandUtils.messagesBundle = ResourceBundle.getBundle("messages", locale);
+        ;
         filterChain.doFilter(servletRequest, servletResponse);
     }
 

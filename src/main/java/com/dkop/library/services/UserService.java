@@ -12,6 +12,8 @@ import org.apache.commons.codec.digest.DigestUtils;
 import java.sql.SQLException;
 import java.util.List;
 
+import static com.dkop.library.controller.command.CommandUtils.messagesBundle;
+
 public class UserService {
     private static UserService instance;
     private final DaoFactory daoFactory;
@@ -71,7 +73,7 @@ public class UserService {
                     .build();
             userDao.create(user);
         } catch (SQLException e) {
-            throw new AlreadyExistException("Email " + email + " already exist!");
+            throw new AlreadyExistException("Email " + email + messagesBundle.getString("email.already.exist"), e);
         }
     }
 
@@ -87,7 +89,7 @@ public class UserService {
             userDao.findById(id);
             userDao.changeStatus(id, newStatus);
         } catch (SQLException e) {
-            throw new NotFoundException(id + " not found");
+            throw new NotFoundException(messagesBundle.getString("user.not.found"));
         }
     }
 }

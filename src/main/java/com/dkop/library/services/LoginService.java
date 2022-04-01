@@ -12,6 +12,8 @@ import org.apache.commons.codec.digest.DigestUtils;
 
 import javax.servlet.http.HttpServletRequest;
 
+import static com.dkop.library.controller.command.CommandUtils.messagesBundle;
+
 public class LoginService {
     private static LoginService instance;
     private DaoFactory daoFactory;
@@ -36,7 +38,7 @@ public class LoginService {
         try {
             String userRole = authenticateUser(email, password);
             if (CommandUtils.checkIsLogged(request, email)) {
-                throw new AlreadyLoggedException("User already LOGGED!");
+                throw new AlreadyLoggedException(messagesBundle.getString("already.logged"));
             } else {
                 CommandUtils.setUserRole(request, email, userRole);
                 return resolvePageByRole(userRole);
@@ -64,10 +66,10 @@ public class LoginService {
                 if (user.getPassword().equals(DigestUtils.sha256Hex(password))) {
                     return user.getRole();
                 } else {
-                    throw new WrongPasswordException("Wrong Password!");
+                    throw new WrongPasswordException(messagesBundle.getString("wrong.password"));
                 }
             } else {
-                throw new WasBlockedException("Your account was blocked. Contact administrator");
+                throw new WasBlockedException(messagesBundle.getString("was.blocked"));
             }
         }
     }

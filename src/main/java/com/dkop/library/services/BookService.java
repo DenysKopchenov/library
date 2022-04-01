@@ -12,6 +12,8 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+import static com.dkop.library.controller.command.CommandUtils.messagesBundle;
+
 
 public class BookService {
     private final DaoFactory daoFactory;
@@ -45,7 +47,7 @@ public class BookService {
         try (BooksDao booksDao = daoFactory.createBooksDao()) {
             booksDao.create(book);
         } catch (SQLException e) {
-            throw new AlreadyExistException("Book already exist, you can update it!");
+            throw new AlreadyExistException(messagesBundle.getString("book.already.exist"), e);
         }
     }
 

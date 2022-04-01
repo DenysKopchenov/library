@@ -16,6 +16,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
+import java.util.logging.Logger;
+
+import static com.dkop.library.controller.command.CommandUtils.messagesBundle;
 
 public class AdminCommand implements Command {
     private final Map<String, Consumer<HttpServletRequest>> operations = new HashMap<>();
@@ -78,7 +81,7 @@ public class AdminCommand implements Command {
             if (errors.isEmpty()) {
                 try {
                     bookService.createBook(title, author, publisher, publishingDate, amount);
-                    request.setAttribute("successMessage", "Successfully created");
+                    request.setAttribute("successMessage", messagesBundle.getString("successfully.created"));
                 } catch (AlreadyExistException e) {
                     request.setAttribute("errorMessage", e.getMessage());
                 }
@@ -93,14 +96,14 @@ public class AdminCommand implements Command {
         if (StringUtils.isNumeric(bookId)) {
             try {
                 bookService.deleteBook(Integer.parseInt(bookId));
-                request.setAttribute("successMessage", "Successfully deleted");
+                request.setAttribute("successMessage", messagesBundle.getString("successfully.deleted"));
                 showCatalogBookOperation(request);
             } catch (NotFoundException | UnableToDeleteException e) {
                 request.setAttribute("errorMessage", e.getMessage());
                 e.getCause().printStackTrace();
             }
         } else {
-            request.setAttribute("errorMessage", "ID may contains only digits");
+            request.setAttribute("errorMessage", messagesBundle.getString("id.error"));
         }
     }
 
@@ -120,8 +123,8 @@ public class AdminCommand implements Command {
                     Map<String, String> errors = Validator.validateBookForm(title, author, publisher, publishingDate, amount);
                     if (errors.isEmpty()) {
                         bookService.updateBook(Integer.parseInt(id), title, author, publisher, publishingDate, amount);
-                        request.setAttribute("successMessage", "Successfully updated");
-                        request.setAttribute("operation", "");
+//                        request.setAttribute("successMessage", "Successfully updated");
+//                        request.setAttribute("operation", "");
                     } else {
                         request.setAttribute("validation", errors);
                     }
@@ -130,7 +133,7 @@ public class AdminCommand implements Command {
                 request.setAttribute("errorMessage", e.getMessage());
             }
         } else {
-            request.setAttribute("errorMessage", "ID may contains only digits");
+            request.setAttribute("errorMessage", messagesBundle.getString("id.error"));
         }
     }
 
@@ -176,13 +179,13 @@ public class AdminCommand implements Command {
         if (StringUtils.isNumeric(userId)) {
             try {
                 userService.deleteUser(Integer.parseInt(userId));
-                request.setAttribute("successMessage", "Successfully deleted");
+                request.setAttribute("successMessage", messagesBundle.getString("successfully.deleted"));
                 showAllLibrariansOperation(request);
             } catch (NotFoundException | UnableToDeleteException e) {
                 request.setAttribute("errorMessage", e.getMessage());
             }
         } else {
-            request.setAttribute("errorMessage", "ID may contains only digits");
+            request.setAttribute("errorMessage", messagesBundle.getString("id.error"));
         }
     }
 
@@ -199,8 +202,8 @@ public class AdminCommand implements Command {
             if (errors.isEmpty()) {
                 try {
                     userService.createUser(firstName, lastName, email, password, "librarian", "active");
-                    request.setAttribute("successMessage", "Successfully created");
-                    request.setAttribute("operation", "");
+//                    request.setAttribute("successMessage", "Successfully created");
+//                    request.setAttribute("operation", "");
                 } catch (AlreadyExistException e) {
                     request.setAttribute("errorMessage", e.getMessage());
                 }
@@ -215,14 +218,14 @@ public class AdminCommand implements Command {
         if (StringUtils.isNumeric(userId)) {
             try {
                 userService.changeStatus(Integer.parseInt(userId), "active");
-                request.setAttribute("successMessage", "Successfully unblocked");
+                request.setAttribute("successMessage", messagesBundle.getString("successfully.unblocked"));
                 showAllReadersOperation(request);
             } catch (NotFoundException e) {
                 request.setAttribute("errorMessage", e.getMessage());
                 showAllReadersOperation(request);
             }
         } else {
-            request.setAttribute("errorMessage", "ID may contains only digits");
+            request.setAttribute("errorMessage", messagesBundle.getString("id.error"));
         }
     }
 
@@ -231,14 +234,14 @@ public class AdminCommand implements Command {
         if (StringUtils.isNumeric(userId)) {
             try {
                 userService.changeStatus(Integer.parseInt(userId), "blocked");
-                request.setAttribute("successMessage", "Successfully blocked");
+                request.setAttribute("successMessage", messagesBundle.getString("successfully.blocked"));
                 showAllReadersOperation(request);
             } catch (NotFoundException e) {
                 request.setAttribute("errorMessage", e.getMessage());
                 showAllReadersOperation(request);
             }
         } else {
-            request.setAttribute("errorMessage", "ID may contains only digits");
+            request.setAttribute("errorMessage", messagesBundle.getString("id.error"));
         }
     }
 }

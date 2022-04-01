@@ -19,6 +19,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
+import static com.dkop.library.controller.command.CommandUtils.messagesBundle;
+
 public class ReaderCommand implements Command {
     private final Map<String, Consumer<HttpServletRequest>> operations = new HashMap<>();
     private final BookService bookService;
@@ -74,18 +76,18 @@ public class ReaderCommand implements Command {
                 int userId = userService.getUserInfo(email).getId();
                 int bookId = Integer.parseInt(request.getParameter("bookId"));
                 createOrderIfNotExist(bookId, userId, orderType, request);
-            } catch (AlreadyExistException | NotFoundException | DoesNotExistException e) {
+            } catch (AlreadyExistException | DoesNotExistException e) {
                 request.setAttribute("errorMessage", e.getMessage());
             }
         }
     }
 
-    private void createOrderIfNotExist(int bookId, int userId, String orderType, HttpServletRequest request) throws NotFoundException, AlreadyExistException {
+    private void createOrderIfNotExist(int bookId, int userId, String orderType, HttpServletRequest request) throws AlreadyExistException {
         if (!orderService.isOrderExist(bookId, userId, orderType)) {
             orderService.createOrder(bookId, userId, orderType);
             request.setAttribute("successMessage", "Order created, after approve you can find it on 'Show orders'");
         } else {
-            throw new AlreadyExistException("You already order this book");
+            throw new AlreadyExistException(messagesBundle.getString("order.already.exist"));
         }
     }
 
@@ -144,7 +146,7 @@ public class ReaderCommand implements Command {
         if (StringUtils.isNumeric(orderId)) {
             try {
                 orderService.returnBook(Integer.parseInt(orderId));
-                request.setAttribute("successMessage", "Successfully returned");
+                request.setAttribute("successMessage", messagesBundle.getString("successfully.returned"));
                 showApprovedOrders(request);
             } catch (NotFoundException e) {
                 request.setAttribute("errorMessage", e.getMessage());

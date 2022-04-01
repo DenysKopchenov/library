@@ -9,6 +9,8 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.dkop.library.controller.command.CommandUtils.messagesBundle;
+
 public class UserDaoImpl implements UserDao {
     private final Connection connection;
 
@@ -87,7 +89,7 @@ public class UserDaoImpl implements UserDao {
                             .id(resultSet.getInt("id"))
                             .build();
                 } else {
-                    throw new NotFoundException("User not found");
+                    throw new NotFoundException(messagesBundle.getString("user.not.found"));
                 }
             }
         } catch (SQLException e) {
@@ -128,7 +130,7 @@ public class UserDaoImpl implements UserDao {
                             .id(resultSet.getInt("id"))
                             .build();
                 } else {
-                    throw new DoesNotExistException(email + " does not exist!");
+                    throw new DoesNotExistException("Email " + email + messagesBundle.getString("email.does.not.exist"));
                 }
             }
         } catch (SQLException e) {

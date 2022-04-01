@@ -1,9 +1,6 @@
 package com.dkop.library.dao.impls;
 
-import com.dkop.library.dao.BooksDao;
-import com.dkop.library.dao.DaoFactory;
-import com.dkop.library.dao.OrderDao;
-import com.dkop.library.dao.UserDao;
+import com.dkop.library.dao.*;
 
 import java.sql.SQLException;
 

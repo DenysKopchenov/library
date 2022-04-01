@@ -1,4 +1,4 @@
-package com.dkop.library.dao.impls;
+package com.dkop.library.dao;
 
 import org.apache.commons.dbcp.BasicDataSource;
 

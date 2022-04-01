@@ -15,6 +15,8 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.util.List;
 
+import static com.dkop.library.controller.command.CommandUtils.messagesBundle;
+
 public class OrderService {
     private static OrderService instance;
     private final BookService bookService;
@@ -83,7 +85,7 @@ public class OrderService {
         Book book = bookService.findById(order.getBookId());
         int amount = book.getAmount();
         if (amount <= 0) {
-            throw new UnableToAcceptOrderException("Unable to accept order, we have no books, reject please");
+            throw new UnableToAcceptOrderException(messagesBundle.getString("unable.accept.order"));
         }
         book.setAmount(book.getAmount() - 1);
         book.setOnOrder(book.getOnOrder() + 1);
