@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.HashSet;
 
-public class Servlet extends HttpServlet {
+public class FrontController extends HttpServlet {
 
     @Override
     public void init(ServletConfig servletConfig) throws ServletException {

@@ -24,7 +24,7 @@
 
     <servlet>
         <servlet-name>Servlet</servlet-name>
-        <servlet-class>com.dkop.library.controller.Servlet</servlet-class>
+        <servlet-class>com.dkop.library.controller.FrontController</servlet-class>
     </servlet>
 
     <servlet-mapping>

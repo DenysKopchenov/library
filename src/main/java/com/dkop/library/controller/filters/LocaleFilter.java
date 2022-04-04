@@ -35,7 +35,6 @@ public class LocaleFilter implements Filter {
         }
 
         CommandUtils.messagesBundle = ResourceBundle.getBundle("messages", locale);
-        ;
         filterChain.doFilter(servletRequest, servletResponse);
     }
 
