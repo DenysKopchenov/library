@@ -15,7 +15,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="?operations=createBook">
+                    <a class="nav-link" href="?operations=createBook&page=${currentPage}&perPage=${perPage}">
                         <fmt:message key="navbar.create.book"/>
                     </a>
                 </li>
@@ -30,7 +30,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="?operations=showAllReaders">
+                    <a class="nav-link" href="?operations=showAllReaders&page=${currentPage}&perPage=${perPage} ">
                         <fmt:message key="navbar.list.readers"/>
                     </a>
                 </li>

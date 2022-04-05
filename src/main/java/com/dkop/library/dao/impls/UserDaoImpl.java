@@ -32,14 +32,31 @@ public class UserDaoImpl implements UserDao {
     }
 
     public List<User> findAll() {
-        return findAllByRole("reader");
+        throw new UnsupportedOperationException();
     }
 
-    public List<User> findAllByRole(String role) {
+    public int countAllRowsByRole(String role) {
+        String COUNT_ROWS = "SELECT count(id) AS count FROM users WHERE role = ?;";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(COUNT_ROWS)) {
+            preparedStatement.setString(1, role);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    return resultSet.getInt("count");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    public List<User> findAllByRole(String role, int offset, int numberOfRecords) {
         List<User> allUsers = new ArrayList<>();
-        String SELECT_USERS = "SELECT * FROM users WHERE role = ? ORDER BY id;";
+        String SELECT_USERS = "SELECT * FROM users WHERE role = ? ORDER BY id limit ?, ?;";
         try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_USERS)) {
             preparedStatement.setString(1, role);
+            preparedStatement.setInt(2, offset);
+            preparedStatement.setInt(3, numberOfRecords);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 while (resultSet.next()) {
                     User user = User.newBuilder()

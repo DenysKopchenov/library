@@ -106,8 +106,8 @@
                             <td style="text-align:center;"><a class="btn btn-danger" href="?operations=deleteLibrarian&userId=${user.getId()}"> delete </a></td>
                         </tr>
     </c:forEach>
-                        </tbody>           
-    
+                        </tbody>  
+                        </table>
 </div>
 </div>
 </c:if>
@@ -115,10 +115,12 @@
 <div class="row" >
 <div class="col-6 mx-auto">
 <table class="table table-bordered table-light">
-<a class="page-link" href="?operations=showAllReaders&page=${currentPage}&perPage=1">per page 1</a>
-<a class="page-link" href="?operations=showAllReaders&page=${currentPage}&perPage=5">per page 5</a>
-<a class="page-link" href="?operations=showAllReaders&page=${currentPage}&perPage=10">per page 10</a>
-<a class="page-link" href="?operations=showAllReaders&page=${currentPage}&perPage=20">per page 20</a>
+                    <select class="form-select" style="width:auto" aria-label="Default select example"
+                            name="perPage" onchange="location=this.value">
+                        <option value="?operations=showAllReaders&perPage=5"<c:if test="${perPage==5}">selected</c:if> >5</option>
+                        <option value="?operations=showAllReaders&perPage=10" <c:if test="${perPage==10}">selected</c:if> >10</option>
+                        <option value="?operations=showAllReaders&perPage=20" <c:if test="${perPage==20}">selected</c:if> >20</option>
+                    </select>
     <thead>
                         <tr>
                             <th>Id</th>
@@ -127,7 +129,8 @@
                             <th>Email</th>
                             <th>Role</th>
                             <th>Status</th>
-                            <th>Operations</th>
+                            <th>Operations</th>                                           
+                </form>
                         </tr>
                         </thead>
                         <tbody>
@@ -141,10 +144,10 @@
                             <td>${reader.getStatus()}</td>
                             <td style="text-align:center;">
                             <c:if test="${reader.getStatus() eq 'blocked'}">
-                                <a class="btn btn-success" href="?operations=unblockUser&userId=${reader.getId()}"> unblock </a>
+                                <a class="btn btn-success" href="?operations=unblockUser&userId=${reader.getId()}&page=${currentPage}&perPage=${perPage}"> unblock </a>
                             </c:if>
                             <c:if test="${reader.getStatus() eq 'active'}">
-                                <a class="btn btn-warning" href="?operations=blockUser&userId=${reader.getId()}"> block </a>
+                                <a class="btn btn-warning" href="?operations=blockUser&userId=${reader.getId()}&page=${currentPage}&perPage=${perPage}"> block </a>
                             </c:if>
                             </td>
                         </tr>
@@ -152,17 +155,17 @@
                         </tbody>
 </table>
 <nav aria-label="Page navigation example">
-  <ul class="pagination">
-    <c:if test="${currentPage != 1}">
-    <li class="page-item"><a class="page-link" href="?operations=showAllReaders&page=${currentPage - 1}">Previous</a></li>
-    </c:if>
-    <c:forEach begin="1" end="${numberOfPages}" var="i">
-                    <li class="active"><a class="page-link" href="?operations=showAllReaders&page=${i}">${i}</a></li>
-            </c:forEach>
-                <c:if test="${currentPage < numberOfPages}">
-                <li class="page-item"><a class="page-link" href="?operations=showAllReaders&page=${currentPage + 1}">Next</a></li>
-    </c:if>
-  </ul>
+    <ul class="pagination">
+        <c:if test="${currentPage != 1}">
+            <li class="page-item"><a class="page-link" href="?operations=showAllReaders&page=${currentPage - 1}&perPage=${perPage}">Previous</a></li>
+        </c:if>
+        <c:forEach begin="1" end="${numberOfPages}" var="i">
+            <li class="active"><a class="page-link" href="?operations=showAllReaders&page=${i}&perPage=${perPage}">${i}</a></li>
+        </c:forEach>
+        <c:if test="${currentPage < numberOfPages}">
+            <li class="page-item"><a class="page-link" href="?operations=showAllReaders&page=${currentPage + 1}&perPage=${perPage}">Next</a></li>
+        </c:if>
+    </ul>
 </nav>
 </div>
 </div>

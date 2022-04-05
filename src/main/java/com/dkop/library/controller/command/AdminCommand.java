@@ -7,6 +7,7 @@ import com.dkop.library.exceptions.DoesNotExistException;
 import com.dkop.library.exceptions.NotFoundException;
 import com.dkop.library.exceptions.UnableToDeleteException;
 import com.dkop.library.services.BookService;
+import com.dkop.library.services.PaginationService;
 import com.dkop.library.services.UserService;
 import com.dkop.library.services.Validator;
 import org.apache.commons.lang3.StringUtils;
@@ -24,6 +25,7 @@ public class AdminCommand implements Command {
     private final Map<String, Consumer<HttpServletRequest>> operations = new HashMap<>();
     private final BookService bookService = BookService.getInstance();
     private final UserService userService = UserService.getInstance();
+    private final PaginationService paginationService = PaginationService.getInstance();
 
     public AdminCommand() {
         init();
@@ -139,35 +141,42 @@ public class AdminCommand implements Command {
 
     private void showAllReadersOperation(HttpServletRequest request) {
         int page = 1;
-        int perPage = 1;
-        if (request.getParameter("perPage") != null) {
+        int perPage = 5;
+        if (StringUtils.isNumeric(request.getParameter("perPage"))) {
             perPage = Integer.parseInt(request.getParameter("perPage"));
         }
-        if (request.getParameter("page") != null) {
+        if (StringUtils.isNumeric(request.getParameter("page"))) {
             page = Integer.parseInt(request.getParameter("page"));
         }
 
-        List<User> allUsers = userService.findAll();
-        int records = allUsers.size();
-        int numberOfPages = (int) Math.ceil(records * 1.0 / perPage);
-        List<User> usersPerPage = (List<User>) getCurrentRecordsPerPage(allUsers, page, perPage);
+        List<User> usersPerPage = paginationService.paginateUsersByRole("reader", page, perPage);
+        int numberOfPages = paginationService.countNumberOfPagesForUsers("reader", perPage);
+
 
         request.setAttribute("numberOfPages", numberOfPages);
-        request.setAttribute("currentPage", page);
+        request.setAttribute("perPage", perPage);
+        request.setAttribute("currentPage", Math.min(page, numberOfPages));
         request.setAttribute("allReaders", usersPerPage);
     }
 
-    private List<?> getCurrentRecordsPerPage(List<?> all, int currentPageNumber, int perPage) {
-        int startIndex = (currentPageNumber - 1) * perPage;
-        int endIndex = (Math.min(startIndex + perPage, all.size()));
-        if (endIndex > all.size() || startIndex > all.size()) {
-            return all;
-        }
-        return all.subList(startIndex, endIndex);
-    }
-
     private void showAllLibrariansOperation(HttpServletRequest request) {
-        request.setAttribute("allLibrarians", userService.findAllByRole("librarian"));
+        int page = 1;
+        int perPage = 5;
+        if (StringUtils.isNumeric(request.getParameter("perPage"))) {
+            perPage = Integer.parseInt(request.getParameter("perPage"));
+        }
+        if (StringUtils.isNumeric(request.getParameter("page"))) {
+            page = Integer.parseInt(request.getParameter("page"));
+        }
+
+        List<User> usersPerPage = paginationService.paginateUsersByRole("librarian", page, perPage);
+        int numberOfPages = paginationService.countNumberOfPagesForUsers("reader", perPage);
+
+
+        request.setAttribute("numberOfPages", numberOfPages);
+        request.setAttribute("perPage", perPage);
+        request.setAttribute("currentPage", page);
+        request.setAttribute("allLibrarians", usersPerPage);
     }
 
     private void showCatalogBookOperation(HttpServletRequest request) {

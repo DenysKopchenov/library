@@ -46,9 +46,9 @@ public class UserService {
         }
     }
 
-    public List<User> findAllByRole(String role) {
+    public List<User> findAllByRole(String role, int offset, int numberOfRecords) {
         try (UserDao userDao = daoFactory.createUserDao()) {
-            return userDao.findAllByRole(role);
+            return userDao.findAllByRole(role, offset, numberOfRecords);
         }
     }
 
@@ -90,6 +90,12 @@ public class UserService {
             userDao.changeStatus(id, newStatus);
         } catch (SQLException e) {
             throw new NotFoundException(messagesBundle.getString("user.not.found"));
+        }
+    }
+
+    public int countAllRowsByRole(String role) {
+        try (UserDao userDao = daoFactory.createUserDao()) {
+            return userDao.countAllRowsByRole(role);
         }
     }
 }
