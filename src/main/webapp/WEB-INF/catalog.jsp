@@ -28,8 +28,8 @@
     <a class="dropdown-item" href="?sort=publishing_date&page=${i}&perPage=${perPage}">Publishing date</a>
   </div>
 </div>
-<div class="btn-group">
-  <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+<div class="btn-group" style="float:right">
+  <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
     ${perPage == null ? "5" : perPage}
     </button>
   <div class="dropdown-menu">

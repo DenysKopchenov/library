@@ -109,6 +109,7 @@ public class OrderDaoImpl implements OrderDao {
 
     @Override
     public List<Order> findAllOrdersByStatus(String status) {
+        //todo pagination
         String SELECT_ORDERS = "SELECT * FROM orders WHERE status = ?;";
         List<Order> ordersByStatus = new ArrayList<>();
         try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ORDERS)) {
@@ -137,6 +138,7 @@ public class OrderDaoImpl implements OrderDao {
 
     @Override
     public List<Order> findAllUserApprovedOrders(int userId) {
+        //todo pagination
         String SELECT_ORDERS = "SELECT * FROM orders WHERE user_id = ? AND status = 'approved'";
         List<Order> allApprovedOrders = new ArrayList<>();
         try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ORDERS)) {

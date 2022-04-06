@@ -1,10 +1,11 @@
 package com.dkop.library.services;
 
-import com.dkop.library.controller.command.LibrarianCommand;
 import com.dkop.library.dao.DaoFactory;
 import com.dkop.library.entity.Book;
 import com.dkop.library.entity.User;
+import org.apache.commons.lang3.StringUtils;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 public class PaginationService {
@@ -49,4 +50,17 @@ public class PaginationService {
         return (int) Math.ceil(bookService.countAllRows() * 1.0 / perPage);
     }
 
+    public int getRecordsPerPage(HttpServletRequest request) {
+        if (StringUtils.isNumeric(request.getParameter("perPage"))) {
+            return Integer.parseInt(request.getParameter("perPage"));
+        }
+        return 5;
+    }
+
+    public int getPageNumber(HttpServletRequest request) {
+        if (StringUtils.isNumeric(request.getParameter("page"))) {
+            return Integer.parseInt(request.getParameter("page"));
+        }
+        return 1;
+    }
 }

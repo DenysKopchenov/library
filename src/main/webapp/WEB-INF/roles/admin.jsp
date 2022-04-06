@@ -50,14 +50,29 @@
 <c:if test="${catalog != null}">
 <div class="row" >
 <div class="col-6 mx-auto">
-                    <select class="form-select" style="width:auto" aria-label="Default select example"
-                            name="perPage" onchange="location=this.value">
-                        <option value="?operations=catalog&perPage=5"<c:if test="${perPage==5}">selected</c:if> >5</option>
-                        <option value="?operations=catalog&perPage=10" <c:if test="${perPage==10}">selected</c:if> >10</option>
-                        <option value="?operations=catalog&perPage=20" <c:if test="${perPage==20}">selected</c:if> >20</option>
-                    </select>
 <table class="table table-bordered table-light">
     <thead>
+    <div class="btn-group">
+      <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        ${sortBy == null ? "By Title" : sortBy}
+        </button>
+      <div class="dropdown-menu">
+        <a class="dropdown-item" href="?operations=catalog&sort=title&page=${i}&perPage=${perPage}">Title</a>
+        <a class="dropdown-item" href="?operations=catalog&sort=author&page=${i}&perPage=${perPage}">Author</a>
+        <a class="dropdown-item" href="?operations=catalog&sort=publisher&page=${i}&perPage=${perPage}">Publisher</a>
+        <a class="dropdown-item" href="?operations=catalog&sort=publishing_date&page=${i}&perPage=${perPage}">Publishing date</a>
+      </div>
+    </div>
+    <div class="btn-group" style="float:right">
+      <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        ${perPage == null ? "5" : perPage}
+        </button>
+      <div class="dropdown-menu">
+        <a class="dropdown-item" href="?operations=catalog&sort=${sort}&page=${i}&perPage=5">5</a>
+        <a class="dropdown-item" href="?operations=catalog&sort=${sort}&page=${i}&perPage=10">10</a>
+        <a class="dropdown-item" href="?operations=catalog&sort=${sort}&page=${i}&perPage=20">20</a>
+      </div>
+      </div>
                         <tr>
                             <th>id</th>
                             <th>Title</th>
@@ -135,12 +150,16 @@
 <div class="row" >
 <div class="col-6 mx-auto">
 <table class="table table-bordered table-light">
-                    <select class="form-select" style="width:auto" aria-label="Default select example"
-                            name="perPage" onchange="location=this.value">
-                        <option value="?operations=showAllReaders&perPage=5"<c:if test="${perPage==5}">selected</c:if> >5</option>
-                        <option value="?operations=showAllReaders&perPage=10" <c:if test="${perPage==10}">selected</c:if> >10</option>
-                        <option value="?operations=showAllReaders&perPage=20" <c:if test="${perPage==20}">selected</c:if> >20</option>
-                    </select>
+    <div class="btn-group" style="float:right">
+      <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        ${perPage == null ? "5" : perPage}
+        </button>
+      <div class="dropdown-menu">
+        <a class="dropdown-item" href="?operations=showAllReaders&sort=${sort}&page=${i}&perPage=5">5</a>
+        <a class="dropdown-item" href="?operations=showAllReaders&sort=${sort}&page=${i}&perPage=10">10</a>
+        <a class="dropdown-item" href="?operations=showAllReaders&sort=${sort}&page=${i}&perPage=20">20</a>
+      </div>
+      </div>
     <thead>
                         <tr>
                             <th>Id</th>
