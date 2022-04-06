@@ -103,9 +103,15 @@ public class BookService {
         }
     }
 
-    public List<Book> findAllSorted(String sortBy) {
+    public List<Book> findAllSorted(String sortBy, int offset, int numberOfRecords) {
         try (BooksDao booksDao = DaoFactory.getInstance().createBooksDao()) {
-            return booksDao.findAllSorted(sortBy);
+            return booksDao.findAllSorted(sortBy, offset, numberOfRecords);
+        }
+    }
+
+    public int countAllRows() {
+        try (BooksDao booksDao = DaoFactory.getInstance().createBooksDao()) {
+            return booksDao.countAllRows();
         }
     }
 }

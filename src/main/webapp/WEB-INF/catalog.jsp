@@ -17,20 +17,27 @@
 <div class="col-6 mx-auto">
 <table class="table table-bordered">
     <thead>
-    <form>
-        <select class="form-select" style="width:auto" aria-label="Default select example"
-                name="sort" onchange="submit()">
-            <option value="title" ${sort==
-            "title" ? 'selected' : ''}><fmt:message key="catalog.sort.title"/></option>
-            <option value="author" ${sort==
-            "author" ? 'selected' : ''}><fmt:message key="catalog.sort.author"/></option>
-            <option value="publisher" ${sort==
-            "publisher" ? 'selected' : ''}><fmt:message key="catalog.sort.publisher"/></option>
-            <option value="publishing_date" ${sort==
-            "publishing_date" ? 'selected' : ''}><fmt:message key="catalog.sort.publishing.date"/></option>
-        </select>
-    </form>
-
+<div class="btn-group">
+  <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    ${sortBy == null ? "By Title" : sortBy}
+    </button>
+  <div class="dropdown-menu">
+    <a class="dropdown-item" href="?sort=title&page=${i}&perPage=${perPage}">Title</a>
+    <a class="dropdown-item" href="?sort=author&page=${i}&perPage=${perPage}">Author</a>
+    <a class="dropdown-item" href="?sort=publisher&page=${i}&perPage=${perPage}">Publisher</a>
+    <a class="dropdown-item" href="?sort=publishing_date&page=${i}&perPage=${perPage}">Publishing date</a>
+  </div>
+</div>
+<div class="btn-group">
+  <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    ${perPage == null ? "5" : perPage}
+    </button>
+  <div class="dropdown-menu">
+    <a class="dropdown-item" href="?sort=${sort}&page=${i}&perPage=5">5</a>
+    <a class="dropdown-item" href="?sort=${sort}&page=${i}&perPage=10">10</a>
+    <a class="dropdown-item" href="?sort=${sort}&page=${i}&perPage=20">20</a>
+  </div>
+  </div>
                         <tr>
                             <th>Title</th>
                             <th>Author</th>
@@ -48,8 +55,23 @@
                         </tr>
     </c:forEach>
                         </tbody>
+                        </table>
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination">
+                                <c:if test="${currentPage != 1}">
+                                    <li class="page-item"><a class="page-link" href="?sort=${sort}&page=${currentPage - 1}&perPage=${perPage}">Previous</a></li>
+                                </c:if>
+                                <c:forEach begin="1" end="${numberOfPages}" var="i">
+                                    <li class="active"><a class="page-link" href="?sort=${sort}&page=${i}&perPage=${perPage}">${i}</a></li>
+                                </c:forEach>
+                                <c:if test="${currentPage < numberOfPages}">
+                                    <li class="page-item"><a class="page-link" href="?sort=${sort}&page=${currentPage + 1}&perPage=${perPage}">Next</a></li>
+                                </c:if>
+                            </ul>
+                        </nav>
 </div>
 </div>
+
 </c:if>
 <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
         integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"

@@ -78,15 +78,25 @@ hello form READER page
     <thead>
 <div class="btn-group">
   <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-    ${sort == null ? "By Title" : sort}
+    ${sortBy == null ? "By Title" : sortBy}
     </button>
   <div class="dropdown-menu">
-    <a class="dropdown-item" href="?operations=catalog&sort=title">title</a>
-    <a class="dropdown-item" href="?operations=catalog&sort=author">author</a>
-    <a class="dropdown-item" href="?operations=catalog&sort=publisher">publisher</a>
-    <a class="dropdown-item" href="?operations=catalog&sort=publishing_date">publishing date</a>
+    <a class="dropdown-item" href="?operations=catalog&sort=title&page=${i}&perPage=${perPage}">Title</a>
+    <a class="dropdown-item" href="?operations=catalog&sort=author&page=${i}&perPage=${perPage}">Author</a>
+    <a class="dropdown-item" href="?operations=catalog&sort=publisher&page=${i}&perPage=${perPage}">Publisher</a>
+    <a class="dropdown-item" href="?operations=catalog&sort=publishing_date&page=${i}&perPage=${perPage}">Publishing date</a>
   </div>
 </div>
+<div class="btn-group">
+  <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    ${perPage == null ? "5" : perPage}
+    </button>
+  <div class="dropdown-menu">
+    <a class="dropdown-item" href="?operations=catalog&sort=${sort}&page=${i}&perPage=5">5</a>
+    <a class="dropdown-item" href="?operations=catalog&sort=${sort}&page=${i}&perPage=10">10</a>
+    <a class="dropdown-item" href="?operations=catalog&sort=${sort}&page=${i}&perPage=20">20</a>
+  </div>
+  </div>
 
                         <tr>
                             <th>Title</th>
@@ -112,6 +122,20 @@ hello form READER page
                         </c:if>
     </c:forEach>
                         </tbody>
+                        </table>
+                                                <nav aria-label="Page navigation example">
+                                                    <ul class="pagination">
+                                                        <c:if test="${currentPage != 1}">
+                                                            <li class="page-item"><a class="page-link" href="?operations=catalog&sort=${sort}&page=${currentPage - 1}&perPage=${perPage}">Previous</a></li>
+                                                        </c:if>
+                                                        <c:forEach begin="1" end="${numberOfPages}" var="i">
+                                                            <li class="active"><a class="page-link" href="?operations=catalog&sort=${sort}&page=${i}&perPage=${perPage}">${i}</a></li>
+                                                        </c:forEach>
+                                                        <c:if test="${currentPage < numberOfPages}">
+                                                            <li class="page-item"><a class="page-link" href="?operations=catalog&sort=${sort}&page=${currentPage + 1}&perPage=${perPage}">Next</a></li>
+                                                        </c:if>
+                                                    </ul>
+                                                </nav>
 </div>
 </div>
 </c:if>

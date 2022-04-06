@@ -24,25 +24,55 @@ public class BooksDaoImpl implements BooksDao {
         return findAllSorted("title");
     }
 
+    public List<Book> findAllSorted(String sortBy, int offset, int numberOfRecords) {
+        if (!StringUtils.equalsAny(sortBy, "title", "author", "publisher", "publishing_date")) {
+            sortBy = "title";
+        }
+        List<Book> allBooks = new ArrayList<>();
+        String SELECT_BOOKS = String.format("SELECT * FROM books ORDER BY %s LIMIT ?, ? ;", sortBy);
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_BOOKS)) {
+            preparedStatement.setInt(1, offset);
+            preparedStatement.setInt(2, numberOfRecords);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    Book book = Book.newBuilder()
+                            .id(resultSet.getInt("id"))
+                            .title(resultSet.getString("title"))
+                            .author(resultSet.getString("author"))
+                            .publisher(resultSet.getString("publisher"))
+                            .publishingDate(resultSet.getDate("publishing_date").toLocalDate())
+                            .amount(resultSet.getInt("amount"))
+                            .onOrder(resultSet.getInt("on_order"))
+                            .build();
+                    allBooks.add(book);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return allBooks;
+    }
+
     public List<Book> findAllSorted(String sortBy) {
         if (!StringUtils.equalsAny(sortBy, "title", "author", "publisher", "publishing_date")) {
             sortBy = "title";
         }
         List<Book> allBooks = new ArrayList<>();
-        String SELECT_BOOKS = String.format("SELECT * FROM books ORDER BY %s;", sortBy);
-        try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_BOOKS);
-             ResultSet resultSet = preparedStatement.executeQuery()) {
-            while (resultSet.next()) {
-                Book book = Book.newBuilder()
-                        .id(resultSet.getInt("id"))
-                        .title(resultSet.getString("title"))
-                        .author(resultSet.getString("author"))
-                        .publisher(resultSet.getString("publisher"))
-                        .publishingDate(resultSet.getDate("publishing_date").toLocalDate())
-                        .amount(resultSet.getInt("amount"))
-                        .onOrder(resultSet.getInt("on_order"))
-                        .build();
-                allBooks.add(book);
+        String SELECT_BOOKS = String.format("SELECT * FROM books LIMIT ?, ? ORDER BY %s;", sortBy);
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_BOOKS)) {
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    Book book = Book.newBuilder()
+                            .id(resultSet.getInt("id"))
+                            .title(resultSet.getString("title"))
+                            .author(resultSet.getString("author"))
+                            .publisher(resultSet.getString("publisher"))
+                            .publishingDate(resultSet.getDate("publishing_date").toLocalDate())
+                            .amount(resultSet.getInt("amount"))
+                            .onOrder(resultSet.getInt("on_order"))
+                            .build();
+                    allBooks.add(book);
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -137,6 +167,19 @@ public class BooksDaoImpl implements BooksDao {
             e.printStackTrace();
         }
         return books;
+    }
+
+    @Override
+    public int countAllRows() {
+        String COUNT_ROWS = "SELECT count(id) AS count FROM books;";
+        try (ResultSet resultSet = connection.prepareStatement(COUNT_ROWS).executeQuery()) {
+            if (resultSet.next()) {
+                return resultSet.getInt("count");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 
     public Book findById(int id) throws NotFoundException {

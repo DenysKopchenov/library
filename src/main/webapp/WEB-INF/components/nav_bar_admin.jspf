@@ -10,12 +10,12 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link" href="?operations=catalog">
+                    <a class="nav-link" href="?operations=catalog&page=${currentPage}&perPage=${perPage} ">
                         <fmt:message key="navbar.catalog"/>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="?operations=createBook&page=${currentPage}&perPage=${perPage}">
+                    <a class="nav-link" href="?operations=createBook">
                         <fmt:message key="navbar.create.book"/>
                     </a>
                 </li>

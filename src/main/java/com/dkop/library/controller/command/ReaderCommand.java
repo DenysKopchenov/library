@@ -9,6 +9,7 @@ import com.dkop.library.exceptions.DoesNotExistException;
 import com.dkop.library.exceptions.NotFoundException;
 import com.dkop.library.services.BookService;
 import com.dkop.library.services.OrderService;
+import com.dkop.library.services.PaginationService;
 import com.dkop.library.services.UserService;
 import org.apache.commons.lang3.StringUtils;
 
@@ -26,11 +27,13 @@ public class ReaderCommand implements Command {
     private final BookService bookService;
     private final UserService userService;
     private final OrderService orderService;
+    private final PaginationService paginationService;
 
     public ReaderCommand() {
         bookService = BookService.getInstance();
         userService = UserService.getInstance();
         orderService = OrderService.getInstance();
+        paginationService = PaginationService.getInstance();
         init();
     }
 
@@ -93,26 +96,39 @@ public class ReaderCommand implements Command {
 
     private void showCatalogBookOperation(HttpServletRequest request) {
         request.setAttribute("operation", "catalog");
+        request.setAttribute("sort", request.getParameter("sort"));
         String sortBy = request.getParameter("sort");
+        int page = 1;
+        int perPage = 5;
+        if (StringUtils.isNumeric(request.getParameter("perPage"))) {
+            perPage = Integer.parseInt(request.getParameter("perPage"));
+        }
+        if (StringUtils.isNumeric(request.getParameter("page"))) {
+            page = Integer.parseInt(request.getParameter("page"));
+        }
         List<Book> catalog;
         if (sortBy != null) {
             switch (sortBy) {
                 case "author":
-                    request.setAttribute("sort", "By Author");
+                    request.setAttribute("sortBy", "By Author");
                     break;
                 case "publisher":
-                    request.setAttribute("sort", "By Publisher");
+                    request.setAttribute("sortBy", "By Publisher");
                     break;
                 case "publishing_date":
-                    request.setAttribute("sort", "By Publishing date");
+                    request.setAttribute("sortBy", "By Publishing date");
                     break;
                 default:
-                    request.setAttribute("sort", "By Title");
+                    request.setAttribute("sortBy", "By Title");
             }
-            catalog = bookService.findAllSorted(sortBy);
+            catalog = paginationService.paginateBooks(sortBy, page, perPage);
         } else {
-            catalog = bookService.findAll();
+            catalog = paginationService.paginateBooks("title", page, perPage);
         }
+        int numberOfPages = paginationService.countNumberOfPagesForBooks(perPage);
+        request.setAttribute("numberOfPages", numberOfPages);
+        request.setAttribute("perPage", perPage);
+        request.setAttribute("currentPage", page);
         request.setAttribute("catalog", catalog);
     }
 

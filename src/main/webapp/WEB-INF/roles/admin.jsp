@@ -50,6 +50,12 @@
 <c:if test="${catalog != null}">
 <div class="row" >
 <div class="col-6 mx-auto">
+                    <select class="form-select" style="width:auto" aria-label="Default select example"
+                            name="perPage" onchange="location=this.value">
+                        <option value="?operations=catalog&perPage=5"<c:if test="${perPage==5}">selected</c:if> >5</option>
+                        <option value="?operations=catalog&perPage=10" <c:if test="${perPage==10}">selected</c:if> >10</option>
+                        <option value="?operations=catalog&perPage=20" <c:if test="${perPage==20}">selected</c:if> >20</option>
+                    </select>
 <table class="table table-bordered table-light">
     <thead>
                         <tr>
@@ -77,7 +83,21 @@
                             <td style="text-align:center;"><a class="btn btn-info" href="?operations=updateBook&bookId=${book.getId()}"> update</a></td>
                         </tr>
     </c:forEach>
-                        </tbody>           
+                        </tbody>
+                        </table>
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination">
+                                <c:if test="${currentPage != 1}">
+                                    <li class="page-item"><a class="page-link" href="?operations=catalog&page=${currentPage - 1}&perPage=${perPage}">Previous</a></li>
+                                </c:if>
+                                <c:forEach begin="1" end="${numberOfPages}" var="i">
+                                    <li class="active"><a class="page-link" href="?operations=catalog&page=${i}&perPage=${perPage}">${i}</a></li>
+                                </c:forEach>
+                                <c:if test="${currentPage < numberOfPages}">
+                                    <li class="page-item"><a class="page-link" href="?operations=catalog&page=${currentPage + 1}&perPage=${perPage}">Next</a></li>
+                                </c:if>
+                            </ul>
+                        </nav>
 </div>
 </div>
 </c:if>

@@ -180,7 +180,22 @@ public class AdminCommand implements Command {
     }
 
     private void showCatalogBookOperation(HttpServletRequest request) {
-        request.setAttribute("catalog", bookService.findAll());
+        int page = 1;
+        int perPage = 5;
+        if (StringUtils.isNumeric(request.getParameter("perPage"))) {
+            perPage = Integer.parseInt(request.getParameter("perPage"));
+        }
+        if (StringUtils.isNumeric(request.getParameter("page"))) {
+            page = Integer.parseInt(request.getParameter("page"));
+        }
+
+        List<Book> booksPerPage = paginationService.paginateBooks("title", page, perPage);
+        int numberOfPages = paginationService.countNumberOfPagesForBooks(perPage);
+
+        request.setAttribute("numberOfPages", numberOfPages);
+        request.setAttribute("perPage", perPage);
+        request.setAttribute("currentPage", page);
+        request.setAttribute("catalog", booksPerPage);
     }
 
     private void deleteLibrarianOperation(HttpServletRequest request) {

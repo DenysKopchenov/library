@@ -2,6 +2,7 @@ package com.dkop.library.services;
 
 import com.dkop.library.controller.command.LibrarianCommand;
 import com.dkop.library.dao.DaoFactory;
+import com.dkop.library.entity.Book;
 import com.dkop.library.entity.User;
 
 import java.util.List;
@@ -36,14 +37,16 @@ public class PaginationService {
     }
 
     public int countNumberOfPagesForUsers(String role, int perPage) {
+        return (int) Math.ceil(userService.countAllRowsByRole(role) * 1.0 / perPage);
+    }
+
+    public List<Book> paginateBooks(String sortedBy, int currentPageNumber, int perPage) {
+        int startIndex = (currentPageNumber - 1) * perPage;
+        return bookService.findAllSorted(sortedBy, startIndex, perPage);
+    }
+
+    public int countNumberOfPagesForBooks(int perPage) {
         return (int) Math.ceil(bookService.countAllRows() * 1.0 / perPage);
     }
 
-    public int countNumberOfPagesForBooks(String role, int perPage) {
-        return (int) Math.ceil(userService.countAllRowsByRole(role) * 1.0 / perPage);
-    }
-
-    public int countNumberOfPagesForOrders(String role, int perPage) {
-        return (int) Math.ceil(userService.countAllRowsByRole(role) * 1.0 / perPage);
-    }
 }
