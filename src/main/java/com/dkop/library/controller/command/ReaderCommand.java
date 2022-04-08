@@ -136,7 +136,9 @@ public class ReaderCommand implements Command {
         try {
             User user = userService.getUserInfo((String) request.getSession().getAttribute("email"));
             List<UserOrderDto> userApprovedOrders = new ArrayList<>();
-            List<Order> allApproved = orderService.findAllUserApprovedOrders(user.getId());
+            int perPage = paginationService.getRecordsPerPage(request);
+            int page = paginationService.getPageNumber(request);
+            List<Order> allApproved = paginationService.paginateOrdersByUser(user.getId(), page, perPage);
             allApproved.forEach(order -> {
                 try {
                     UserOrderDto userOrder = new UserOrderDto();
@@ -192,7 +194,7 @@ public class ReaderCommand implements Command {
     private void totalPenalty(HttpServletRequest request) {
         try {
             User user = userService.getUserInfo((String) request.getSession().getAttribute("email"));
-            List<Order> allApproved = orderService.findAllUserApprovedOrders(user.getId());
+            List<Order> allApproved = orderService.findAllUserApprovedOrders(user.getId(), 0, 0);
             long totalPenalty = allApproved.stream().mapToLong(orderService::checkForPenalty).sum();
             request.setAttribute("totalPenalty", penaltyFormatter(String.valueOf(totalPenalty)));
         } catch (DoesNotExistException e) {

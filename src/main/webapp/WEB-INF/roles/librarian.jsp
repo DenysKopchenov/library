@@ -42,6 +42,16 @@
 <div class="row" >
 <div class="col-6 mx-auto">
 <table class="table table-bordered">
+    <div class="btn-group" style="float:right">
+      <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        ${perPage == null ? "5" : perPage}
+        </button>
+      <div class="dropdown-menu">
+        <a class="dropdown-item" href="?operations=showPendingOrders&page=${i}&perPage=5">5</a>
+        <a class="dropdown-item" href="?operations=showPendingOrders&page=${i}&perPage=10">10</a>
+        <a class="dropdown-item" href="?operations=showPendingOrders&page=${i}&perPage=20">20</a>
+      </div>
+      </div>
     <thead>
                         <tr>
                             <th>Create date</th>
@@ -70,6 +80,20 @@
                         </tr>
     </c:forEach>
                         </tbody>
+                        </table>
+                        <nav aria-label="Page navigation example">
+                        <ul class="pagination">
+                        <c:if test="${currentPage > 1}">
+                        <li class="page-item"><a class="page-link" href="?operations=showPendingOrders&page=${currentPage - 1}&perPage=${perPage}">Previous</a></li>
+                        </c:if>
+                         <c:forEach begin="1" end="${numberOfPages}" var="i">
+                           <li class="active"><a class="page-link" href="?operations=showPendingOrders&page=${i}&perPage=${perPage}">${i}</a></li>
+                          </c:forEach>
+                           <c:if test="${currentPage < numberOfPages}">
+                             <li class="page-item"><a class="page-link" href="?operations=showPendingOrders&page=${currentPage + 1}&perPage=${perPage}">Next</a></li>
+                            </c:if>
+                            </ul>
+                         </nav>
 </div>
 </div>
 </c:if>
@@ -78,6 +102,16 @@
 <div class="row" >
 <div class="col-6 mx-auto">
 <table class="table table-bordered">
+    <div class="btn-group" style="float:right">
+      <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        ${perPage == null ? "5" : perPage}
+        </button>
+      <div class="dropdown-menu">
+        <a class="dropdown-item" href="?operations=showAllReaders&page=${i}&perPage=5">5</a>
+        <a class="dropdown-item" href="?operations=showAllReaders&page=${i}&perPage=10">10</a>
+        <a class="dropdown-item" href="?operations=showAllReaders&page=${i}&perPage=20">20</a>
+      </div>
+      </div>
     <thead>
                         <tr>
                             <th>Id</th>
@@ -104,6 +138,20 @@
                         </tr>
     </c:forEach>
                         </tbody>
+                        </table>
+                                                <nav aria-label="Page navigation example">
+                                                <ul class="pagination">
+                                                <c:if test="${currentPage > 1}">
+                                                <li class="page-item"><a class="page-link" href="?operations=showAllReaders&page=${currentPage - 1}&perPage=${perPage}">Previous</a></li>
+                                                </c:if>
+                                                 <c:forEach begin="1" end="${numberOfPages}" var="i">
+                                                   <li class="active"><a class="page-link" href="?operations=showAllReaders&page=${i}&perPage=${perPage}">${i}</a></li>
+                                                  </c:forEach>
+                                                   <c:if test="${currentPage < numberOfPages}">
+                                                     <li class="page-item"><a class="page-link" href="?operations=showAllReaders&page=${currentPage + 1}&perPage=${perPage}">Next</a></li>
+                                                    </c:if>
+                                                    </ul>
+                                                 </nav>
 </div>
 </div>
 </c:if>
@@ -111,6 +159,16 @@
 <div class="row" >
 <div class="col-6 mx-auto">
 <table class="table table-bordered">
+    <div class="btn-group" style="float:right">
+      <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        ${perPage == null ? "5" : perPage}
+        </button>
+      <div class="dropdown-menu">
+        <a class="dropdown-item" href="?operations=showReadersApprovedOrders&userId=${userId}&page=${i}&perPage=5">5</a>
+        <a class="dropdown-item" href="?operations=showReadersApprovedOrders&userId=${userId}&page=${i}&perPage=10">10</a>
+        <a class="dropdown-item" href="?operations=showReadersApprovedOrders&userId=${userId}&page=${i}&perPage=20">20</a>
+      </div>
+      </div>
     <thead>
                         <tr>
                             <th>Reader full name</th>
@@ -135,6 +193,20 @@
                         </tr>
     </c:forEach>
                         </tbody>
+                        </table>
+                              <nav aria-label="Page navigation example">
+                                             <ul class="pagination">
+                                        <c:if test="${currentPage > 1}">
+                                 <li class="page-item"><a class="page-link" href="?operations=showReadersApprovedOrders&userId=${userId}&page=${currentPage - 1}&perPage=${perPage}">Previous</a></li>
+                          </c:if>
+                                   <c:forEach begin="1" end="${numberOfPages}" var="i">
+                                 <li class="active"><a class="page-link" href="?operations=showReadersApprovedOrders&userId=${userId}&page=${i}&perPage=${perPage}">${i}</a></li>
+                                                 </c:forEach>
+                                          <c:if test="${currentPage < numberOfPages}">
+                                           <li class="page-item"><a class="page-link" href="?operations=showReadersApprovedOrders&userId=${userId}&page=${currentPage + 1}&perPage=${perPage}">Next</a></li>
+                                       </c:if>
+                                                   </ul>
+                                                      </nav>
 </div>
 </div>
 </c:if>

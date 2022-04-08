@@ -91,11 +91,11 @@ public class BookService {
         return books;
     }
 
-    public List<Book> findAll() {
-        try (BooksDao booksDao = DaoFactory.getInstance().createBooksDao()) {
-            return booksDao.findAll();
-        }
-    }
+//    public List<Book> findAll() {
+//        try (BooksDao booksDao = DaoFactory.getInstance().createBooksDao()) {
+//            return booksDao.findAll();
+//        }
+//    }
 
     public Book findById(int id) throws NotFoundException {
         try (BooksDao booksDao = DaoFactory.getInstance().createBooksDao()) {
@@ -103,9 +103,9 @@ public class BookService {
         }
     }
 
-    public List<Book> findAllSorted(String sortBy, int offset, int numberOfRecords) {
+    public List<Book> findAllSorted(String sortBy, int start, int numberOfRecords) {
         try (BooksDao booksDao = DaoFactory.getInstance().createBooksDao()) {
-            return booksDao.findAllSorted(sortBy, offset, numberOfRecords);
+            return booksDao.findAllSorted(sortBy, start, numberOfRecords);
         }
     }
 

@@ -125,8 +125,6 @@ public class AdminCommand implements Command {
                     Map<String, String> errors = Validator.validateBookForm(title, author, publisher, publishingDate, amount);
                     if (errors.isEmpty()) {
                         bookService.updateBook(Integer.parseInt(id), title, author, publisher, publishingDate, amount);
-//                        request.setAttribute("successMessage", "Successfully updated");
-//                        request.setAttribute("operation", "");
                     } else {
                         request.setAttribute("validation", errors);
                     }
@@ -140,18 +138,11 @@ public class AdminCommand implements Command {
     }
 
     private void showAllReadersOperation(HttpServletRequest request) {
-        int page = 1;
-        int perPage = 5;
-        if (StringUtils.isNumeric(request.getParameter("perPage"))) {
-            perPage = Integer.parseInt(request.getParameter("perPage"));
-        }
-        if (StringUtils.isNumeric(request.getParameter("page"))) {
-            page = Integer.parseInt(request.getParameter("page"));
-        }
+        int perPage = paginationService.getRecordsPerPage(request);
+        int page = paginationService.getPageNumber(request);
 
         List<User> usersPerPage = paginationService.paginateUsersByRole("reader", page, perPage);
         int numberOfPages = paginationService.countNumberOfPagesForUsers("reader", perPage);
-
 
         request.setAttribute("numberOfPages", numberOfPages);
         request.setAttribute("perPage", perPage);
@@ -160,18 +151,11 @@ public class AdminCommand implements Command {
     }
 
     private void showAllLibrariansOperation(HttpServletRequest request) {
-        int page = 1;
-        int perPage = 5;
-        if (StringUtils.isNumeric(request.getParameter("perPage"))) {
-            perPage = Integer.parseInt(request.getParameter("perPage"));
-        }
-        if (StringUtils.isNumeric(request.getParameter("page"))) {
-            page = Integer.parseInt(request.getParameter("page"));
-        }
+        int perPage = paginationService.getRecordsPerPage(request);
+        int page = paginationService.getPageNumber(request);
 
         List<User> usersPerPage = paginationService.paginateUsersByRole("librarian", page, perPage);
-        int numberOfPages = paginationService.countNumberOfPagesForUsers("reader", perPage);
-
+        int numberOfPages = paginationService.countNumberOfPagesForUsers("librarian", perPage);
 
         request.setAttribute("numberOfPages", numberOfPages);
         request.setAttribute("perPage", perPage);
@@ -239,8 +223,6 @@ public class AdminCommand implements Command {
             if (errors.isEmpty()) {
                 try {
                     userService.createUser(firstName, lastName, email, password, "librarian", "active");
-//                    request.setAttribute("successMessage", "Successfully created");
-//                    request.setAttribute("operation", "");
                 } catch (AlreadyExistException e) {
                     request.setAttribute("errorMessage", e.getMessage());
                 }

@@ -9,7 +9,6 @@
 <%@ include file="/WEB-INF/components/head.jspf" %>
 </head>
 <body>
-hello form READER page
 <%@ include file="/WEB-INF/components/nav_bar_reader.jspf" %>
 <h3><font style="color:hsl(0,100%,50%);">${errorMessage}</font></h3>
 <h3><font style="color:hsl(100,100%,50%);">${successMessage}</font></h3>
@@ -67,6 +66,7 @@ hello form READER page
                         </c:if>
     </c:forEach>
                         </tbody>
+                        </table>
 </div>
 </div>
 </c:if>
@@ -87,7 +87,7 @@ hello form READER page
     <a class="dropdown-item" href="?operations=catalog&sort=publishing_date&page=${i}&perPage=${perPage}">Publishing date</a>
   </div>
 </div>
-<div class="btn-group">
+<div class="btn-group" style="float:right">
   <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
     ${perPage == null ? "5" : perPage}
     </button>
@@ -125,7 +125,7 @@ hello form READER page
                         </table>
                                                 <nav aria-label="Page navigation example">
                                                     <ul class="pagination">
-                                                        <c:if test="${currentPage != 1}">
+                                                        <c:if test="${currentPage > 1}">
                                                             <li class="page-item"><a class="page-link" href="?operations=catalog&sort=${sort}&page=${currentPage - 1}&perPage=${perPage}">Previous</a></li>
                                                         </c:if>
                                                         <c:forEach begin="1" end="${numberOfPages}" var="i">
@@ -144,6 +144,16 @@ hello form READER page
 <div class="row" >
 <div class="col-6 mx-auto">
 <table class="table table-bordered">
+    <div class="btn-group" style="float:right">
+      <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        ${perPage == null ? "5" : perPage}
+        </button>
+      <div class="dropdown-menu">
+        <a class="dropdown-item" href="?operations=showApprovedOrders&page=${i}&perPage=5">5</a>
+        <a class="dropdown-item" href="?operations=showApprovedOrders&page=${i}&perPage=10">10</a>
+        <a class="dropdown-item" href="?operations=showApprovedOrders&page=${i}&perPage=20">20</a>
+      </div>
+      </div>
     <thead>
                         <tr>
                             <th>Title</th>
@@ -169,18 +179,23 @@ hello form READER page
                         </tr>
     </c:forEach>
                         </tbody>
+                        </table>
+                        <nav aria-label="Page navigation example">
+                              <ul class="pagination">
+                                          <c:if test="${currentPage > 1}">
+                              <li class="page-item"><a class="page-link" href="?operations=showApprovedOrders&page=${currentPage - 1}&perPage=${perPage}">Previous</a></li>
+                              </c:if>
+                              <c:forEach begin="1" end="${numberOfPages}" var="i">
+                                <li class="active"><a class="page-link" href="?operations=showApprovedOrders&page=${i}&perPage=${perPage}">${i}</a></li>
+                             </c:forEach>
+                            <c:if test="${currentPage < numberOfPages}">
+                            <li class="page-item"><a class="page-link" href="?operations=showApprovedOrders&page=${currentPage + 1}&perPage=${perPage}">Next</a></li>
+                              </c:if>
+                             </ul>
+                             </nav>
 </div>
 </div>
 </c:if>
-
-<div>
-    <c:forEach var="userOrder" items="${userOrders}">
-        <li>
-        ${userOrder}
-        <a class="btn btn-primary" href="?operations=returnBook&orderId=${userOrder.getOrderId()}"> Return book</a>
-        </li>
-    </c:forEach>
-</div>
 <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
         integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
         crossorigin="anonymous"></script>

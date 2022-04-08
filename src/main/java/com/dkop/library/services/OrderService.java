@@ -54,15 +54,15 @@ public class OrderService {
         }
     }
 
-    public List<Order> findAllUserApprovedOrders(int userId) {
+    public List<Order> findAllUserApprovedOrders(int userId, int start, int numberOfRecords) {
         try (OrderDao orderDao = daoFactory.createOrderDao()) {
-            return orderDao.findAllUserApprovedOrders(userId);
+            return orderDao.findAllUserApprovedOrders(userId, start, numberOfRecords);
         }
     }
 
-    public List<Order> findAllOrdersByStatus(String status) {
+    public List<Order> findAllOrdersByStatus(String status, int start, int numberOfRecords) {
         try (OrderDao orderDao = daoFactory.createOrderDao()) {
-            return orderDao.findAllOrdersByStatus(status);
+            return orderDao.findAllOrdersByStatus(status, start, numberOfRecords);
         }
     }
 
@@ -133,6 +133,12 @@ public class OrderService {
                 .build();
         try (OrderDao orderDao = daoFactory.createOrderDao()) {
             return orderDao.isOrderExist(order);
+        }
+    }
+
+    public int countAllRowsByStatus(String status) {
+        try (OrderDao orderDao = daoFactory.createOrderDao()) {
+            return orderDao.countAllRowsByStatus(status);
         }
     }
 }

@@ -108,12 +108,14 @@ public class OrderDaoImpl implements OrderDao {
     }
 
     @Override
-    public List<Order> findAllOrdersByStatus(String status) {
+    public List<Order> findAllOrdersByStatus(String status, int start, int numberOfRecords) {
         //todo pagination
-        String SELECT_ORDERS = "SELECT * FROM orders WHERE status = ?;";
+        String SELECT_ORDERS = "SELECT * FROM orders WHERE status = ? LIMIT ?, ?;";
         List<Order> ordersByStatus = new ArrayList<>();
         try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ORDERS)) {
             preparedStatement.setString(1, status);
+            preparedStatement.setInt(2, start);
+            preparedStatement.setInt(3, numberOfRecords);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 while (resultSet.next()) {
                     Order order = Order.newBuilder()
@@ -137,12 +139,14 @@ public class OrderDaoImpl implements OrderDao {
     }
 
     @Override
-    public List<Order> findAllUserApprovedOrders(int userId) {
+    public List<Order> findAllUserApprovedOrders(int userId, int start, int numberOfRecords) {
         //todo pagination
-        String SELECT_ORDERS = "SELECT * FROM orders WHERE user_id = ? AND status = 'approved'";
+        String SELECT_ORDERS = "SELECT * FROM orders WHERE user_id = ? AND status = 'approved' LIMIT ?, ?;";
         List<Order> allApprovedOrders = new ArrayList<>();
         try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ORDERS)) {
             preparedStatement.setInt(1, userId);
+            preparedStatement.setInt(2, start);
+            preparedStatement.setInt(3, numberOfRecords);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 while (resultSet.next()) {
                     Order order = Order.newBuilder()
@@ -216,6 +220,22 @@ public class OrderDaoImpl implements OrderDao {
             e.printStackTrace();
         }
         return false;
+    }
+
+    @Override
+    public int countAllRowsByStatus(String status) {
+        String COUNT_ROWS = "SELECT count(id) AS count FROM users WHERE status = ?;";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(COUNT_ROWS)) {
+            preparedStatement.setString(1, status);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    return resultSet.getInt("count");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 
     @Override

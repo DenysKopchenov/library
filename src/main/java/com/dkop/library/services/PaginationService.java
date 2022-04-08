@@ -2,6 +2,7 @@ package com.dkop.library.services;
 
 import com.dkop.library.dao.DaoFactory;
 import com.dkop.library.entity.Book;
+import com.dkop.library.entity.Order;
 import com.dkop.library.entity.User;
 import org.apache.commons.lang3.StringUtils;
 
@@ -13,6 +14,7 @@ public class PaginationService {
     private static PaginationService instance;
     private final BookService bookService;
     private final UserService userService;
+    private final OrderService orderService;
 
     public static PaginationService getInstance() {
         if (instance == null) {
@@ -30,6 +32,7 @@ public class PaginationService {
         daoFactory = DaoFactory.getInstance();
         bookService = BookService.getInstance();
         userService = UserService.getInstance();
+        orderService = OrderService.getInstance();
     }
 
     public List<User> paginateUsersByRole(String role, int currentPageNumber, int perPage) {
@@ -48,6 +51,20 @@ public class PaginationService {
 
     public int countNumberOfPagesForBooks(int perPage) {
         return (int) Math.ceil(bookService.countAllRows() * 1.0 / perPage);
+    }
+
+    public List<Order> paginateOrdersByStatus(String status, int currentPageNumber, int perPage) {
+        int startIndex = (currentPageNumber - 1) * perPage;
+        return orderService.findAllOrdersByStatus(status, startIndex, perPage);
+    }
+
+    public List<Order> paginateOrdersByUser(int userId, int currentPageNumber, int perPage) {
+        int startIndex = (currentPageNumber - 1) * perPage;
+        return orderService.findAllUserApprovedOrders(userId, startIndex, perPage);
+    }
+
+    public int countNumberOfPagesForOrdersByStatus(String status, int perPage) {
+        return (int) Math.ceil(orderService.countAllRowsByStatus(status) * 1.0 / perPage);
     }
 
     public int getRecordsPerPage(HttpServletRequest request) {

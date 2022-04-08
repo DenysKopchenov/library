@@ -21,17 +21,18 @@ public class BooksDaoImpl implements BooksDao {
     }
 
     public List<Book> findAll() {
-        return findAllSorted("title");
+//        return findAllSorted("title");
+        throw new UnsupportedOperationException();
     }
 
-    public List<Book> findAllSorted(String sortBy, int offset, int numberOfRecords) {
+    public List<Book> findAllSorted(String sortBy, int start, int numberOfRecords) {
         if (!StringUtils.equalsAny(sortBy, "title", "author", "publisher", "publishing_date")) {
             sortBy = "title";
         }
         List<Book> allBooks = new ArrayList<>();
         String SELECT_BOOKS = String.format("SELECT * FROM books ORDER BY %s LIMIT ?, ? ;", sortBy);
         try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_BOOKS)) {
-            preparedStatement.setInt(1, offset);
+            preparedStatement.setInt(1, start);
             preparedStatement.setInt(2, numberOfRecords);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 while (resultSet.next()) {

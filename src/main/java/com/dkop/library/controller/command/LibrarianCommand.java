@@ -8,6 +8,7 @@ import com.dkop.library.exceptions.NotFoundException;
 import com.dkop.library.exceptions.UnableToAcceptOrderException;
 import com.dkop.library.services.BookService;
 import com.dkop.library.services.OrderService;
+import com.dkop.library.services.PaginationService;
 import com.dkop.library.services.UserService;
 import org.apache.commons.lang3.StringUtils;
 
@@ -23,11 +24,13 @@ public class LibrarianCommand implements Command {
     private final BookService bookService;
     private final UserService userService;
     private final OrderService orderService;
+    private final PaginationService paginationService;
 
     public LibrarianCommand() {
         bookService = BookService.getInstance();
         userService = UserService.getInstance();
         orderService = OrderService.getInstance();
+        paginationService = PaginationService.getInstance();
         init();
     }
 
@@ -66,14 +69,25 @@ public class LibrarianCommand implements Command {
     }
 
     private void showReaders(HttpServletRequest request) {
-        request.setAttribute("allReaders", userService.findAll());
+        int perPage = paginationService.getRecordsPerPage(request);
+        int page = paginationService.getPageNumber(request);
+
+        List<User> usersPerPage = paginationService.paginateUsersByRole("reader", page, perPage);
+        int numberOfPages = paginationService.countNumberOfPagesForUsers("reader", perPage);
+
+        request.setAttribute("numberOfPages", numberOfPages);
+        request.setAttribute("perPage", perPage);
+        request.setAttribute("currentPage", Math.min(page, numberOfPages));
+        request.setAttribute("allReaders", usersPerPage);
     }
 
     private void showReadersApprovedOrders(HttpServletRequest request) {
         if (StringUtils.isNumeric(request.getParameter("userId"))) {
             int userId = Integer.parseInt(request.getParameter("userId"));
+            int perPage = paginationService.getRecordsPerPage(request);
+            int page = paginationService.getPageNumber(request);
             List<UserOrderDto> userApprovedOrders = new ArrayList<>();
-            List<Order> allApproved = orderService.findAllUserApprovedOrders(userId);
+            List<Order> allApproved = paginationService.paginateOrdersByUser(userId, page, perPage);
             allApproved.forEach(order -> {
                 try {
                     UserOrderDto userOrder = new UserOrderDto();
@@ -89,7 +103,13 @@ public class LibrarianCommand implements Command {
                     request.setAttribute("errorMessage", e.getMessage());
                 }
             });
+
+            int numberOfPages = paginationService.countNumberOfPagesForOrdersByStatus("approved", perPage);
+            request.setAttribute("numberOfPages", numberOfPages);
+            request.setAttribute("perPage", perPage);
+            request.setAttribute("currentPage", Math.min(page, numberOfPages));
             request.setAttribute("userApprovedOrders", userApprovedOrders);
+            request.setAttribute("userId", userId);
         }
     }
 
@@ -107,8 +127,10 @@ public class LibrarianCommand implements Command {
     }
 
     private void showPendingOrders(HttpServletRequest request) {
+        int perPage = paginationService.getRecordsPerPage(request);
+        int page = paginationService.getPageNumber(request);
         List<UserOrderDto> pendingOrders = new ArrayList<>();
-        List<Order> orders = orderService.findAllOrdersByStatus("pending");
+        List<Order> orders = paginationService.paginateOrdersByStatus("pending", page, perPage);
         orders.forEach(order -> {
             try {
                 UserOrderDto userOrder = new UserOrderDto();
@@ -121,6 +143,11 @@ public class LibrarianCommand implements Command {
                 request.setAttribute("errorMessage", e.getMessage());
             }
         });
+
+        int numberOfPages = paginationService.countNumberOfPagesForOrdersByStatus("pending", perPage);
+        request.setAttribute("numberOfPages", numberOfPages);
+        request.setAttribute("perPage", perPage);
+        request.setAttribute("currentPage", Math.min(page, numberOfPages));
         request.setAttribute("pendingOrders", pendingOrders);
     }
 
