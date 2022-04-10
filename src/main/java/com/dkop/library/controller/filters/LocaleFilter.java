@@ -32,7 +32,7 @@ public class LocaleFilter implements Filter {
             locale = new Locale((String) req.getSession().getAttribute(LANGUAGE));
         }
 
-        CommandUtils.messagesBundle = ResourceBundle.getBundle("messages", locale);
+        CommandUtils.setMessagesBundle(ResourceBundle.getBundle("messages", locale));
         filterChain.doFilter(servletRequest, servletResponse);
     }
 

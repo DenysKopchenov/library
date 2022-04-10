@@ -8,6 +8,10 @@ import java.util.Set;
 public class CommandUtils {
     public static ResourceBundle messagesBundle;
 
+    public static void setMessagesBundle(ResourceBundle messagesBundle) {
+        CommandUtils.messagesBundle = messagesBundle;
+    }
+
     private CommandUtils() {
     }
 
