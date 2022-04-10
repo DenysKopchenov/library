@@ -124,8 +124,8 @@ public class BooksDaoImpl implements BooksDao {
 
     @Override
     public int countAllRows() {
-        String COUNT_ROWS = "SELECT count(id) AS count FROM books;";
-        try (ResultSet resultSet = connection.prepareStatement(COUNT_ROWS).executeQuery()) {
+        String COUNT_ROWS_BOOKS = "SELECT count(id) AS count FROM books;";
+        try (ResultSet resultSet = connection.prepareStatement(COUNT_ROWS_BOOKS).executeQuery()) {
             if (resultSet.next()) {
                 return resultSet.getInt("count");
             }
@@ -170,7 +170,7 @@ public class BooksDaoImpl implements BooksDao {
         try {
             connection.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.error(e, e.getCause());
         }
     }
 }

@@ -73,12 +73,12 @@ public class Order {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Order order = (Order) o;
-        return id == order.id && userId == order.userId && bookId == order.bookId && status.equals(order.status) && Objects.equals(approvedDate, order.approvedDate) && Objects.equals(expectedReturnDate, order.expectedReturnDate) && Objects.equals(actualReturnDate, order.actualReturnDate);
+        return id == order.id && userId == order.userId && bookId == order.bookId && Objects.equals(type, order.type) && Objects.equals(status, order.status) && Objects.equals(createDate, order.createDate) && Objects.equals(approvedDate, order.approvedDate) && Objects.equals(expectedReturnDate, order.expectedReturnDate) && Objects.equals(actualReturnDate, order.actualReturnDate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, userId, bookId, status, approvedDate, expectedReturnDate, actualReturnDate);
+        return Objects.hash(id, userId, bookId, type, status, createDate, approvedDate, expectedReturnDate, actualReturnDate);
     }
 
     public static Builder newBuilder() {

@@ -4,6 +4,8 @@ import com.dkop.library.dao.OrderDao;
 import com.dkop.library.entity.Book;
 import com.dkop.library.entity.Order;
 import com.dkop.library.exceptions.NotFoundException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -13,7 +15,9 @@ import java.util.List;
 import static com.dkop.library.controller.command.CommandUtils.messagesBundle;
 
 public class OrderDaoImpl implements OrderDao {
+
     private Connection connection;
+    private static final Logger LOGGER = LogManager.getLogger(OrderDaoImpl.class);
 
     public OrderDaoImpl(Connection connection) {
         this.connection = connection;
@@ -38,24 +42,27 @@ public class OrderDaoImpl implements OrderDao {
         try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ORDERS)) {
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 while (resultSet.next()) {
-                    Order order = Order.newBuilder()
-                            .id(resultSet.getInt("id"))
-                            .bookId(resultSet.getInt("book_id"))
-                            .userId(resultSet.getInt("user_id"))
-                            .type(resultSet.getString("type"))
-                            .status(resultSet.getString("status"))
-                            .createDate(resultSet.getDate("create_date").toLocalDate())
-                            .approvedDate(resultSet.getDate("approved_date").toLocalDate())
-                            .expectedReturnDate(resultSet.getDate("expected_return_date").toLocalDate())
-                            .actualReturnDate(resultSet.getDate("actual_return_date").toLocalDate())
-                            .build();
-                    allOrders.add(order);
+                    allOrders.add(extractOrderFromResultSet(resultSet));
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.error(e, e.getCause());
         }
         return allOrders;
+    }
+
+    private Order extractOrderFromResultSet(ResultSet resultSet) throws SQLException {
+        return Order.newBuilder()
+                .id(resultSet.getInt("id"))
+                .bookId(resultSet.getInt("book_id"))
+                .userId(resultSet.getInt("user_id"))
+                .type(resultSet.getString("type"))
+                .status(resultSet.getString("status"))
+                .createDate(resultSet.getDate("create_date").toLocalDate())
+                .approvedDate(resultSet.getDate("approved_date").toLocalDate())
+                .expectedReturnDate(resultSet.getDate("expected_return_date").toLocalDate())
+                .actualReturnDate(resultSet.getDate("actual_return_date").toLocalDate())
+                .build();
     }
 
     @Override
@@ -66,35 +73,24 @@ public class OrderDaoImpl implements OrderDao {
             preparedStatement.setInt(1, id);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
-                    order = Order.newBuilder()
-                            .id(resultSet.getInt("id"))
-                            .bookId(resultSet.getInt("book_id"))
-                            .userId(resultSet.getInt("user_id"))
-                            .type(resultSet.getString("type"))
-                            .status(resultSet.getString("status"))
-                            .createDate(resultSet.getDate("create_date").toLocalDate())
-                            .approvedDate(resultSet.getDate("approved_date").toLocalDate())
-                            .expectedReturnDate(resultSet.getDate("expected_return_date").toLocalDate())
-                            .actualReturnDate(resultSet.getDate("actual_return_date").toLocalDate())
-                            .build();
+                    order = extractOrderFromResultSet(resultSet);
                 } else {
                     throw new NotFoundException(messagesBundle.getString("order.not.found"));
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.error(e, e.getCause());
         }
         return order;
     }
 
     @Override
     public void update(Order order) {
-        String UPDATE_ORDER = "UPDATE orders SET status = ? , approved_date = ?, expected_return_date = ? WHERE id = ?;";
+        String UPDATE_ORDER = "UPDATE orders SET status = ?, approved_date = ?, expected_return_date = ? WHERE id = ?;";
         try (PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_ORDER)) {
             preparedStatement.setString(1, order.getStatus());
             preparedStatement.setDate(2, Date.valueOf(order.getApprovedDate()));
             preparedStatement.setDate(3, Date.valueOf(order.getExpectedReturnDate()));
-//            preparedStatement.setDate(4, Date.valueOf(order.getActualReturnDate()));
             preparedStatement.setInt(4, order.getId());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
@@ -104,12 +100,11 @@ public class OrderDaoImpl implements OrderDao {
 
     @Override
     public void delete(int id) {
-
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public List<Order> findAllOrdersByStatus(String status, int start, int numberOfRecords) {
-        //todo pagination
         String SELECT_ORDERS = "SELECT * FROM orders WHERE status = ? LIMIT ?, ?;";
         List<Order> ordersByStatus = new ArrayList<>();
         try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ORDERS)) {
@@ -118,29 +113,17 @@ public class OrderDaoImpl implements OrderDao {
             preparedStatement.setInt(3, numberOfRecords);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 while (resultSet.next()) {
-                    Order order = Order.newBuilder()
-                            .id(resultSet.getInt("id"))
-                            .bookId(resultSet.getInt("book_id"))
-                            .userId(resultSet.getInt("user_id"))
-                            .type(resultSet.getString("type"))
-                            .status(resultSet.getString("status"))
-                            .createDate(resultSet.getDate("create_date").toLocalDate())
-                            .approvedDate(resultSet.getDate("approved_date").toLocalDate())
-                            .expectedReturnDate(resultSet.getDate("expected_return_date").toLocalDate())
-                            .actualReturnDate(resultSet.getDate("actual_return_date").toLocalDate())
-                            .build();
-                    ordersByStatus.add(order);
+                    ordersByStatus.add(extractOrderFromResultSet(resultSet));
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.error(e, e.getCause());
         }
         return ordersByStatus;
     }
 
     @Override
     public List<Order> findAllUserApprovedOrders(int userId, int start, int numberOfRecords) {
-        //todo pagination
         String SELECT_ORDERS = "SELECT * FROM orders WHERE user_id = ? AND status = 'approved' LIMIT ?, ?;";
         List<Order> allApprovedOrders = new ArrayList<>();
         try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ORDERS)) {
@@ -149,22 +132,11 @@ public class OrderDaoImpl implements OrderDao {
             preparedStatement.setInt(3, numberOfRecords);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 while (resultSet.next()) {
-                    Order order = Order.newBuilder()
-                            .id(resultSet.getInt("id"))
-                            .bookId(resultSet.getInt("book_id"))
-                            .userId(resultSet.getInt("user_id"))
-                            .type(resultSet.getString("type"))
-                            .status(resultSet.getString("status"))
-                            .createDate(resultSet.getDate("create_date").toLocalDate())
-                            .approvedDate(resultSet.getDate("approved_date").toLocalDate())
-                            .expectedReturnDate(resultSet.getDate("expected_return_date").toLocalDate())
-                            .actualReturnDate(resultSet.getDate("actual_return_date").toLocalDate())
-                            .build();
-                    allApprovedOrders.add(order);
+                    allApprovedOrders.add(extractOrderFromResultSet(resultSet));
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.error(e, e.getCause());
         }
         return allApprovedOrders;
     }
@@ -179,14 +151,9 @@ public class OrderDaoImpl implements OrderDao {
             updateOrder.setString(1, order.getStatus());
             updateOrder.setDate(2, Date.valueOf(order.getApprovedDate()));
             updateOrder.setDate(3, Date.valueOf(order.getExpectedReturnDate()));
-//            updateOrder.setDate(4, Date.valueOf(order.getActualReturnDate()));
             updateOrder.setInt(4, order.getId());
             updateOrder.executeUpdate();
 
-//            updateBook.setString(1, book.getTitle());
-//            updateBook.setString(2, book.getAuthor());
-//            updateBook.setString(3, book.getPublisher());
-//            updateBook.setDate(4, Date.valueOf(book.getPublishingDate()));
             updateBook.setInt(1, book.getAmount());
             updateBook.setInt(2, book.getOnOrder());
             updateBook.setInt(3, book.getId());
@@ -194,12 +161,12 @@ public class OrderDaoImpl implements OrderDao {
 
             connection.commit();
         } catch (SQLException e) {
+            LOGGER.error(e, e.getCause());
             try {
                 connection.rollback();
             } catch (SQLException ex) {
-                ex.printStackTrace();
+                LOGGER.error(ex, ex.getCause());
             }
-            e.printStackTrace();
         }
     }
 
@@ -217,15 +184,15 @@ public class OrderDaoImpl implements OrderDao {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.error(e, e.getCause());
         }
         return false;
     }
 
     @Override
     public int countAllRowsByStatus(String status) {
-        String COUNT_ROWS = "SELECT count(id) AS count FROM orders WHERE status = ?;";
-        try (PreparedStatement preparedStatement = connection.prepareStatement(COUNT_ROWS)) {
+        String COUNT_ROWS_BY_STATUS = "SELECT count(id) AS count FROM orders WHERE status = ?;";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(COUNT_ROWS_BY_STATUS)) {
             preparedStatement.setString(1, status);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
@@ -233,15 +200,15 @@ public class OrderDaoImpl implements OrderDao {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.error(e, e.getCause());
         }
         return 0;
     }
 
     @Override
     public int countAllRowsByStatusAndUser(String status, int userId) {
-        String COUNT_ROWS = "SELECT count(id) AS count FROM orders WHERE status = ? AND user_id = ?;";
-        try (PreparedStatement preparedStatement = connection.prepareStatement(COUNT_ROWS)) {
+        String COUNT_ROWS_BY_STATUS_AND_READER = "SELECT count(id) AS count FROM orders WHERE status = ? AND user_id = ?;";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(COUNT_ROWS_BY_STATUS_AND_READER)) {
             preparedStatement.setString(1, status);
             preparedStatement.setInt(2, userId);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -250,7 +217,7 @@ public class OrderDaoImpl implements OrderDao {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.error(e, e.getCause());
         }
         return 0;
     }
@@ -260,7 +227,7 @@ public class OrderDaoImpl implements OrderDao {
         try {
             connection.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.error(e, e.getCause());
         }
     }
 }

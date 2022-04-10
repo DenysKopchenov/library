@@ -21,7 +21,7 @@ public class SessionListener implements HttpSessionListener {
         String email = (String) httpSessionEvent.getSession().getAttribute("email");
         if (loggedUsers != null) {
             loggedUsers.remove(email);
-            logger.info(email, " logout");
+            logger.info("'{}' logged out.", email);
         }
     }
 }

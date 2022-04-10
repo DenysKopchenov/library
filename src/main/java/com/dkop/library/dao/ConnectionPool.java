@@ -2,11 +2,8 @@ package com.dkop.library.dao;
 
 import org.apache.commons.dbcp.BasicDataSource;
 
-import java.io.FileReader;
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.Properties;
 import java.util.ResourceBundle;
 
 public class ConnectionPool {
@@ -16,11 +13,6 @@ public class ConnectionPool {
     }
 
     static {
-//        try {
-//            Class.forName("com.mysql.cj.jdbc.Driver");
-//        } catch (ClassNotFoundException e) {
-//            e.printStackTrace();
-//        }
         ResourceBundle resourceBundle = ResourceBundle.getBundle("application");
 
         ds.setUrl(resourceBundle.getString("db.url"));
