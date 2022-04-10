@@ -12,6 +12,8 @@ import com.dkop.library.services.OrderService;
 import com.dkop.library.services.PaginationService;
 import com.dkop.library.services.UserService;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -28,6 +30,8 @@ public class ReaderCommand implements Command {
     private final UserService userService;
     private final OrderService orderService;
     private final PaginationService paginationService;
+    private static final Logger LOGGER = LogManager.getLogger(ReaderCommand.class);
+
 
     public ReaderCommand() {
         bookService = BookService.getInstance();
@@ -35,6 +39,7 @@ public class ReaderCommand implements Command {
         orderService = OrderService.getInstance();
         paginationService = PaginationService.getInstance();
         init();
+        LOGGER.info(ReaderCommand.class.getSimpleName());
     }
 
     private void init() {

@@ -45,7 +45,7 @@ public class LoginService {
                 throw new AlreadyLoggedException(messagesBundle.getString("already.logged"));
             } else {
                 CommandUtils.setUserRole(request, email, userRole);
-                LOGGER.info("{} logged in. Role {}.", email, userRole);
+                LOGGER.info("'{}' logged in. Role - '{}'.", email, userRole);
                 return resolvePageByRole(userRole);
             }
         } catch (DoesNotExistException | WrongPasswordException | WasBlockedException | AlreadyLoggedException e) {
