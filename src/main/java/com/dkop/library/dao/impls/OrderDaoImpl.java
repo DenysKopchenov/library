@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.dkop.library.controller.command.CommandUtils.messagesBundle;
+import static com.dkop.library.dao.impls.Queries.*;
 
 public class OrderDaoImpl implements OrderDao {
 
@@ -25,7 +26,6 @@ public class OrderDaoImpl implements OrderDao {
 
     @Override
     public void create(Order order) throws SQLException {
-        String CREATE_ORDER = "INSERT INTO orders (book_id, user_id, type, create_date) VALUES (?, ?, ?, ?);";
         try (PreparedStatement preparedStatement = connection.prepareStatement(CREATE_ORDER)) {
             preparedStatement.setInt(1, order.getBookId());
             preparedStatement.setInt(2, order.getUserId());
@@ -37,7 +37,6 @@ public class OrderDaoImpl implements OrderDao {
 
     @Override
     public List<Order> findAll() {
-        String SELECT_ORDERS = "SELECT * FROM orders;";
         List<Order> allOrders = new ArrayList<>();
         try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ORDERS)) {
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -67,7 +66,6 @@ public class OrderDaoImpl implements OrderDao {
 
     @Override
     public Order findById(int id) throws NotFoundException {
-        String SELECT_ORDER = "SELECT * FROM orders WHERE id = ?;";
         Order order = null;
         try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ORDER)) {
             preparedStatement.setInt(1, id);
@@ -86,7 +84,6 @@ public class OrderDaoImpl implements OrderDao {
 
     @Override
     public void update(Order order) {
-        String UPDATE_ORDER = "UPDATE orders SET status = ?, approved_date = ?, expected_return_date = ? WHERE id = ?;";
         try (PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_ORDER)) {
             preparedStatement.setString(1, order.getStatus());
             preparedStatement.setDate(2, Date.valueOf(order.getApprovedDate()));
@@ -105,9 +102,8 @@ public class OrderDaoImpl implements OrderDao {
 
     @Override
     public List<Order> findAllOrdersByStatus(String status, int start, int numberOfRecords) {
-        String SELECT_ORDERS = "SELECT * FROM orders WHERE status = ? LIMIT ?, ?;";
         List<Order> ordersByStatus = new ArrayList<>();
-        try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ORDERS)) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ORDERS_BY_STATUS)) {
             preparedStatement.setString(1, status);
             preparedStatement.setInt(2, start);
             preparedStatement.setInt(3, numberOfRecords);
@@ -124,9 +120,8 @@ public class OrderDaoImpl implements OrderDao {
 
     @Override
     public List<Order> findAllUserApprovedOrders(int userId, int start, int numberOfRecords) {
-        String SELECT_ORDERS = "SELECT * FROM orders WHERE user_id = ? AND status = 'approved' LIMIT ?, ?;";
         List<Order> allApprovedOrders = new ArrayList<>();
-        try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ORDERS)) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_APPROVED_USER_ORDERS)) {
             preparedStatement.setInt(1, userId);
             preparedStatement.setInt(2, start);
             preparedStatement.setInt(3, numberOfRecords);
@@ -143,9 +138,7 @@ public class OrderDaoImpl implements OrderDao {
 
     @Override
     public void processOrder(Order order, Book book) {
-        String UPDATE_ORDER = "UPDATE orders SET status = ?, approved_date = ?, expected_return_date = ? WHERE id = ?;";
-        String UPDATE_BOOK = "UPDATE books SET amount = ?, on_order = ? WHERE id = ?;";
-        try (PreparedStatement updateBook = connection.prepareStatement(UPDATE_BOOK);
+        try (PreparedStatement updateBook = connection.prepareStatement(UPDATE_BOOK_FROM_ORDER);
              PreparedStatement updateOrder = connection.prepareStatement(UPDATE_ORDER)) {
             connection.setAutoCommit(false);
             updateOrder.setString(1, order.getStatus());
@@ -172,7 +165,6 @@ public class OrderDaoImpl implements OrderDao {
 
     @Override
     public boolean isOrderExist(Order order) {
-        String CHECK_ORDER = "SELECT count(id) AS count FROM orders WHERE book_id = ? AND user_id = ? AND type = ? AND (status = 'approved' OR status = 'pending');";
         try (PreparedStatement preparedStatement = connection.prepareStatement(CHECK_ORDER)) {
             preparedStatement.setInt(1, order.getBookId());
             preparedStatement.setInt(2, order.getUserId());
@@ -191,7 +183,6 @@ public class OrderDaoImpl implements OrderDao {
 
     @Override
     public int countAllRowsByStatus(String status) {
-        String COUNT_ROWS_BY_STATUS = "SELECT count(id) AS count FROM orders WHERE status = ?;";
         try (PreparedStatement preparedStatement = connection.prepareStatement(COUNT_ROWS_BY_STATUS)) {
             preparedStatement.setString(1, status);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -207,7 +198,6 @@ public class OrderDaoImpl implements OrderDao {
 
     @Override
     public int countAllRowsByStatusAndUser(String status, int userId) {
-        String COUNT_ROWS_BY_STATUS_AND_READER = "SELECT count(id) AS count FROM orders WHERE status = ? AND user_id = ?;";
         try (PreparedStatement preparedStatement = connection.prepareStatement(COUNT_ROWS_BY_STATUS_AND_READER)) {
             preparedStatement.setString(1, status);
             preparedStatement.setInt(2, userId);
