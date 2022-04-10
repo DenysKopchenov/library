@@ -85,6 +85,7 @@ public class ReaderCommand implements Command {
                 int bookId = Integer.parseInt(request.getParameter("bookId"));
                 createOrderIfNotExist(bookId, userId, orderType, request);
             } catch (AlreadyExistException | DoesNotExistException e) {
+                LOGGER.error(e, e.getCause());
                 request.setAttribute("errorMessage", e.getMessage());
             }
         }
@@ -93,7 +94,7 @@ public class ReaderCommand implements Command {
     private void createOrderIfNotExist(int bookId, int userId, String orderType, HttpServletRequest request) throws AlreadyExistException {
         if (!orderService.isOrderExist(bookId, userId, orderType)) {
             orderService.createOrder(bookId, userId, orderType);
-            request.setAttribute("successMessage", "Order created, after approve you can find it on 'Show orders'");
+            request.setAttribute("successMessage", messagesBundle.getString("order.created"));
         } else {
             throw new AlreadyExistException(messagesBundle.getString("order.already.exist"));
         }
@@ -155,6 +156,7 @@ public class ReaderCommand implements Command {
                     userOrder.setOrderId(order.getId());
                     userApprovedOrders.add(userOrder);
                 } catch (NotFoundException e) {
+                    LOGGER.error(e, e.getCause());
                     request.setAttribute("errorMessage", e.getMessage());
                 }
             });
@@ -178,6 +180,7 @@ public class ReaderCommand implements Command {
                 request.setAttribute("successMessage", messagesBundle.getString("successfully.returned"));
                 showApprovedOrders(request);
             } catch (NotFoundException e) {
+                LOGGER.error(e, e.getCause());
                 request.setAttribute("errorMessage", e.getMessage());
             }
         }
@@ -198,6 +201,7 @@ public class ReaderCommand implements Command {
             User user = userService.getUserInfo(email);
             request.setAttribute("user", user);
         } catch (DoesNotExistException e) {
+            LOGGER.error(e, e.getCause());
             request.setAttribute("errorMessage", e.getMessage());
         }
     }
@@ -209,6 +213,7 @@ public class ReaderCommand implements Command {
             long totalPenalty = allApproved.stream().mapToLong(orderService::checkForPenalty).sum();
             request.setAttribute("totalPenalty", penaltyFormatter(String.valueOf(totalPenalty)));
         } catch (DoesNotExistException e) {
+            LOGGER.error(e, e.getCause());
             request.setAttribute("errorMessage", e.getMessage());
         }
     }
