@@ -77,8 +77,8 @@
                             <td>${pendingOrder.getType()}</td>
                             <td>${pendingOrder.getStatus()}</td>
                             <td style="text-align:center;">
-                            <a class="btn btn-primary" href="?operations=acceptOrder&orderId=${pendingOrder.getOrderId()}"> Accept </a>
-                            <a class="btn btn-danger" href="?operations=rejectOrder&orderId=${pendingOrder.getOrderId()}"> Reject </a>
+                            <a class="btn btn-primary" href="?operations=acceptOrder&orderId=${pendingOrder.getOrderId()}&page=${currentPage}&perPage=${perPage}"> Accept </a>
+                            <a class="btn btn-danger" href="?operations=rejectOrder&orderId=${pendingOrder.getOrderId()}&page=${currentPage}&perPage=${perPage}"> Reject </a>
                             <a class="btn btn-primary" href="?operations=showReadersApprovedOrders&userId=${pendingOrder.getUser().getId()}"> Details </a>
                             </td>
                         </tr>

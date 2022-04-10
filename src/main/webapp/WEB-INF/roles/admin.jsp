@@ -94,7 +94,7 @@
                             <td>${book.getPublishingDate()}</td>
                             <td>${book.getAmount()}</td>
                             <td>${book.getOnOrder()}</td>
-                            <td style="text-align:center;"><a class="btn btn-danger" href="?operations=deleteBook&bookId=${book.getId()}"> delete</a></td>
+                            <td style="text-align:center;"><a class="btn btn-danger" href="?operations=deleteBook&bookId=${book.getId()}&sort=${sort}&page=${currentPage}&perPage=${perPage}"> delete</a></td>
                             <td style="text-align:center;"><a class="btn btn-info" href="?operations=updateBook&bookId=${book.getId()}"> update</a></td>
                         </tr>
     </c:forEach>
@@ -173,7 +173,7 @@
 <div class="row" >
 <div class="col-6 mx-auto">
 <table class="table table-bordered table-light">
-    <div class="btn-group" style="float:right">
+    <div class="dropdown" style="float:right">
       <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         ${perPage == null ? "5" : perPage}
         </button>

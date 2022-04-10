@@ -14,8 +14,8 @@
 <%@ include file="/WEB-INF/components/nav_bar_guest.jspf" %>
 <c:if test="${catalog != null}">
 <div class="row" >
-<div class="col-6 mx-auto">
-<table class="table table-bordered">
+<div class="col-4 mx-auto">
+    <table class="table table-bordered mx-auto">
     <thead>
 <div class="btn-group">
   <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

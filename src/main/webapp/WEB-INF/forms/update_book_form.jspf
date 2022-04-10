@@ -24,50 +24,55 @@
                     <td>${updatingBook.getOnOrder()}</td>
                 </tr>
                 </tbody>
+            </table>
+            <div class="col-2 mx-auto">
+                <form method="post">
+                    <br><label for="title"><b>Title</b></label><br>
+                    <input type="text" name="title" value="${operation eq 'updateBook' ? updatingBook.getTitle() : ''}"
+                           placeholder="Title"/>
+                    <br>
+                    <c:if test="${validation.containsKey('title')}">
+                        <font style="color:hsl(0,100%,50%);">${validation.get("title")}</font>
+                    </c:if>
+
+                    <br><label for="author"><b>Author</b></label><br>
+                    <input type="text" name="author"
+                           value="${operation eq 'updateBook' ? updatingBook.getAuthor() : ''}"
+                           placeholder="Author"/>
+                    <br>
+                    <c:if test="${validation.containsKey('author')}">
+                        <font style="color:hsl(0,100%,50%);">${validation.get("author")}</font>
+                    </c:if>
+
+                    <br><label for="publisher"><b>Publisher</b></label><br>
+                    <input type="text" name="publisher"
+                           value="${operation eq 'updateBook' ? updatingBook.getPublisher() : ''}"
+                           placeholder="Publisher"/>
+                    <br>
+                    <c:if test="${validation.containsKey('publisher')}">
+                        <font style="color:hsl(0,100%,50%);">${validation.get("publisher")}</font>
+                    </c:if>
+
+                    <br><label for="publishing_date"><b>Publishing date</b></label><br>
+                    <input type="date" name="publishing_date"
+                           value="${operation eq 'updateBook' ? updatingBook.getPublishingDate() : ''}"
+                           placeholder="yyyy-MM-dd"/>
+                    <br>
+                    <c:if test="${validation.containsKey('publishingDate')}">
+                        <font style="color:hsl(0,100%,50%);">${validation.get("publishingDate")}</font>
+                    </c:if>
+
+                    <br><label for="amount"><b>Amount</b></label><br>
+                    <input type="number" name="amount"
+                           value="${operation eq 'updateBook' ? updatingBook.getAmount() : ''}"
+                           placeholder="Amount"/>
+                    <br>
+                    <c:if test="${validation.containsKey('amount')}">
+                        <font style="color:hsl(0,100%,50%);">${validation.get("amount")}</font>
+                    </c:if>
+                    <br><input class="btn btn-primary" type="submit" name="updateCurrentBook" value="Update Book"/>
+                </form>
+            </div>
         </div>
     </div>
-</div>
-<div>
-    <form method="post">
-        <br><label for="title"><b>Title</b></label><br>
-        <input type="text" name="title" value="${operation eq 'updateBook' ? updatingBook.getTitle() : ''}"
-               placeholder="Title"/>
-        <br>
-        <c:if test="${validation.containsKey('title')}">
-            <font style="color:hsl(0,100%,50%);">${validation.get("title")}</font>
-        </c:if>
-
-        <br><label for="author"><b>Author</b></label><br>
-        <input type="text" name="author" value="${operation eq 'updateBook' ? updatingBook.getAuthor() : ''}"
-               placeholder="Author"/>
-        <br>
-        <c:if test="${validation.containsKey('author')}">
-            <font style="color:hsl(0,100%,50%);">${validation.get("author")}</font>
-        </c:if>
-
-        <br><label for="publisher"><b>Publisher</b></label><br>
-        <input type="text" name="publisher" value="${operation eq 'updateBook' ? updatingBook.getPublisher() : ''}"
-               placeholder="Publisher"/>
-        <br>
-        <c:if test="${validation.containsKey('publisher')}">
-            <font style="color:hsl(0,100%,50%);">${validation.get("publisher")}</font>
-        </c:if>
-
-        <br><label for="publishing_date"><b>Publishing date</b></label><br>
-        <input type="date" name="publishing_date"
-               value="${operation eq 'updateBook' ? updatingBook.getPublishingDate() : ''}" placeholder="yyyy-MM-dd"/>
-        <br>
-        <c:if test="${validation.containsKey('publishingDate')}">
-            <font style="color:hsl(0,100%,50%);">${validation.get("publishingDate")}</font>
-        </c:if>
-
-        <br><label for="amount"><b>Amount</b></label><br>
-        <input type="number" name="amount" value="${operation eq 'updateBook' ? updatingBook.getAmount() : ''}"
-               placeholder="Amount"/>
-        <br>
-        <c:if test="${validation.containsKey('amount')}">
-            <font style="color:hsl(0,100%,50%);">${validation.get("amount")}</font>
-        </c:if>
-        <br><input class="btn btn-primary" type="submit" name="updateCurrentBook" value="Update Book"/>
-    </form>
 </div>

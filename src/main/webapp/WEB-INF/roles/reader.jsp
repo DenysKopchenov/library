@@ -175,7 +175,7 @@
                             <td>${approvedOrder.getExpectedReturnDate()}</td>
                             <td>${approvedOrder.getPenalty()}</td>
                             <td style="text-align:center;">
-                            <a class="btn btn-primary" href="?operations=returnBook&orderId=${approvedOrder.getOrderId()}">Return book</a></td>
+                            <a class="btn btn-primary" href="?operations=returnBook&orderId=${approvedOrder.getOrderId()}&page=${currentPage}&perPage=${perPage}">Return book</a></td>
                         </tr>
     </c:forEach>
                         </tbody>

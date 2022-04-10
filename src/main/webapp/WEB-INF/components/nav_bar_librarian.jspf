@@ -29,20 +29,20 @@
                         <fmt:message key="navbar.logout"/>
                     </a>
                 </li>
-                <form>
-                    <select class="form-select" aria-label="Default select example"
-                            name="lang" onchange="submit()">
-                        <option value="en" ${language==
-                        "en" ? 'selected' : ''}>
-                        <fmt:message key="language.en"/>
-                        </option>
-                        <option value="uk" ${language==
-                        "uk" ? 'selected' : ''}>
-                        <fmt:message key="language.ua"/>
-                        </option>
-                    </select>
-                </form>
-                </li>
+                <div class="btn-group">
+                    <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+                            aria-expanded="false">
+                        ${language == "en" ? 'Language' : 'Мова'}
+                    </button>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="?lang=en">
+                            <fmt:message key="language.en"/>
+                        </a>
+                        <a class="dropdown-item" href="?lang=uk">
+                            <fmt:message key="language.ua"/>
+                        </a>
+                    </div>
+                </div>
             </ul>
         </div>
     </div>

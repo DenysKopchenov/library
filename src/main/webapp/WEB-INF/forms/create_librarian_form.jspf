@@ -1,43 +1,46 @@
-<form name="form" method="post">
-    <label for="firstName"><b>
-        <fmt:message key="first.name"/>
+<div class="col-2 mx-auto">
+    <form name="form" method="post">
+        <label for="firstName"><b>
+            <fmt:message key="first.name"/>
+        </b></label><br>
+        <input type="text" name="firstName" placeholder="<fmt:message key=" first.name"/>"/>
+        <br>
+        <c:if test="${validation.containsKey('firstName')}">
+            <font style="color:hsl(0,100%,50%);">${validation.get("firstName")}</font>
+        </c:if>
+        <br><label for="lastName"><b>
+        <fmt:message key="last.name"/>
+</b></label><br>
+        <input type="text" name="lastName" placeholder="<fmt:message key=" last.name"/>">
+        <br>
+        <c:if test="${validation.containsKey('lastName')}">
+            <font style="color:hsl(0,100%,50%);">${validation.get("lastName")}</font>
+        </c:if>
+        <br><label for="password"><b>
+        <fmt:message key="password"/>
+</b></label><br>
+        <input type="password" name="password" placeholder="<fmt:message key=" password"/>"/>
+        <br>
+        <c:if test="${validation.containsKey('password')}">
+            <font style="color:hsl(0,100%,50%);">${validation.get("password")}</font>
+        </c:if>
+        <br><label for="confirmPassword"><b>
+        <fmt:message key="registration.confirm.password"/>
+</b></label><br>
+        <input type="password" name="confirmPassword" placeholder="<fmt:message key=" registration.confirm.password"/>"/>
+        <br>
+        <c:if test="${validation.containsKey('confirmPassword')}">
+            <font style="color:hsl(0,100%,50%);">${validation.get("confirmPassword")}</font>
+        </c:if>
+        <br><label for="email"><b>
+        <fmt:message key="email"/>
     </b></label><br>
-    <input type="text" name="firstName" placeholder="<fmt:message key="first.name"/>"/>
-    <br>
-    <c:if test="${validation.containsKey('firstName')}">
-        <font style="color:hsl(0,100%,50%);">${validation.get("firstName")}</font>
-    </c:if>
-    <br><label for="lastName"><b>
-    <fmt:message key="last.name"/>
-</b></label><br>
-    <input type="text" name="lastName" placeholder="<fmt:message key="last.name"/>">
-    <br>
-    <c:if test="${validation.containsKey('lastName')}">
-        <font style="color:hsl(0,100%,50%);">${validation.get("lastName")}</font>
-    </c:if>
-    <br><label for="password"><b>
-    <fmt:message key="password"/>
-</b></label><br>
-    <input type="password" name="password" placeholder="<fmt:message key="password"/>"/>
-    <br>
-    <c:if test="${validation.containsKey('password')}">
-        <font style="color:hsl(0,100%,50%);">${validation.get("password")}</font>
-    </c:if>
-    <br><label for="confirmPassword"><b>
-    <fmt:message key="registration.confirm.password"/>
-</b></label><br>
-    <input type="password" name="confirmPassword" placeholder="<fmt:message key="registration.confirm.password"/>"/>
-    <br>
-    <c:if test="${validation.containsKey('confirmPassword')}">
-        <font style="color:hsl(0,100%,50%);">${validation.get("confirmPassword")}</font>
-    </c:if>
-    <br><label for="email"><b>
-    <fmt:message key="email"/>
-</b></label><br>
-    <input type="text" name="email" placeholder="<fmt:message key="email"/>"/>
-    <br>
-    <c:if test="${validation.containsKey('email')}">
-        <font style="color:hsl(0,100%,50%);">${validation.get("email")}</font>
-    </c:if>
-    <br><input class="btn btn-primary" type="submit" name="register" value="<fmt:message key="registration.button.librarian"/>"/>
-</form>
+        <input type="text" name="email" placeholder="<fmt:message key=" email"/>"/>
+        <br>
+        <c:if test="${validation.containsKey('email')}">
+            <font style="color:hsl(0,100%,50%);">${validation.get("email")}</font>
+        </c:if>
+        <br><input class="btn btn-primary" type="submit" name="register" value="<fmt:message key="
+                   registration.button.librarian"/>"/>
+    </form>
+</div>
