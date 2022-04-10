@@ -2,6 +2,8 @@ package com.dkop.library.controller.command;
 
 import com.dkop.library.services.LoginService;
 import com.dkop.library.services.Validator;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
@@ -9,6 +11,11 @@ import java.util.Map;
 public class LoginCommand implements Command {
     private static final String LOGIN_JSP = "/WEB-INF/login.jsp";
     private final LoginService loginService = LoginService.getInstance();
+    private static final Logger LOGGER = LogManager.getLogger(LoginCommand.class);
+
+    public LoginCommand() {
+        LOGGER.info(LoginCommand.class.getSimpleName());
+    }
 
     @Override
     public String execute(HttpServletRequest request) {

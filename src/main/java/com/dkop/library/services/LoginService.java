@@ -9,6 +9,8 @@ import com.dkop.library.exceptions.DoesNotExistException;
 import com.dkop.library.exceptions.WasBlockedException;
 import com.dkop.library.exceptions.WrongPasswordException;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -17,6 +19,7 @@ import static com.dkop.library.controller.command.CommandUtils.messagesBundle;
 public class LoginService {
     private static LoginService instance;
     private DaoFactory daoFactory;
+    private static final Logger LOGGER = LogManager.getLogger(LoginService.class);
 
     public static LoginService getInstance() {
         if (instance == null) {
@@ -32,6 +35,7 @@ public class LoginService {
 
     private LoginService() {
         daoFactory = DaoFactory.getInstance();
+        LOGGER.info(LoginService.class.getSimpleName());
     }
 
     public String login(String email, String password, HttpServletRequest request) {
@@ -41,9 +45,11 @@ public class LoginService {
                 throw new AlreadyLoggedException(messagesBundle.getString("already.logged"));
             } else {
                 CommandUtils.setUserRole(request, email, userRole);
+                LOGGER.info("{} logged in. Role {}.", email, userRole);
                 return resolvePageByRole(userRole);
             }
         } catch (DoesNotExistException | WrongPasswordException | WasBlockedException | AlreadyLoggedException e) {
+            LOGGER.error(e, e.getCause());
             request.setAttribute("errorMessage", e.getMessage());
             return "/WEB-INF/login.jsp";
         }
