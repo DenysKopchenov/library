@@ -21,7 +21,7 @@
                     Sorry, an error has occurred, Requested page not found!
                 </div>
                 <div class="error-actions">
-                    <a href="/app" class="btn btn-primary btn-lg"><span class="glyphicon glyphicon-home"></span>
+                    <a href="/app/library/" class="btn btn-primary btn-lg"><span class="glyphicon glyphicon-home"></span>
                         Take Me Home </a>
                 </div>
             </div>

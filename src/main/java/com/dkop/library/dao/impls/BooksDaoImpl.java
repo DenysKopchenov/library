@@ -14,6 +14,8 @@ import java.util.List;
 
 
 import static com.dkop.library.controller.command.CommandUtils.messagesBundle;
+import static com.dkop.library.dao.impls.Queries.*;
+
 
 public class BooksDaoImpl implements BooksDao {
 
@@ -33,8 +35,7 @@ public class BooksDaoImpl implements BooksDao {
             sortBy = "title";
         }
         List<Book> allBooks = new ArrayList<>();
-        String SELECT_BOOKS = String.format("SELECT * FROM books ORDER BY %s LIMIT ?, ? ;", sortBy);
-        try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_BOOKS)) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(String.format(SELECT_BOOKS, sortBy))) {
             preparedStatement.setInt(1, start);
             preparedStatement.setInt(2, numberOfRecords);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -49,7 +50,6 @@ public class BooksDaoImpl implements BooksDao {
     }
 
     public void create(Book book) throws SQLException {
-        String CREATE_BOOK = "INSERT INTO books (title, author, publisher, publishing_date, amount) VALUES (?, ?, ?, ?, ?);";
         try (PreparedStatement preparedStatement = connection.prepareStatement(CREATE_BOOK)) {
             preparedStatement.setString(1, book.getTitle());
             preparedStatement.setString(2, book.getAuthor());
@@ -62,10 +62,9 @@ public class BooksDaoImpl implements BooksDao {
     }
 
     public void delete(int id) throws UnableToDeleteException {
-        String DELETE_BOOK = "DELETE FROM books WHERE id = ?;";
         try (PreparedStatement preparedStatement = connection.prepareStatement(DELETE_BOOK)) {
             preparedStatement.setInt(1, id);
-            preparedStatement.execute();
+            preparedStatement.executeUpdate();
         } catch (SQLException e) {
             LOGGER.error(e, e.getCause());
             throw new UnableToDeleteException(messagesBundle.getString("unable.delete"), e);
@@ -73,7 +72,6 @@ public class BooksDaoImpl implements BooksDao {
     }
 
     public void update(Book book) {
-        String UPDATE_BOOK = "UPDATE books SET title = ?, author = ?, publisher = ?, publishing_date = ?, amount = ?, on_order = ? WHERE id = ?;";
         try (PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_BOOK)) {
             preparedStatement.setString(1, book.getTitle());
             preparedStatement.setString(2, book.getAuthor());
@@ -91,8 +89,7 @@ public class BooksDaoImpl implements BooksDao {
     @Override
     public List<Book> findAllByAuthor(String author) {
         List<Book> books = new ArrayList<>();
-        String SELECT_BOOK = "SELECT * FROM books WHERE author LIKE ?;";
-        try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_BOOK)) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_BOOK_BY_AUTHOR)) {
             preparedStatement.setString(1, "%" + author + "%");
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 while (resultSet.next()) {
@@ -108,8 +105,7 @@ public class BooksDaoImpl implements BooksDao {
     @Override
     public List<Book> findAllByTitle(String title) {
         List<Book> books = new ArrayList<>();
-        String SELECT_BOOK = "SELECT * FROM books WHERE title LIKE ?;";
-        try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_BOOK)) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_BOOK_BY_TITLE)) {
             preparedStatement.setString(1, "%" + title + "%");
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 while (resultSet.next()) {
@@ -124,7 +120,6 @@ public class BooksDaoImpl implements BooksDao {
 
     @Override
     public int countAllRows() {
-        String COUNT_ROWS_BOOKS = "SELECT count(id) AS count FROM books;";
         try (ResultSet resultSet = connection.prepareStatement(COUNT_ROWS_BOOKS).executeQuery()) {
             if (resultSet.next()) {
                 return resultSet.getInt("count");
@@ -136,9 +131,8 @@ public class BooksDaoImpl implements BooksDao {
     }
 
     public Book findById(int id) throws NotFoundException {
-        String SELECT_BOOK = "SELECT * FROM books WHERE id = ?;";
         Book book = null;
-        try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_BOOK)) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_BOOK_BY_ID)) {
             preparedStatement.setInt(1, id);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
