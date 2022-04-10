@@ -1,6 +1,8 @@
 package com.dkop.library.controller.filters;
 
 import com.dkop.library.controller.command.*;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -11,6 +13,8 @@ import java.util.Set;
 
 public class AuthenticationFilter implements Filter {
     private static final String HOME_PAGE = "/app/library/";
+    private static final Logger LOGGER = LogManager.getLogger(AuthenticationFilter.class);
+
 
     @Override
     public void init(FilterConfig filterConfig) {
@@ -42,6 +46,7 @@ public class AuthenticationFilter implements Filter {
                 if (requestURI.contains("admin") || requestURI.contains("logout")) {
                     filterChain.doFilter(servletRequest, servletResponse);
                 } else {
+                    LOGGER.info("Unauthorized access");
                     resp.sendRedirect(HOME_PAGE + role);
                 }
                 break;
@@ -49,6 +54,7 @@ public class AuthenticationFilter implements Filter {
                 if (requestURI.contains("librarian") || requestURI.contains("logout")) {
                     filterChain.doFilter(servletRequest, servletResponse);
                 } else {
+                    LOGGER.info("Unauthorized access");
                     resp.sendRedirect(HOME_PAGE + role);
                 }
                 break;
@@ -56,6 +62,7 @@ public class AuthenticationFilter implements Filter {
                 if (requestURI.contains("reader") || requestURI.contains("logout")) {
                     filterChain.doFilter(servletRequest, servletResponse);
                 } else {
+                    LOGGER.info("Unauthorized access");
                     resp.sendRedirect(HOME_PAGE + role);
                 }
                 break;

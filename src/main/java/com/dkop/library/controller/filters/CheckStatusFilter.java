@@ -4,6 +4,8 @@ import com.dkop.library.controller.command.Command;
 import com.dkop.library.controller.command.LogOutCommand;
 import com.dkop.library.exceptions.DoesNotExistException;
 import com.dkop.library.services.UserService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -13,10 +15,11 @@ import java.io.IOException;
 public class CheckStatusFilter implements Filter {
     private final Command logout = new LogOutCommand();
     private final UserService userService = UserService.getInstance();
+    private static final Logger LOGGER = LogManager.getLogger(CheckStatusFilter.class);
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-
+        //do nothing
     }
 
     @Override
@@ -29,13 +32,14 @@ public class CheckStatusFilter implements Filter {
             try {
                 String status = userService.getUserInfo(email).getStatus();
                 if (status.equals("blocked")) {
+                    LOGGER.info("{} was blocked.", email);
                     logout.execute(req);
                     resp.sendRedirect("/app/library");
                 } else {
                     chain.doFilter(req, resp);
                 }
             } catch (DoesNotExistException e) {
-                e.printStackTrace();
+                LOGGER.error(e, e.getCause());
             }
         } else {
             chain.doFilter(req, resp);
@@ -44,6 +48,6 @@ public class CheckStatusFilter implements Filter {
 
     @Override
     public void destroy() {
-
+        //do nothing
     }
 }

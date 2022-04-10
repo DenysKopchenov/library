@@ -1,11 +1,9 @@
 package com.dkop.library.controller.filters;
 
 import com.dkop.library.controller.command.CommandUtils;
-import com.dkop.library.services.Validator;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.jsp.jstl.core.Config;
 import java.io.IOException;
 import java.util.Locale;
 import java.util.ResourceBundle;
