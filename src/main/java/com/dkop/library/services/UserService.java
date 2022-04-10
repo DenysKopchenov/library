@@ -34,12 +34,6 @@ public class UserService {
         daoFactory = DaoFactory.getInstance();
     }
 
-    public List<User> findAll() {
-        try (UserDao userDao = daoFactory.createUserDao()) {
-            return userDao.findAll();
-        }
-    }
-
     public User findById(int id) throws NotFoundException {
         try (UserDao userDao = daoFactory.createUserDao()) {
             return userDao.findById(id);

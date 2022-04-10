@@ -76,6 +76,7 @@
 
     <listener>
         <listener-class>com.dkop.library.controller.listeners.SessionListener</listener-class>
+        <listener-class>com.dkop.library.controller.listeners.ContextListener</listener-class>
     </listener>
 
     <session-config>

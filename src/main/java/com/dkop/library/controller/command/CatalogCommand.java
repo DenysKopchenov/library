@@ -2,12 +2,19 @@ package com.dkop.library.controller.command;
 
 import com.dkop.library.entity.Book;
 import com.dkop.library.services.PaginationService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 public class CatalogCommand implements Command {
     private final PaginationService paginationService = PaginationService.getInstance();
+    private static final Logger LOGGER = LogManager.getLogger(CatalogCommand.class);
+
+    public CatalogCommand() {
+        LOGGER.info(CatalogCommand.class.getSimpleName());
+    }
 
     @Override
     public String execute(HttpServletRequest request) {

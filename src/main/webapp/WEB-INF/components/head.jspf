@@ -4,15 +4,4 @@
           integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
           crossorigin="anonymous">
     <meta http-equiv='Content-Type' content='text/html; charset=UTF-8'/>
-    <%--
-    <style>
-        body{
-                    background-image      : url("https://www.detroitlabs.com/wp-content/uploads/2018/02/alfons-morales-YLSwjSy7stw-unsplash.jpg");
-                    background-attachment : fixed;
-                    background-position   : center center;
-                    background-size       : cover;  
-                }
-
-    </style>
-    --%>
 </head>

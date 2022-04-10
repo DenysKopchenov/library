@@ -6,11 +6,14 @@ import com.dkop.library.entity.Book;
 import com.dkop.library.exceptions.AlreadyExistException;
 import com.dkop.library.exceptions.NotFoundException;
 import com.dkop.library.exceptions.UnableToDeleteException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+
 
 import static com.dkop.library.controller.command.CommandUtils.messagesBundle;
 
@@ -18,6 +21,7 @@ import static com.dkop.library.controller.command.CommandUtils.messagesBundle;
 public class BookService {
     private final DaoFactory daoFactory;
     private static BookService instance;
+    private static final Logger LOGGER = LogManager.getLogger(BookService.class);
 
     public static BookService getInstance() {
         if (instance == null) {
@@ -33,6 +37,7 @@ public class BookService {
 
     private BookService() {
         daoFactory = DaoFactory.getInstance();
+        LOGGER.info(BookService.class.getSimpleName());
     }
 
     public void createBook(String title, String author, String publisher, String publishingDate, String amount) throws AlreadyExistException {
@@ -47,6 +52,7 @@ public class BookService {
         try (BooksDao booksDao = daoFactory.createBooksDao()) {
             booksDao.create(book);
         } catch (SQLException e) {
+            LOGGER.error(e, e.getCause());
             throw new AlreadyExistException(messagesBundle.getString("book.already.exist"), e);
         }
     }
@@ -90,12 +96,6 @@ public class BookService {
         }
         return books;
     }
-
-//    public List<Book> findAll() {
-//        try (BooksDao booksDao = DaoFactory.getInstance().createBooksDao()) {
-//            return booksDao.findAll();
-//        }
-//    }
 
     public Book findById(int id) throws NotFoundException {
         try (BooksDao booksDao = DaoFactory.getInstance().createBooksDao()) {

@@ -11,6 +11,8 @@ import com.dkop.library.services.PaginationService;
 import com.dkop.library.services.UserService;
 import com.dkop.library.services.Validator;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
@@ -25,9 +27,11 @@ public class AdminCommand implements Command {
     private final BookService bookService = BookService.getInstance();
     private final UserService userService = UserService.getInstance();
     private final PaginationService paginationService = PaginationService.getInstance();
+    private static final Logger LOGGER = LogManager.getLogger(AdminCommand.class);
 
     public AdminCommand() {
         init();
+        LOGGER.info(AdminCommand.class.getSimpleName());
     }
 
     private void init() {
@@ -65,6 +69,7 @@ public class AdminCommand implements Command {
             User user = userService.getUserInfo(email);
             request.setAttribute("user", user);
         } catch (DoesNotExistException e) {
+            LOGGER.error(e, e.getCause());
             request.setAttribute("errorMessage", e.getMessage());
         }
     }
@@ -84,6 +89,7 @@ public class AdminCommand implements Command {
                     bookService.createBook(title, author, publisher, publishingDate, amount);
                     request.setAttribute("successMessage", messagesBundle.getString("successfully.created"));
                 } catch (AlreadyExistException e) {
+                    LOGGER.error(e, e.getCause());
                     request.setAttribute("errorMessage", e.getMessage());
                 }
             } else {
@@ -100,8 +106,8 @@ public class AdminCommand implements Command {
                 request.setAttribute("successMessage", messagesBundle.getString("successfully.deleted"));
                 showCatalogBookOperation(request);
             } catch (NotFoundException | UnableToDeleteException e) {
+                LOGGER.error(e, e.getCause());
                 request.setAttribute("errorMessage", e.getMessage());
-                e.getCause().printStackTrace();
             }
         } else {
             request.setAttribute("errorMessage", messagesBundle.getString("id.error"));
@@ -109,11 +115,11 @@ public class AdminCommand implements Command {
     }
 
     private void updateBookOperation(HttpServletRequest request) {
-        request.setAttribute("operation", "updateBook");
         String id = request.getParameter("bookId");
         if (StringUtils.isNumeric(id)) {
             try {
                 Book book = bookService.findById(Integer.parseInt(id));
+                request.setAttribute("operation", "updateBook");
                 request.setAttribute("updatingBook", book); //shows what book is updating
                 if (request.getParameter("updateCurrentBook") != null) {
                     String title = request.getParameter("title");
@@ -129,6 +135,7 @@ public class AdminCommand implements Command {
                     }
                 }
             } catch (NotFoundException e) {
+                LOGGER.error(e, e.getCause());
                 request.setAttribute("errorMessage", e.getMessage());
             }
         } else {
@@ -202,9 +209,11 @@ public class AdminCommand implements Command {
                 request.setAttribute("successMessage", messagesBundle.getString("successfully.deleted"));
                 showAllLibrariansOperation(request);
             } catch (NotFoundException | UnableToDeleteException e) {
+                LOGGER.error(e, e.getCause());
                 request.setAttribute("errorMessage", e.getMessage());
             }
         } else {
+            LOGGER.error("Wrong id format");
             request.setAttribute("errorMessage", messagesBundle.getString("id.error"));
         }
     }
@@ -239,10 +248,12 @@ public class AdminCommand implements Command {
                 request.setAttribute("successMessage", messagesBundle.getString("successfully.unblocked"));
                 showAllReadersOperation(request);
             } catch (NotFoundException e) {
+                LOGGER.error(e, e.getCause());
                 request.setAttribute("errorMessage", e.getMessage());
                 showAllReadersOperation(request);
             }
         } else {
+            LOGGER.error("Wrong id format");
             request.setAttribute("errorMessage", messagesBundle.getString("id.error"));
         }
     }
@@ -255,10 +266,12 @@ public class AdminCommand implements Command {
                 request.setAttribute("successMessage", messagesBundle.getString("successfully.blocked"));
                 showAllReadersOperation(request);
             } catch (NotFoundException e) {
+                LOGGER.error(e, e.getCause());
                 request.setAttribute("errorMessage", e.getMessage());
                 showAllReadersOperation(request);
             }
         } else {
+            LOGGER.error("Wrong id format");
             request.setAttribute("errorMessage", messagesBundle.getString("id.error"));
         }
     }
