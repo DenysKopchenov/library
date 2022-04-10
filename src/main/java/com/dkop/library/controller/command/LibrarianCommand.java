@@ -11,6 +11,8 @@ import com.dkop.library.services.OrderService;
 import com.dkop.library.services.PaginationService;
 import com.dkop.library.services.UserService;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -25,6 +27,7 @@ public class LibrarianCommand implements Command {
     private final UserService userService;
     private final OrderService orderService;
     private final PaginationService paginationService;
+    private static final Logger LOGGER = LogManager.getLogger(LibrarianCommand.class);
 
     public LibrarianCommand() {
         bookService = BookService.getInstance();
@@ -32,6 +35,7 @@ public class LibrarianCommand implements Command {
         orderService = OrderService.getInstance();
         paginationService = PaginationService.getInstance();
         init();
+        LOGGER.info(LibrarianCommand.class.getSimpleName());
     }
 
     private void init() {
@@ -64,6 +68,7 @@ public class LibrarianCommand implements Command {
             User user = userService.getUserInfo(email);
             request.setAttribute("user", user);
         } catch (DoesNotExistException e) {
+            LOGGER.error(e, e.getCause());
             request.setAttribute("errorMessage", e.getMessage());
         }
     }
@@ -90,16 +95,10 @@ public class LibrarianCommand implements Command {
             List<Order> allApproved = paginationService.paginateOrdersByUser(userId, page, perPage);
             allApproved.forEach(order -> {
                 try {
-                    UserOrderDto userOrder = new UserOrderDto();
-                    long penalty = orderService.checkForPenalty(order);
-                    userOrder.setPenalty(penaltyFormatter(String.valueOf(penalty)));
-                    userOrder.setCreateDate(order.getCreateDate());
-                    userOrder.setExpectedReturnDate(order.getExpectedReturnDate());
-                    userOrder.setBook(bookService.findById(order.getBookId()));
-                    userOrder.setUser(userService.findById(order.getUserId()));
-                    userOrder.setOrderId(order.getId());
+                    UserOrderDto userOrder = prepareUserOrderForView(order);
                     userApprovedOrders.add(userOrder);
                 } catch (NotFoundException e) {
+                    LOGGER.error(e, e.getCause());
                     request.setAttribute("errorMessage", e.getMessage());
                 }
             });
@@ -111,6 +110,20 @@ public class LibrarianCommand implements Command {
             request.setAttribute("userApprovedOrders", userApprovedOrders);
             request.setAttribute("userId", userId);
         }
+    }
+
+    private UserOrderDto prepareUserOrderForView(Order order) throws NotFoundException {
+        UserOrderDto userOrder = new UserOrderDto();
+        long penalty = orderService.checkForPenalty(order);
+        userOrder.setPenalty(penaltyFormatter(String.valueOf(penalty)));
+        userOrder.setCreateDate(order.getCreateDate());
+        userOrder.setExpectedReturnDate(order.getExpectedReturnDate());
+        userOrder.setType(StringUtils.capitalize(order.getType()));
+        userOrder.setStatus(StringUtils.capitalize(order.getStatus()));
+        userOrder.setBook(bookService.findById(order.getBookId()));
+        userOrder.setUser(userService.findById(order.getUserId()));
+        userOrder.setOrderId(order.getId());
+        return userOrder;
     }
 
     private String penaltyFormatter(String penalty) {
@@ -133,13 +146,10 @@ public class LibrarianCommand implements Command {
         List<Order> orders = paginationService.paginateOrdersByStatus("pending", page, perPage);
         orders.forEach(order -> {
             try {
-                UserOrderDto userOrder = new UserOrderDto();
-                userOrder.setCreateDate(order.getCreateDate());
-                userOrder.setBook(bookService.findById(order.getBookId()));
-                userOrder.setUser(userService.findById(order.getUserId()));
-                userOrder.setOrderId(order.getId());
+                UserOrderDto userOrder = prepareUserOrderForView(order);
                 pendingOrders.add(userOrder);
             } catch (NotFoundException e) {
+                LOGGER.error(e, e.getCause());
                 request.setAttribute("errorMessage", e.getMessage());
             }
         });
@@ -159,6 +169,7 @@ public class LibrarianCommand implements Command {
                 orderService.acceptOrder(order);
                 showPendingOrders(request);
             } catch (NotFoundException | UnableToAcceptOrderException e) {
+                LOGGER.error(e, e.getCause());
                 request.setAttribute("errorMessage", e.getMessage());
             }
         }
@@ -172,6 +183,7 @@ public class LibrarianCommand implements Command {
                 orderService.rejectOrder(order);
                 showPendingOrders(request);
             } catch (NotFoundException e) {
+                LOGGER.error(e, e.getCause());
                 request.setAttribute("errorMessage", e.getMessage());
             }
         }

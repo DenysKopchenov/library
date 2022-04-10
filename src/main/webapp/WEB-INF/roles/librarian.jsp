@@ -40,7 +40,7 @@
 <div>
 <c:if test="${pendingOrders != null}">
 <div class="row" >
-<div class="col-6 mx-auto">
+<div class="col-8 mx-auto">
 <table class="table table-bordered">
     <div class="btn-group" style="float:right">
       <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -60,6 +60,8 @@
                             <th>Publisher</th>
                             <th>Publishing date</th>
                             <th>Reader full name</th>
+                            <th>Type</th>
+                            <th>Status</th>
                             <th colspan="3" style="text-align:center;">Operations</th>
                         </tr>
                         </thead>
@@ -72,6 +74,8 @@
                             <td>${pendingOrder.getBook().getPublisher()}</td>
                             <td>${pendingOrder.getBook().getPublishingDate()}</td>
                             <td>${pendingOrder.getUser().getFirstName()} ${pendingOrder.getUser().getLastName()}</td>
+                            <td>${pendingOrder.getType()}</td>
+                            <td>${pendingOrder.getStatus()}</td>
                             <td style="text-align:center;">
                             <a class="btn btn-primary" href="?operations=acceptOrder&orderId=${pendingOrder.getOrderId()}"> Accept </a>
                             <a class="btn btn-danger" href="?operations=rejectOrder&orderId=${pendingOrder.getOrderId()}"> Reject </a>
@@ -81,19 +85,19 @@
     </c:forEach>
                         </tbody>
                         </table>
-                        <nav aria-label="Page navigation example">
-                        <ul class="pagination">
-                        <c:if test="${currentPage > 1}">
-                        <li class="page-item"><a class="page-link" href="?operations=showPendingOrders&page=${currentPage - 1}&perPage=${perPage}">Previous</a></li>
-                        </c:if>
-                         <c:forEach begin="1" end="${numberOfPages}" var="i">
-                           <li class="active"><a class="page-link" href="?operations=showPendingOrders&page=${i}&perPage=${perPage}">${i}</a></li>
-                          </c:forEach>
-                           <c:if test="${currentPage < numberOfPages}">
-                             <li class="page-item"><a class="page-link" href="?operations=showPendingOrders&page=${currentPage + 1}&perPage=${perPage}">Next</a></li>
-                            </c:if>
-                            </ul>
-                         </nav>
+                                                <nav aria-label="Page navigation example">
+                                                <ul class="pagination">
+                                                <c:if test="${currentPage > 1}">
+                                                <li class="page-item"><a class="page-link" href="?operations=showPendingOrders&page=${currentPage - 1}&perPage=${perPage}">Previous</a></li>
+                                                </c:if>
+                                                 <c:forEach begin="1" end="${numberOfPages}" var="i">
+                                                   <li class="active"><a class="page-link" href="?operations=showPendingOrders&page=${i}&perPage=${perPage}">${i}</a></li>
+                                                  </c:forEach>
+                                                   <c:if test="${currentPage < numberOfPages}">
+                                                     <li class="page-item"><a class="page-link" href="?operations=showPendingOrders&page=${currentPage + 1}&perPage=${perPage}">Next</a></li>
+                                                    </c:if>
+                                                    </ul>
+                                                 </nav>
 </div>
 </div>
 </c:if>
@@ -157,7 +161,7 @@
 </c:if>
 <c:if test="${userApprovedOrders != null}">
 <div class="row" >
-<div class="col-6 mx-auto">
+<div class="col-8 mx-auto">
 <table class="table table-bordered">
     <div class="btn-group" style="float:right">
       <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -177,6 +181,8 @@
                             <th>Publisher</th>
                             <th>Publishing date</th>
                             <th>Expected return date</th>
+                            <th>Type</th>
+                            <th>Status</th>
                             <th>Penalty</th>
                         </tr>
                         </thead>
@@ -189,6 +195,8 @@
                             <td>${approvedOrder.getBook().getPublisher()}</td>
                             <td>${approvedOrder.getBook().getPublishingDate()}</td>
                             <td>${approvedOrder.getExpectedReturnDate()}</td>
+                            <td>${approvedOrder.getType()}</td>
+                            <td>${approvedOrder.getStatus()}</td>
                             <td>${approvedOrder.getPenalty()}</td>
                         </tr>
     </c:forEach>

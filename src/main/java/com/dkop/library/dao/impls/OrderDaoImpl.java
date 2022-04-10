@@ -224,7 +224,7 @@ public class OrderDaoImpl implements OrderDao {
 
     @Override
     public int countAllRowsByStatus(String status) {
-        String COUNT_ROWS = "SELECT count(id) AS count FROM users WHERE status = ?;";
+        String COUNT_ROWS = "SELECT count(id) AS count FROM orders WHERE status = ?;";
         try (PreparedStatement preparedStatement = connection.prepareStatement(COUNT_ROWS)) {
             preparedStatement.setString(1, status);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {

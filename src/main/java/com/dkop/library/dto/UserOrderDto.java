@@ -11,6 +11,25 @@ public class UserOrderDto {
     private Book book;
     private User user;
     private String penalty;
+    private String type;
+    private String status;
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
     private int orderId;
 
     public User getUser() {
@@ -61,8 +80,6 @@ public class UserOrderDto {
         this.orderId = orderId;
     }
 
-
-    //todo not like this!
 
     @Override
     public String toString() {
