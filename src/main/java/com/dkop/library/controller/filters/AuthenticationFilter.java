@@ -42,7 +42,6 @@ public class AuthenticationFilter implements Filter {
                 if (requestURI.contains("admin") || requestURI.contains("logout")) {
                     filterChain.doFilter(servletRequest, servletResponse);
                 } else {
-//                    logOutCommand.execute(req);
                     resp.sendRedirect(HOME_PAGE + role);
                 }
                 break;
@@ -50,7 +49,6 @@ public class AuthenticationFilter implements Filter {
                 if (requestURI.contains("librarian") || requestURI.contains("logout")) {
                     filterChain.doFilter(servletRequest, servletResponse);
                 } else {
-//                    logOutCommand.execute(req);
                     resp.sendRedirect(HOME_PAGE + role);
                 }
                 break;
@@ -58,7 +56,6 @@ public class AuthenticationFilter implements Filter {
                 if (requestURI.contains("reader") || requestURI.contains("logout")) {
                     filterChain.doFilter(servletRequest, servletResponse);
                 } else {
-//                    logOutCommand.execute(req);
                     resp.sendRedirect(HOME_PAGE + role);
                 }
                 break;
