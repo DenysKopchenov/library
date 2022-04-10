@@ -22,36 +22,72 @@ public class Order {
         return id;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public int getUserId() {
         return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     public int getBookId() {
         return bookId;
     }
 
+    public void setBookId(int bookId) {
+        this.bookId = bookId;
+    }
+
     public String getType() {
         return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public String getStatus() {
         return status;
     }
 
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public LocalDate getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(LocalDate createDate) {
+        this.createDate = createDate;
+    }
+
     public LocalDate getApprovedDate() {
         return approvedDate;
+    }
+
+    public void setApprovedDate(LocalDate approvedDate) {
+        this.approvedDate = approvedDate;
     }
 
     public LocalDate getExpectedReturnDate() {
         return expectedReturnDate;
     }
 
+    public void setExpectedReturnDate(LocalDate expectedReturnDate) {
+        this.expectedReturnDate = expectedReturnDate;
+    }
+
     public LocalDate getActualReturnDate() {
         return actualReturnDate;
     }
 
-    public LocalDate getCreateDate() {
-        return createDate;
+    public void setActualReturnDate(LocalDate actualReturnDate) {
+        this.actualReturnDate = actualReturnDate;
     }
 
     @Override
@@ -85,21 +121,6 @@ public class Order {
         return new Order().new Builder();
     }
 
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public void setApprovedDate(LocalDate approvedDate) {
-        this.approvedDate = approvedDate;
-    }
-
-    public void setExpectedReturnDate(LocalDate expectedReturnDate) {
-        this.expectedReturnDate = expectedReturnDate;
-    }
-
-    public void setActualReturnDate(LocalDate actualReturnDate) {
-        this.actualReturnDate = actualReturnDate;
-    }
 
     public class Builder {
 
