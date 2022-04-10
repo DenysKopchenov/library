@@ -5,13 +5,15 @@ import com.dkop.library.entity.Book;
 import com.dkop.library.entity.Order;
 import com.dkop.library.entity.User;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 public class PaginationService {
-    private final DaoFactory daoFactory;
     private static PaginationService instance;
+    private static final Logger LOGGER = LogManager.getLogger(PaginationService.class);
     private final BookService bookService;
     private final UserService userService;
     private final OrderService orderService;
@@ -29,10 +31,10 @@ public class PaginationService {
     }
 
     private PaginationService() {
-        daoFactory = DaoFactory.getInstance();
         bookService = BookService.getInstance();
         userService = UserService.getInstance();
         orderService = OrderService.getInstance();
+        LOGGER.info(PaginationService.class.getSimpleName());
     }
 
     public List<User> paginateUsersByRole(String role, int currentPageNumber, int perPage) {

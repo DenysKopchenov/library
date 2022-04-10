@@ -8,6 +8,8 @@ import com.dkop.library.exceptions.DoesNotExistException;
 import com.dkop.library.exceptions.NotFoundException;
 import com.dkop.library.exceptions.UnableToDeleteException;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -16,6 +18,7 @@ import static com.dkop.library.controller.command.CommandUtils.messagesBundle;
 
 public class UserService {
     private static UserService instance;
+    private static final Logger LOGGER = LogManager.getLogger(UserService.class);
     private final DaoFactory daoFactory;
 
     public static UserService getInstance() {
@@ -32,6 +35,7 @@ public class UserService {
 
     private UserService() {
         daoFactory = DaoFactory.getInstance();
+        LOGGER.info(UserService.class.getSimpleName());
     }
 
     public User findById(int id) throws NotFoundException {
@@ -64,6 +68,7 @@ public class UserService {
                     .build();
             userDao.create(user);
         } catch (SQLException e) {
+            LOGGER.error(e, e.getCause());
             throw new AlreadyExistException("Email " + email + messagesBundle.getString("email.already.exist"), e);
         }
     }
@@ -80,6 +85,7 @@ public class UserService {
             userDao.findById(id);
             userDao.changeStatus(id, newStatus);
         } catch (SQLException e) {
+            LOGGER.error(e, e.getCause());
             throw new NotFoundException(messagesBundle.getString("user.not.found"));
         }
     }

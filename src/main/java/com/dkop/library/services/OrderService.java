@@ -4,14 +4,11 @@ import com.dkop.library.dao.DaoFactory;
 import com.dkop.library.dao.OrderDao;
 import com.dkop.library.entity.Book;
 import com.dkop.library.entity.Order;
-import com.dkop.library.entity.User;
-import com.dkop.library.exceptions.AlreadyExistException;
-import com.dkop.library.exceptions.DoesNotExistException;
 import com.dkop.library.exceptions.NotFoundException;
 import com.dkop.library.exceptions.UnableToAcceptOrderException;
-import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-import javax.servlet.http.HttpServletRequest;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.Period;
@@ -21,9 +18,10 @@ import static com.dkop.library.controller.command.CommandUtils.messagesBundle;
 
 public class OrderService {
     private static OrderService instance;
+    private static final Logger LOGGER = LogManager.getLogger(OrderService.class);
     private final BookService bookService;
-    private final UserService userService;
     private final DaoFactory daoFactory;
+
 
     public static OrderService getInstance() {
         if (instance == null) {
@@ -40,7 +38,7 @@ public class OrderService {
     private OrderService() {
         daoFactory = DaoFactory.getInstance();
         bookService = BookService.getInstance();
-        userService = UserService.getInstance();
+        LOGGER.info(OrderService.class.getSimpleName());
     }
 
     public void createOrder(int bookId, int userId, String type) {
@@ -52,7 +50,7 @@ public class OrderService {
         try (OrderDao orderDao = daoFactory.createOrderDao()) {
             orderDao.create(order);
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.error(e, e.getCause());
         }
     }
 
@@ -75,7 +73,7 @@ public class OrderService {
             if (order.getStatus().equals("approved")) {
                 order.setStatus("completed");
             } else {
-                throw new RuntimeException();
+                LOGGER.error(new RuntimeException());
             }
 
             Book book = bookService.findById(order.getBookId());
@@ -88,7 +86,7 @@ public class OrderService {
 
     public void acceptOrder(Order order) throws NotFoundException, UnableToAcceptOrderException {
         if (!order.getStatus().equals("pending")) {
-            throw new RuntimeException();
+            LOGGER.error(new RuntimeException());
         }
         Book book = bookService.findById(order.getBookId());
         int amount = book.getAmount();
