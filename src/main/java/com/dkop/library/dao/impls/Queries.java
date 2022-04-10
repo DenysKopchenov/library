@@ -22,5 +22,13 @@ public interface Queries {
     String CHECK_ORDER = "SELECT count(id) AS count FROM orders WHERE book_id = ? AND user_id = ? AND type = ? AND (status = 'approved' OR status = 'pending');";
     String COUNT_ROWS_BY_STATUS = "SELECT count(id) AS count FROM orders WHERE status = ?;";
     String COUNT_ROWS_BY_STATUS_AND_READER = "SELECT count(id) AS count FROM orders WHERE status = ? AND user_id = ?;";
+
     //Users
+    String CREATE_USER = "INSERT INTO users (first_name, last_name, email, password, role, status) VALUES (?, ?, ?, ?, ?, ?);";
+    String COUNT_ROWS_BY_ROLE = "SELECT count(id) AS count FROM users WHERE role = ?;";
+    String SELECT_USERS_BY_ROLE = "SELECT * FROM users WHERE role = ? ORDER BY id limit ?, ?;";
+    String BLOCK_USER = "UPDATE users SET status = ? WHERE id = ?;";
+    String SELECT_USER_BY_ID = "SELECT * FROM users WHERE id = ?;";
+    String SELECT_USER_BY_EMAIL = "SELECT * FROM users WHERE email = ?;";
+    String DELETE_USER_BY_ID = "DELETE FROM users WHERE id = ?;";
 }

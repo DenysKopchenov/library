@@ -14,6 +14,4 @@ public interface UserDao extends GenericDao<User> {
     List<User> findAllByRole(String role, int offset, int numberOfRecords);
 
     int countAllRowsByRole(String role);
-
-//    List<User> findAllPageable(int offset, int numberOfRecords);
 }

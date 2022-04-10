@@ -46,13 +46,10 @@ public class UserService {
         }
     }
 
-    //return user
     public User getUserInfo(String email) throws DoesNotExistException {
-        User user;
         try (UserDao userDao = daoFactory.createUserDao()) {
-            user = userDao.findByEmail(email);
+            return userDao.findByEmail(email);
         }
-        return user;
     }
 
     public void createUser(String firstName, String lastName, String email, String password, String role, String status) throws AlreadyExistException {

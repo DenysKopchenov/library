@@ -4,14 +4,19 @@ import com.dkop.library.dao.UserDao;
 import com.dkop.library.entity.User;
 import com.dkop.library.exceptions.DoesNotExistException;
 import com.dkop.library.exceptions.NotFoundException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.dkop.library.controller.command.CommandUtils.messagesBundle;
+import static com.dkop.library.dao.impls.Queries.*;
 
 public class UserDaoImpl implements UserDao {
+
+    private static final Logger LOGGER = LogManager.getLogger(UserDaoImpl.class);
     private final Connection connection;
 
     public UserDaoImpl(Connection connection) {
@@ -19,8 +24,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     public void create(User user) throws SQLException {
-        String INSERT_USERS_SQL = "INSERT INTO users (first_name, last_name, email, password, role, status) VALUES (?, ?, ?, ?, ?, ?);";
-        try (PreparedStatement preparedStatement = connection.prepareStatement(INSERT_USERS_SQL)) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(CREATE_USER)) {
             preparedStatement.setString(1, user.getFirstName());
             preparedStatement.setString(2, user.getLastName());
             preparedStatement.setString(3, user.getEmail());
@@ -36,8 +40,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     public int countAllRowsByRole(String role) {
-        String COUNT_ROWS = "SELECT count(id) AS count FROM users WHERE role = ?;";
-        try (PreparedStatement preparedStatement = connection.prepareStatement(COUNT_ROWS)) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(COUNT_ROWS_BY_ROLE)) {
             preparedStatement.setString(1, role);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
@@ -45,95 +48,86 @@ public class UserDaoImpl implements UserDao {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.error(e, e.getCause());
         }
         return 0;
     }
 
     public List<User> findAllByRole(String role, int offset, int numberOfRecords) {
         List<User> allUsers = new ArrayList<>();
-        String SELECT_USERS = "SELECT * FROM users WHERE role = ? ORDER BY id limit ?, ?;";
-        try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_USERS)) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_USERS_BY_ROLE)) {
             preparedStatement.setString(1, role);
             preparedStatement.setInt(2, offset);
             preparedStatement.setInt(3, numberOfRecords);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 while (resultSet.next()) {
-                    User user = User.newBuilder()
-                            .firstName(resultSet.getString("first_name"))
-                            .lastName(resultSet.getString("last_name"))
-                            .email(resultSet.getString("email"))
-                            .role(resultSet.getString("role"))
-                            .status(resultSet.getString("status"))
-                            .id(resultSet.getInt("id"))
-                            .build();
-                    allUsers.add(user);
+                    allUsers.add(extractUserFromResultSet(resultSet));
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.error(e, e.getCause());
         }
         return allUsers;
     }
 
     @Override
     public void changeStatus(int id, String newStatus) {
-        String BLOCK_USER = "UPDATE users SET status = ? WHERE id = ?;";
         try (PreparedStatement preparedStatement = connection.prepareStatement(BLOCK_USER)) {
             preparedStatement.setString(1, newStatus);
             preparedStatement.setInt(2, id);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.error(e, e.getCause());
         }
     }
 
     @Override
     public User findById(int id) throws NotFoundException {
-        String SELECT_USER = "SELECT * FROM users WHERE id = ?;";
         User user = null;
-        try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_USER)) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_USER_BY_ID)) {
             preparedStatement.setInt(1, id);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
-                    user = User.newBuilder()
-                            .firstName(resultSet.getString("first_name"))
-                            .lastName(resultSet.getString("last_name"))
-                            .email(resultSet.getString("email"))
-                            .password(resultSet.getString("password"))
-                            .role(resultSet.getString("role"))
-                            .status(resultSet.getString("status"))
-                            .id(resultSet.getInt("id"))
-                            .build();
+                    user = extractUserFromResultSet(resultSet);
                 } else {
                     throw new NotFoundException(messagesBundle.getString("user.not.found"));
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.error(e, e.getCause());
         }
         return user;
     }
 
+    private User extractUserFromResultSet(ResultSet resultSet) throws SQLException {
+        return User.newBuilder()
+                .firstName(resultSet.getString("first_name"))
+                .lastName(resultSet.getString("last_name"))
+                .email(resultSet.getString("email"))
+                .role(resultSet.getString("role"))
+                .status(resultSet.getString("status"))
+                .id(resultSet.getInt("id"))
+                .build();
+    }
+
     @Override
     public void update(User user) {
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public void delete(int id) {
-        String DELETE_USER = "DELETE FROM users WHERE id = ?;";
-        try (PreparedStatement preparedStatement = connection.prepareStatement(DELETE_USER)) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(DELETE_USER_BY_ID)) {
             preparedStatement.setInt(1, id);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.error(e, e.getCause());
         }
     }
 
     public User findByEmail(String email) throws DoesNotExistException {
-        String SELECT_USER = "SELECT * FROM users WHERE email = ?;";
         User user = null;
-        try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_USER)) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_USER_BY_EMAIL)) {
             preparedStatement.setString(1, email);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
@@ -151,7 +145,7 @@ public class UserDaoImpl implements UserDao {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.error(e, e.getCause());
         }
         return user;
     }
@@ -161,7 +155,7 @@ public class UserDaoImpl implements UserDao {
         try {
             connection.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.error(e, e.getCause());
         }
     }
 }
