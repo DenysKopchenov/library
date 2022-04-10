@@ -171,7 +171,7 @@ public class OrderDaoImpl implements OrderDao {
 
     @Override
     public void processOrder(Order order, Book book) {
-        String UPDATE_ORDER = "UPDATE orders SET status = ? , approved_date = ?, expected_return_date = ? WHERE id = ?;";
+        String UPDATE_ORDER = "UPDATE orders SET status = ?, approved_date = ?, expected_return_date = ? WHERE id = ?;";
         String UPDATE_BOOK = "UPDATE books SET amount = ?, on_order = ? WHERE id = ?;";
         try (PreparedStatement updateBook = connection.prepareStatement(UPDATE_BOOK);
              PreparedStatement updateOrder = connection.prepareStatement(UPDATE_ORDER)) {
@@ -227,6 +227,23 @@ public class OrderDaoImpl implements OrderDao {
         String COUNT_ROWS = "SELECT count(id) AS count FROM orders WHERE status = ?;";
         try (PreparedStatement preparedStatement = connection.prepareStatement(COUNT_ROWS)) {
             preparedStatement.setString(1, status);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    return resultSet.getInt("count");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    @Override
+    public int countAllRowsByStatusAndUser(String status, int userId) {
+        String COUNT_ROWS = "SELECT count(id) AS count FROM orders WHERE status = ? AND user_id = ?;";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(COUNT_ROWS)) {
+            preparedStatement.setString(1, status);
+            preparedStatement.setInt(2, userId);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
                     return resultSet.getInt("count");

@@ -153,10 +153,16 @@ public class ReaderCommand implements Command {
                     request.setAttribute("errorMessage", e.getMessage());
                 }
             });
+            int numberOfPages = paginationService.countNumberOfPagesForUserApprovedOrders("approved", user.getId(), perPage);
+            request.setAttribute("numberOfPages", numberOfPages);
+            request.setAttribute("perPage", perPage);
+            request.setAttribute("currentPage", page);
             request.setAttribute("userApprovedOrders", userApprovedOrders);
         } catch (DoesNotExistException e) {
             request.setAttribute("errorMessage", e.getMessage());
         }
+
+
     }
 
     private void returnBookOperation(HttpServletRequest request) {

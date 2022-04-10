@@ -2,8 +2,12 @@ package com.dkop.library.dao;
 
 import org.apache.commons.dbcp.BasicDataSource;
 
+import java.io.FileReader;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Properties;
+import java.util.ResourceBundle;
 
 public class ConnectionPool {
     private static BasicDataSource ds = new BasicDataSource();
@@ -17,12 +21,14 @@ public class ConnectionPool {
 //        } catch (ClassNotFoundException e) {
 //            e.printStackTrace();
 //        }
-        ds.setUrl("jdbc:mysql://127.0.0.1:3306/users?useUnicode=yes;characterEncoding=UTF-8;autoReconnect=true");
-        ds.setUsername("root");
-        ds.setPassword("ghbdtnltybc");
-        ds.setMinIdle(5);
-        ds.setMaxIdle(15);
-        ds.setMaxOpenPreparedStatements(50);
+        ResourceBundle resourceBundle = ResourceBundle.getBundle("application");
+
+        ds.setUrl(resourceBundle.getString("db.url"));
+        ds.setUsername(resourceBundle.getString("db.username"));
+        ds.setPassword(resourceBundle.getString("db.password"));
+        ds.setMinIdle(25);
+        ds.setMaxIdle(100);
+        ds.setMaxOpenPreparedStatements(150);
     }
 
     public static Connection getConnection() throws SQLException {

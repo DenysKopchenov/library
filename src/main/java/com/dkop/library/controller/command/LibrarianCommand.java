@@ -103,7 +103,7 @@ public class LibrarianCommand implements Command {
                 }
             });
 
-            int numberOfPages = paginationService.countNumberOfPagesForOrdersByStatus("approved", perPage);
+            int numberOfPages = paginationService.countNumberOfPagesForUserApprovedOrders("approved", userId, perPage);
             request.setAttribute("numberOfPages", numberOfPages);
             request.setAttribute("perPage", perPage);
             request.setAttribute("currentPage", Math.min(page, numberOfPages));

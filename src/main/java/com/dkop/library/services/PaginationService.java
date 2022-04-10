@@ -67,6 +67,10 @@ public class PaginationService {
         return (int) Math.ceil(orderService.countAllRowsByStatus(status) * 1.0 / perPage);
     }
 
+    public int countNumberOfPagesForUserApprovedOrders(String status, int userId, int perPage) {
+        return (int) Math.ceil(orderService.countAllRowsByStatusAndUser(status, userId) * 1.0 / perPage);
+    }
+
     public int getRecordsPerPage(HttpServletRequest request) {
         if (StringUtils.isNumeric(request.getParameter("perPage"))) {
             return Integer.parseInt(request.getParameter("perPage"));

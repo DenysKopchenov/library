@@ -5,9 +5,11 @@ import com.dkop.library.dao.OrderDao;
 import com.dkop.library.entity.Book;
 import com.dkop.library.entity.Order;
 import com.dkop.library.entity.User;
+import com.dkop.library.exceptions.AlreadyExistException;
 import com.dkop.library.exceptions.DoesNotExistException;
 import com.dkop.library.exceptions.NotFoundException;
 import com.dkop.library.exceptions.UnableToAcceptOrderException;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.sql.SQLException;
@@ -70,8 +72,11 @@ public class OrderService {
     public void returnBook(int orderId) throws NotFoundException {
         try (OrderDao orderDao = daoFactory.createOrderDao()) {
             Order order = orderDao.findById(orderId);
-//            order.setActualReturnDate(LocalDate.now()); sets automatically on db
-            order.setStatus("completed");
+            if (order.getStatus().equals("approved")) {
+                order.setStatus("completed");
+            } else {
+                throw new RuntimeException();
+            }
 
             Book book = bookService.findById(order.getBookId());
             book.setAmount(book.getAmount() + 1);
@@ -82,6 +87,9 @@ public class OrderService {
     }
 
     public void acceptOrder(Order order) throws NotFoundException, UnableToAcceptOrderException {
+        if (!order.getStatus().equals("pending")) {
+            throw new RuntimeException();
+        }
         Book book = bookService.findById(order.getBookId());
         int amount = book.getAmount();
         if (amount <= 0) {
@@ -139,6 +147,12 @@ public class OrderService {
     public int countAllRowsByStatus(String status) {
         try (OrderDao orderDao = daoFactory.createOrderDao()) {
             return orderDao.countAllRowsByStatus(status);
+        }
+    }
+
+    public int countAllRowsByStatusAndUser(String status, int userId) {
+        try (OrderDao orderDao = daoFactory.createOrderDao()) {
+            return orderDao.countAllRowsByStatusAndUser(status, userId);
         }
     }
 }

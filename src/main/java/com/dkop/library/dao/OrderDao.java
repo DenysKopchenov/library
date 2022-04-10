@@ -15,4 +15,6 @@ public interface OrderDao extends GenericDao<Order> {
     boolean isOrderExist(Order order);
 
     int countAllRowsByStatus(String status);
+
+    int countAllRowsByStatusAndUser(String status, int userId);
 }
