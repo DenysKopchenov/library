@@ -91,7 +91,7 @@ public class OrderDaoImpl implements OrderDao {
             preparedStatement.setInt(4, order.getId());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.error(e, e.getCause());
         }
     }
 

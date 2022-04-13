@@ -80,7 +80,7 @@ public class BooksDaoImpl implements BooksDao {
             preparedStatement.setInt(5, book.getAmount());
             preparedStatement.setInt(6, book.getOnOrder());
             preparedStatement.setInt(7, book.getId());
-            preparedStatement.execute();
+            preparedStatement.executeUpdate();
         } catch (SQLException e) {
             LOGGER.error(e, e.getCause());
         }

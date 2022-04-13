@@ -4,6 +4,7 @@ import com.dkop.library.dao.UserDao;
 import com.dkop.library.entity.User;
 import com.dkop.library.exceptions.DoesNotExistException;
 import com.dkop.library.exceptions.NotFoundException;
+import com.dkop.library.exceptions.UnableToDeleteException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -116,12 +117,13 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public void delete(int id) {
+    public void delete(int id) throws UnableToDeleteException {
         try (PreparedStatement preparedStatement = connection.prepareStatement(DELETE_USER_BY_ID)) {
             preparedStatement.setInt(1, id);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             LOGGER.error(e, e.getCause());
+            throw new UnableToDeleteException(messagesBundle.getString("unable.delete"), e);
         }
     }
 
