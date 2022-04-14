@@ -165,7 +165,7 @@ public class OrderDaoImpl implements OrderDao {
 
     @Override
     public boolean isOrderExist(Order order) {
-        try (PreparedStatement preparedStatement = connection.prepareStatement(CHECK_ORDER)) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(CHECK_ORDER_EXIST)) {
             preparedStatement.setInt(1, order.getBookId());
             preparedStatement.setInt(2, order.getUserId());
             preparedStatement.setString(3, order.getType());
@@ -173,6 +173,22 @@ public class OrderDaoImpl implements OrderDao {
                 if (resultSet.next()) {
                     long count = resultSet.getLong("count");
                     return count > 0;
+                }
+            }
+        } catch (SQLException e) {
+            LOGGER.error(e, e.getCause());
+        }
+        return false;
+    }
+
+    @Override
+    public boolean isAvailableToDeleteBook(int bookId) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(CHECK_ORDER_AVAILABLE_TO_DELETE_BOOK)) {
+            preparedStatement.setInt(1, bookId);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    long count = resultSet.getLong("count");
+                    return count == 0;
                 }
             }
         } catch (SQLException e) {

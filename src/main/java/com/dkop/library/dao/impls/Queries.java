@@ -19,7 +19,8 @@ public interface Queries {
     String SELECT_ORDERS_BY_STATUS = "SELECT * FROM orders WHERE status = ? LIMIT ?, ?;";
     String SELECT_APPROVED_USER_ORDERS = "SELECT * FROM orders WHERE user_id = ? AND status = 'approved' LIMIT ?, ?;";
     String UPDATE_BOOK_FROM_ORDER = "UPDATE books SET amount = ?, on_order = ? WHERE id = ?;";
-    String CHECK_ORDER = "SELECT count(id) AS count FROM orders WHERE book_id = ? AND user_id = ? AND type = ? AND (status = 'approved' OR status = 'pending');";
+    String CHECK_ORDER_EXIST = "SELECT count(id) AS count FROM orders WHERE book_id = ? AND user_id = ? AND type = ? AND (status = 'approved' OR status = 'pending');";
+    String CHECK_ORDER_AVAILABLE_TO_DELETE_BOOK = "SELECT count(id) AS count FROM orders WHERE book_id = ? AND (status = 'approved' OR status = 'pending');";
     String COUNT_ROWS_BY_STATUS = "SELECT count(id) AS count FROM orders WHERE status = ?;";
     String COUNT_ROWS_BY_STATUS_AND_READER = "SELECT count(id) AS count FROM orders WHERE status = ? AND user_id = ?;";
 

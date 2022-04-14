@@ -2,6 +2,7 @@ package com.dkop.library.services;
 
 import com.dkop.library.dao.BooksDao;
 import com.dkop.library.dao.DaoFactory;
+import com.dkop.library.dao.OrderDao;
 import com.dkop.library.entity.Book;
 import com.dkop.library.exceptions.AlreadyExistException;
 import com.dkop.library.exceptions.NotFoundException;
@@ -64,8 +65,13 @@ public class BookService {
 
     public void deleteBook(int id) throws NotFoundException, UnableToDeleteException {
         findById(id);
-        try (BooksDao booksDao = DaoFactory.getInstance().createBooksDao()) {
-            booksDao.delete(id);
+        try (BooksDao booksDao = DaoFactory.getInstance().createBooksDao();
+             OrderDao orderDao = DaoFactory.getInstance().createOrderDao()) {
+            if (orderDao.isAvailableToDeleteBook(id)){
+                booksDao.delete(id);
+            } else {
+                throw new UnableToDeleteException(messagesBundle.getString("unable.delete.book"));
+            }
         }
     }
 

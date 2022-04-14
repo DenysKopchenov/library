@@ -67,7 +67,7 @@ public class BooksDaoImpl implements BooksDao {
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             LOGGER.error(e, e.getCause());
-            throw new UnableToDeleteException(messagesBundle.getString("unable.delete"), e);
+            throw new UnableToDeleteException(messagesBundle.getString("unable.delete.book"), e);
         }
     }
 

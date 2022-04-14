@@ -133,10 +133,19 @@ public class OrderDaoTest {
     @Test
     public void testIsOrderExist() throws SQLException {
         boolean isExist = orderDao.isOrderExist(createTestOrder());
-        verify(mockConnection, times(1)).prepareStatement(CHECK_ORDER);
+        verify(mockConnection, times(1)).prepareStatement(CHECK_ORDER_EXIST);
         verify(mockPreparedStatement, times(1)).setInt(1, 1);
         verify(mockPreparedStatement, times(1)).setInt(2, 1);
         verify(mockPreparedStatement, times(1)).setString(3, "type");
+        verify(mockPreparedStatement, times(1)).executeQuery();
+        Assert.assertFalse(isExist);
+    }
+
+    @Test
+    public void testIsOrderAvailableToDeleteBook() throws SQLException {
+        boolean isExist = orderDao.isAvailableToDeleteBook(1);
+        verify(mockConnection, times(1)).prepareStatement(CHECK_ORDER_AVAILABLE_TO_DELETE_BOOK);
+        verify(mockPreparedStatement, times(1)).setInt(1, 1);
         verify(mockPreparedStatement, times(1)).executeQuery();
         Assert.assertFalse(isExist);
     }
