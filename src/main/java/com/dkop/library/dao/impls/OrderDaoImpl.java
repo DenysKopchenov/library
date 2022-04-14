@@ -38,7 +38,7 @@ public class OrderDaoImpl implements OrderDao {
     @Override
     public List<Order> findAll() {
         List<Order> allOrders = new ArrayList<>();
-        try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ORDERS)) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_ORDERS)) {
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 while (resultSet.next()) {
                     allOrders.add(extractOrderFromResultSet(resultSet));
@@ -67,7 +67,7 @@ public class OrderDaoImpl implements OrderDao {
     @Override
     public Order findById(int id) throws NotFoundException {
         Order order = null;
-        try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ORDER)) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ORDER_BY_ID)) {
             preparedStatement.setInt(1, id);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {

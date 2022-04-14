@@ -1,7 +1,6 @@
 package com.dkop.library.tests.dao;
 
 import com.dkop.library.dao.OrderDao;
-import com.dkop.library.dao.UserDao;
 import com.dkop.library.dao.impls.OrderDaoImpl;
 import com.dkop.library.entity.Book;
 import com.dkop.library.entity.Order;
@@ -9,7 +8,6 @@ import com.dkop.library.exceptions.NotFoundException;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.internal.matchers.Or;
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -17,6 +15,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import static com.dkop.library.controller.command.CommandUtils.messagesBundle;
+import static com.dkop.library.dao.impls.Queries.*;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
@@ -38,17 +37,18 @@ public class OrderDaoTest {
     @Test
     public void testCreate() throws SQLException {
         orderDao.create(createTestOrder());
-        verify(mockConnection, times(1)).prepareStatement(anyString());
-        verify(mockPreparedStatement, times(2)).setInt(anyInt(), anyInt());
-        verify(mockPreparedStatement, times(1)).setString(anyInt(), anyString());
-        verify(mockPreparedStatement, times(1)).setDate(anyInt(), any(Date.class));
+        verify(mockConnection, times(1)).prepareStatement(CREATE_ORDER);
+        verify(mockPreparedStatement, times(1)).setInt(1, 1);
+        verify(mockPreparedStatement, times(1)).setInt(2, 1);
+        verify(mockPreparedStatement, times(1)).setString(3, "type");
+        verify(mockPreparedStatement, times(1)).setDate(4, Date.valueOf(LocalDate.now()));
         verify(mockPreparedStatement, times(1)).executeUpdate();
     }
 
     @Test
     public void testFindAll() throws SQLException {
         List<Order> allOrders = orderDao.findAll();
-        verify(mockConnection, times(1)).prepareStatement(anyString());
+        verify(mockConnection, times(1)).prepareStatement(SELECT_ALL_ORDERS);
         verify(mockPreparedStatement, times(1)).executeQuery();
         Assert.assertTrue(allOrders.isEmpty());
     }
@@ -58,8 +58,8 @@ public class OrderDaoTest {
         try {
             orderDao.findById(1);
         } catch (NotFoundException e) {
-            verify(mockConnection, times(1)).prepareStatement(anyString());
-            verify(mockPreparedStatement, times(1)).setInt(anyInt(), anyInt());
+            verify(mockConnection, times(1)).prepareStatement(SELECT_ORDER_BY_ID);
+            verify(mockPreparedStatement, times(1)).setInt(1, 1);
             verify(mockPreparedStatement, times(1)).executeQuery();
             throw e;
         }
@@ -68,28 +68,32 @@ public class OrderDaoTest {
     @Test
     public void testUpdate() throws SQLException {
         orderDao.update(createTestOrder());
-        verify(mockConnection, times(1)).prepareStatement(anyString());
-        verify(mockPreparedStatement, times(1)).setString(anyInt(), anyString());
-        verify(mockPreparedStatement, times(2)).setDate(anyInt(), any(Date.class));
-        verify(mockPreparedStatement, times(1)).setInt(anyInt(), anyInt());
+        verify(mockConnection, times(1)).prepareStatement(UPDATE_ORDER);
+        verify(mockPreparedStatement, times(1)).setString(1, "status");
+        verify(mockPreparedStatement, times(1)).setDate(2, Date.valueOf(LocalDate.now()));
+        verify(mockPreparedStatement, times(1)).setDate(3, Date.valueOf(LocalDate.now()));
+        verify(mockPreparedStatement, times(1)).setInt(4, 1);
         verify(mockPreparedStatement, times(1)).executeUpdate();
     }
 
     @Test
     public void testFindAllOrdersByStatus() throws SQLException {
-        List<Order> ordersByStatus = orderDao.findAllOrdersByStatus(anyString(), 1, 5);
-        verify(mockConnection, times(1)).prepareStatement(anyString());
-        verify(mockPreparedStatement, times(1)).setString(anyInt(), anyString());
-        verify(mockPreparedStatement, times(2)).setInt(anyInt(), anyInt());
+        List<Order> ordersByStatus = orderDao.findAllOrdersByStatus("status", 1, 5);
+        verify(mockConnection, times(1)).prepareStatement(SELECT_ORDERS_BY_STATUS);
+        verify(mockPreparedStatement, times(1)).setString(1, "status");
+        verify(mockPreparedStatement, times(1)).setInt(2, 1);
+        verify(mockPreparedStatement, times(1)).setInt(3, 5);
         verify(mockPreparedStatement, times(1)).executeQuery();
         Assert.assertTrue(ordersByStatus.isEmpty());
     }
 
     @Test
     public void testFindAllUserApprovedOrders() throws SQLException {
-        List<Order> allApprovedOrders = orderDao.findAllUserApprovedOrders(anyInt(), 1, 5);
-        verify(mockConnection, times(1)).prepareStatement(anyString());
-        verify(mockPreparedStatement, times(3)).setInt(anyInt(), anyInt());
+        List<Order> allApprovedOrders = orderDao.findAllUserApprovedOrders(1, 1, 5);
+        verify(mockConnection, times(1)).prepareStatement(SELECT_APPROVED_USER_ORDERS);
+        verify(mockPreparedStatement, times(1)).setInt(1, 1);
+        verify(mockPreparedStatement, times(1)).setInt(2, 1);
+        verify(mockPreparedStatement, times(1)).setInt(3, 5);
         verify(mockPreparedStatement, times(1)).executeQuery();
         Assert.assertTrue(allApprovedOrders.isEmpty());
     }
@@ -97,24 +101,31 @@ public class OrderDaoTest {
     @Test
     public void testProcessOrder() throws SQLException {
         orderDao.processOrder(createTestOrder(), createTestBook());
-        verify(mockConnection, times(2)).prepareStatement(anyString());
+        verify(mockConnection, times(1)).prepareStatement(UPDATE_BOOK_FROM_ORDER);
+        verify(mockConnection, times(1)).prepareStatement(UPDATE_ORDER);
         verify(mockConnection, times(1)).setAutoCommit(false);
-        verify(mockPreparedStatement, times(1)).setString(anyInt(), anyString());
-        verify(mockPreparedStatement, times(2)).setDate(anyInt(), any(Date.class));
-        verify(mockPreparedStatement, times(4)).setInt(anyInt(), anyInt());
+        verify(mockPreparedStatement, times(1)).setString(1, "status");
+        verify(mockPreparedStatement, times(1)).setDate(2, Date.valueOf(LocalDate.now()));
+        verify(mockPreparedStatement, times(1)).setDate(3, Date.valueOf(LocalDate.now()));
+        verify(mockPreparedStatement, times(1)).setInt(4, 1);
+        verify(mockPreparedStatement, times(1)).setInt(1, 1);
+        verify(mockPreparedStatement, times(1)).setInt(2, 0);
+        verify(mockPreparedStatement, times(1)).setInt(3, 1);
         verify(mockPreparedStatement, times(2)).executeUpdate();
         verify(mockConnection, times(1)).commit();
     }
 
     @Test
-    public void testProcessOrderThrows() throws SQLException {
+    public void testProcessOrderTransactionFailed() throws SQLException {
         when(mockPreparedStatement.executeUpdate()).thenThrow(new SQLException());
         orderDao.processOrder(createTestOrder(), createTestBook());
-        verify(mockConnection, times(2)).prepareStatement(anyString());
+        verify(mockConnection, times(1)).prepareStatement(UPDATE_BOOK_FROM_ORDER);
+        verify(mockConnection, times(1)).prepareStatement(UPDATE_ORDER);
         verify(mockConnection, times(1)).setAutoCommit(false);
-        verify(mockPreparedStatement, times(1)).setString(anyInt(), anyString());
-        verify(mockPreparedStatement, times(2)).setDate(anyInt(), any(Date.class));
-        verify(mockPreparedStatement, times(1)).setInt(anyInt(), anyInt());
+        verify(mockPreparedStatement, times(1)).setString(1, "status");
+        verify(mockPreparedStatement, times(1)).setDate(2, Date.valueOf(LocalDate.now()));
+        verify(mockPreparedStatement, times(1)).setDate(3, Date.valueOf(LocalDate.now()));
+        verify(mockPreparedStatement, times(1)).setInt(4, 1);
         verify(mockPreparedStatement, times(1)).executeUpdate();
         verify(mockConnection, times(1)).rollback();
     }
@@ -122,28 +133,29 @@ public class OrderDaoTest {
     @Test
     public void testIsOrderExist() throws SQLException {
         boolean isExist = orderDao.isOrderExist(createTestOrder());
-        verify(mockConnection, times(1)).prepareStatement(anyString());
-        verify(mockPreparedStatement, times(2)).setInt(anyInt(), anyInt());
-        verify(mockPreparedStatement, times(1)).setString(anyInt(), anyString());
+        verify(mockConnection, times(1)).prepareStatement(CHECK_ORDER);
+        verify(mockPreparedStatement, times(1)).setInt(1, 1);
+        verify(mockPreparedStatement, times(1)).setInt(2, 1);
+        verify(mockPreparedStatement, times(1)).setString(3, "type");
         verify(mockPreparedStatement, times(1)).executeQuery();
         Assert.assertFalse(isExist);
     }
 
     @Test
     public void testCountAllRowsByStatus() throws SQLException {
-        int count = orderDao.countAllRowsByStatus(anyString());
-        verify(mockConnection, times(1)).prepareStatement(anyString());
-        verify(mockPreparedStatement, times(1)).setString(anyInt(), anyString());
+        int count = orderDao.countAllRowsByStatus("status");
+        verify(mockConnection, times(1)).prepareStatement(COUNT_ROWS_BY_STATUS);
+        verify(mockPreparedStatement, times(1)).setString(1, "status");
         verify(mockPreparedStatement, times(1)).executeQuery();
         Assert.assertEquals(0, count);
     }
 
     @Test
     public void testCountAllRowsByStatusAndUser() throws SQLException {
-        int count = orderDao.countAllRowsByStatusAndUser(anyString(), 1);
-        verify(mockConnection, times(1)).prepareStatement(anyString());
-        verify(mockPreparedStatement, times(1)).setString(anyInt(), anyString());
-        verify(mockPreparedStatement, times(1)).setInt(anyInt(), anyInt());
+        int count = orderDao.countAllRowsByStatusAndUser("status", 1);
+        verify(mockConnection, times(1)).prepareStatement(COUNT_ROWS_BY_STATUS_AND_READER);
+        verify(mockPreparedStatement, times(1)).setString(1, "status");
+        verify(mockPreparedStatement, times(1)).setInt(2, 1);
         verify(mockPreparedStatement, times(1)).executeQuery();
         Assert.assertEquals(0, count);
     }
@@ -153,8 +165,8 @@ public class OrderDaoTest {
                 .id(1)
                 .bookId(1)
                 .userId(1)
-                .type("any")
-                .status("any")
+                .type("type")
+                .status("status")
                 .createDate(LocalDate.now())
                 .approvedDate(LocalDate.now())
                 .expectedReturnDate(LocalDate.now())

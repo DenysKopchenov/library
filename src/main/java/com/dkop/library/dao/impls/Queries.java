@@ -13,8 +13,8 @@ public interface Queries {
 
     //Orders
     String CREATE_ORDER = "INSERT INTO orders (book_id, user_id, type, create_date) VALUES (?, ?, ?, ?);";
-    String SELECT_ORDERS = "SELECT * FROM orders;";
-    String SELECT_ORDER = "SELECT * FROM orders WHERE id = ?;";
+    String SELECT_ALL_ORDERS = "SELECT * FROM orders;";
+    String SELECT_ORDER_BY_ID = "SELECT * FROM orders WHERE id = ?;";
     String UPDATE_ORDER = "UPDATE orders SET status = ?, approved_date = ?, expected_return_date = ? WHERE id = ?;";
     String SELECT_ORDERS_BY_STATUS = "SELECT * FROM orders WHERE status = ? LIMIT ?, ?;";
     String SELECT_APPROVED_USER_ORDERS = "SELECT * FROM orders WHERE user_id = ? AND status = 'approved' LIMIT ?, ?;";
@@ -27,7 +27,7 @@ public interface Queries {
     String CREATE_USER = "INSERT INTO users (first_name, last_name, email, password, role, status) VALUES (?, ?, ?, ?, ?, ?);";
     String COUNT_ROWS_BY_ROLE = "SELECT count(id) AS count FROM users WHERE role = ?;";
     String SELECT_USERS_BY_ROLE = "SELECT * FROM users WHERE role = ? ORDER BY id limit ?, ?;";
-    String BLOCK_USER = "UPDATE users SET status = ? WHERE id = ?;";
+    String UPDATE_USER_STATUS = "UPDATE users SET status = ? WHERE id = ?;";
     String SELECT_USER_BY_ID = "SELECT * FROM users WHERE id = ?;";
     String SELECT_USER_BY_EMAIL = "SELECT * FROM users WHERE email = ?;";
     String DELETE_USER_BY_ID = "DELETE FROM users WHERE id = ?;";

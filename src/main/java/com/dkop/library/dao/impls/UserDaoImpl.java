@@ -73,7 +73,7 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public void changeStatus(int id, String newStatus) {
-        try (PreparedStatement preparedStatement = connection.prepareStatement(BLOCK_USER)) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_USER_STATUS)) {
             preparedStatement.setString(1, newStatus);
             preparedStatement.setInt(2, id);
             preparedStatement.executeUpdate();

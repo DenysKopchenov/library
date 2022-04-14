@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import static com.dkop.library.controller.command.CommandUtils.messagesBundle;
+import static com.dkop.library.dao.impls.Queries.*;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
@@ -40,8 +41,13 @@ public class UserDaoTest {
     @Test
     public void testCreate() throws SQLException {
         userDao.create(createTestUser());
-        verify(mockConnection, times(1)).prepareStatement(anyString());
-        verify(mockPreparedStatement, times(6)).setString(anyInt(), anyString());
+        verify(mockConnection, times(1)).prepareStatement(CREATE_USER);
+        verify(mockPreparedStatement, times(1)).setString(1, "Ivan");
+        verify(mockPreparedStatement, times(1)).setString(2, "Ivanov");
+        verify(mockPreparedStatement, times(1)).setString(3, "ivan@mail.com");
+        verify(mockPreparedStatement, times(1)).setString(4, "12345");
+        verify(mockPreparedStatement, times(1)).setString(5, "role");
+        verify(mockPreparedStatement, times(1)).setString(6, "status");
         verify(mockPreparedStatement, times(1)).executeUpdate();
     }
 
@@ -52,37 +58,38 @@ public class UserDaoTest {
 
     @Test
     public void testCountAllRowsByRole() throws SQLException {
-        int count = userDao.countAllRowsByRole(anyString());
-        verify(mockConnection, times(1)).prepareStatement(anyString());
-        verify(mockPreparedStatement, times(1)).setString(anyInt(), anyString());
+        int count = userDao.countAllRowsByRole("role");
+        verify(mockConnection, times(1)).prepareStatement(COUNT_ROWS_BY_ROLE);
+        verify(mockPreparedStatement, times(1)).setString(1, "role");
         verify(mockPreparedStatement, times(1)).executeQuery();
         Assert.assertEquals(0, count);
     }
 
     @Test
     public void testFindAllByRole() throws SQLException {
-        List<User> allUsers = userDao.findAllByRole(anyString(), 1, 5);
-        verify(mockConnection, times(1)).prepareStatement(anyString());
-        verify(mockPreparedStatement, times(1)).setString(anyInt(), anyString());
-        verify(mockPreparedStatement, times(2)).setInt(anyInt(), anyInt());
+        List<User> allUsers = userDao.findAllByRole("role", 1, 5);
+        verify(mockConnection, times(1)).prepareStatement(SELECT_USERS_BY_ROLE);
+        verify(mockPreparedStatement, times(1)).setString(1, "role");
+        verify(mockPreparedStatement, times(1)).setInt(2, 1);
+        verify(mockPreparedStatement, times(1)).setInt(3, 5);
         verify(mockPreparedStatement, times(1)).executeQuery();
         Assert.assertTrue(allUsers.isEmpty());
     }
 
     @Test
     public void testChangeStatus() throws SQLException {
-        userDao.changeStatus(1, anyString());
-        verify(mockConnection, times(1)).prepareStatement(anyString());
-        verify(mockPreparedStatement, times(1)).setString(anyInt(), anyString());
-        verify(mockPreparedStatement, times(1)).setInt(anyInt(), anyInt());
+        userDao.changeStatus(1, "changed");
+        verify(mockConnection, times(1)).prepareStatement(UPDATE_USER_STATUS);
+        verify(mockPreparedStatement, times(1)).setString(1, "changed");
+        verify(mockPreparedStatement, times(1)).setInt(2, 1);
         verify(mockPreparedStatement, times(1)).executeUpdate();
     }
 
     @Test(expected = NotFoundException.class)
     public void testFindById() throws NotFoundException, SQLException {
         userDao.findById(1);
-        verify(mockConnection, times(1)).prepareStatement(anyString());
-        verify(mockPreparedStatement, times(1)).setInt(anyInt(), anyInt());
+        verify(mockConnection, times(1)).prepareStatement(SELECT_USER_BY_ID);
+        verify(mockPreparedStatement, times(1)).setInt(1, 1);
         verify(mockPreparedStatement, times(1)).executeQuery();
     }
 
@@ -94,8 +101,8 @@ public class UserDaoTest {
     @Test
     public void testDelete() throws UnableToDeleteException, SQLException {
         userDao.delete(1);
-        verify(mockConnection, times(1)).prepareStatement(anyString());
-        verify(mockPreparedStatement, times(1)).setInt(anyInt(), anyInt());
+        verify(mockConnection, times(1)).prepareStatement(DELETE_USER_BY_ID);
+        verify(mockPreparedStatement, times(1)).setInt(1, 1);
         verify(mockPreparedStatement, times(1)).executeUpdate();
     }
 
@@ -105,8 +112,8 @@ public class UserDaoTest {
         try {
             userDao.delete(1);
         } catch (UnableToDeleteException e) {
-            verify(mockConnection, times(1)).prepareStatement(anyString());
-            verify(mockPreparedStatement, times(1)).setInt(anyInt(), anyInt());
+            verify(mockConnection, times(1)).prepareStatement(DELETE_USER_BY_ID);
+            verify(mockPreparedStatement, times(1)).setInt(1, 1);
             verify(mockPreparedStatement, times(1)).executeUpdate();
             throw e;
         }
@@ -114,9 +121,9 @@ public class UserDaoTest {
 
     @Test(expected = DoesNotExistException.class)
     public void testFindByEmail() throws SQLException, DoesNotExistException {
-        userDao.findByEmail(anyString());
-        verify(mockConnection, times(1)).prepareStatement(anyString());
-        verify(mockPreparedStatement, times(1)).setString(anyInt(), anyString());
+        userDao.findByEmail("ivanov@mail.com");
+        verify(mockConnection, times(1)).prepareStatement(SELECT_USER_BY_EMAIL);
+        verify(mockPreparedStatement, times(1)).setString(1, "ivanov@mail.com");
         verify(mockPreparedStatement, times(1)).executeQuery();
     }
 
@@ -126,8 +133,8 @@ public class UserDaoTest {
                 .lastName("Ivanov")
                 .email("ivan@mail.com")
                 .password("12345")
-                .role("any")
-                .status("any")
+                .role("role")
+                .status("status")
                 .id(1)
                 .build();
 
