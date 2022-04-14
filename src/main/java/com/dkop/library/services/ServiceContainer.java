@@ -16,7 +16,7 @@ public class ServiceContainer {
     private void init() {
         bookService = new BookService(DaoFactory.getInstance());
         loginService = new LoginService(DaoFactory.getInstance());
-        orderService = new OrderService(new BookService(DaoFactory.getInstance()), DaoFactory.getInstance());
+        orderService = new OrderService(DaoFactory.getInstance());
         userService = new UserService(DaoFactory.getInstance());
         paginationService = new PaginationService(bookService, userService, orderService);
     }

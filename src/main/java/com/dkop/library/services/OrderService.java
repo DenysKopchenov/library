@@ -1,5 +1,6 @@
 package com.dkop.library.services;
 
+import com.dkop.library.dao.BooksDao;
 import com.dkop.library.dao.DaoFactory;
 import com.dkop.library.dao.OrderDao;
 import com.dkop.library.entity.Book;
@@ -18,11 +19,9 @@ import static com.dkop.library.controller.command.CommandUtils.messagesBundle;
 
 public class OrderService {
     private static final Logger LOGGER = LogManager.getLogger(OrderService.class);
-    private final BookService bookService;
     private final DaoFactory daoFactory;
 
-    public OrderService(BookService bookService, DaoFactory daoFactory) {
-        this.bookService = bookService;
+    public OrderService(DaoFactory daoFactory) {
         this.daoFactory = daoFactory;
         LOGGER.info(OrderService.class.getSimpleName());
     }
@@ -54,7 +53,8 @@ public class OrderService {
 
 
     public void returnBook(int orderId) throws NotFoundException {
-        try (OrderDao orderDao = daoFactory.createOrderDao()) {
+        try (OrderDao orderDao = daoFactory.createOrderDao();
+             BooksDao booksDao = daoFactory.createBooksDao()) {
             Order order = orderDao.findById(orderId);
             if (order.getStatus().equals("approved")) {
                 order.setStatus("completed");
@@ -62,7 +62,7 @@ public class OrderService {
                 LOGGER.error(new RuntimeException());
             }
 
-            Book book = bookService.findById(order.getBookId());
+            Book book = booksDao.findById(order.getBookId());
             book.setAmount(book.getAmount() + 1);
             book.setOnOrder(book.getOnOrder() - 1);
 
@@ -74,24 +74,27 @@ public class OrderService {
         if (!order.getStatus().equals("pending")) {
             LOGGER.error(new RuntimeException());
         }
-        Book book = bookService.findById(order.getBookId());
-        int amount = book.getAmount();
-        if (amount <= 0) {
-            throw new UnableToAcceptOrderException(messagesBundle.getString("unable.accept.order"));
-        }
-        book.setAmount(book.getAmount() - 1);
-        book.setOnOrder(book.getOnOrder() + 1);
-        LocalDate expectedReturnDate = order.getType().equals("home") ? LocalDate.now().plusDays(25) : LocalDate.now();
-        order.setApprovedDate(LocalDate.now());
-        order.setExpectedReturnDate(expectedReturnDate);
-        order.setStatus("approved");
-
-        try (OrderDao orderDao = daoFactory.createOrderDao()) {
+        try (OrderDao orderDao = daoFactory.createOrderDao();
+             BooksDao booksDao = daoFactory.createBooksDao()) {
+            Book book = booksDao.findById(order.getBookId());
+            int amount = book.getAmount();
+            if (amount <= 0) {
+                throw new UnableToAcceptOrderException(messagesBundle.getString("unable.accept.order"));
+            }
+            book.setAmount(book.getAmount() - 1);
+            book.setOnOrder(book.getOnOrder() + 1);
+            LocalDate expectedReturnDate = order.getType().equals("home") ? LocalDate.now().plusDays(25) : LocalDate.now();
+            order.setApprovedDate(LocalDate.now());
+            order.setExpectedReturnDate(expectedReturnDate);
+            order.setStatus("approved");
             orderDao.processOrder(order, book);
         }
     }
 
     public void rejectOrder(Order order) throws NotFoundException {
+        if (!order.getStatus().equals("pending")) {
+            LOGGER.error(new RuntimeException());
+        }
         order.setStatus("rejected");
         try (OrderDao orderDao = daoFactory.createOrderDao()) {
             orderDao.update(order);
