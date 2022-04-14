@@ -11,8 +11,8 @@
 </head>
 <body>
 <%@ include file="/WEB-INF/components/nav_bar_librarian.jspf" %>
-<h3><font style="color:hsl(0,100%,50%);">${errorMessage}</font></h3>
-<h3><font style="color:hsl(100,100%,50%);">${successMessage}</font></h3>
+<h3 style="text-align:center"><font style="color:hsl(0,100%,50%);">${errorMessage}</font></h3>
+<h3 style="text-align:center"><font style="color:hsl(100, 100%, 50%);">${successMessage}</font></h3>
 <c:if test="${user != null}">
 <div class="row">
     <div class="col-4 mx-auto">

@@ -1,7 +1,9 @@
 package com.dkop.library.controller.filters;
 
 import com.dkop.library.controller.command.Command;
+import com.dkop.library.controller.command.CommandContainer;
 import com.dkop.library.controller.command.LogOutCommand;
+import com.dkop.library.dao.DaoFactory;
 import com.dkop.library.exceptions.DoesNotExistException;
 import com.dkop.library.services.UserService;
 import org.apache.logging.log4j.LogManager;
@@ -13,8 +15,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class CheckStatusFilter implements Filter {
-    private final Command logout = new LogOutCommand();
-    private final UserService userService = UserService.getInstance();
+    private final Command logout = CommandContainer.getCommand("logout");
+    private final UserService userService = new UserService(DaoFactory.getInstance());
     private static final Logger LOGGER = LogManager.getLogger(CheckStatusFilter.class);
 
     @Override

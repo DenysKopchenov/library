@@ -17,24 +17,11 @@ import java.util.List;
 import static com.dkop.library.controller.command.CommandUtils.messagesBundle;
 
 public class UserService {
-    private static UserService instance;
     private static final Logger LOGGER = LogManager.getLogger(UserService.class);
     private final DaoFactory daoFactory;
 
-    public static UserService getInstance() {
-        if (instance == null) {
-            synchronized (LoginService.class) {
-                if (instance == null) {
-                    UserService userService = new UserService();
-                    instance = userService;
-                }
-            }
-        }
-        return instance;
-    }
-
-    private UserService() {
-        daoFactory = DaoFactory.getInstance();
+    public UserService(DaoFactory daoFactory) {
+        this.daoFactory = daoFactory;
         LOGGER.info(UserService.class.getSimpleName());
     }
 

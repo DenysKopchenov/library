@@ -12,10 +12,11 @@ import java.util.Map;
 
 public class RegistrationCommand implements Command {
     private static final String REGISTRATION_JSP = "/WEB-INF/registration.jsp";
-    private final UserService userService = UserService.getInstance();
+    private final UserService userService;
     private static final Logger LOGGER = LogManager.getLogger(RegistrationCommand.class);
 
-    public RegistrationCommand() {
+    public RegistrationCommand(UserService userService) {
+        this.userService = userService;
         LOGGER.info(RegistrationCommand.class.getSimpleName());
     }
 

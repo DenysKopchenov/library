@@ -33,14 +33,15 @@ public class ReaderCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger(ReaderCommand.class);
 
 
-    public ReaderCommand() {
-        bookService = BookService.getInstance();
-        userService = UserService.getInstance();
-        orderService = OrderService.getInstance();
-        paginationService = PaginationService.getInstance();
+    public ReaderCommand(BookService bookService, UserService userService, OrderService orderService, PaginationService paginationService) {
+        this.bookService = bookService;
+        this.userService = userService;
+        this.orderService = orderService;
+        this.paginationService = paginationService;
         init();
         LOGGER.info(ReaderCommand.class.getSimpleName());
     }
+
 
     private void init() {
         operations.put("catalog", this::showCatalogBookOperation);

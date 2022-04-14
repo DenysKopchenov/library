@@ -17,24 +17,11 @@ import javax.servlet.http.HttpServletRequest;
 import static com.dkop.library.controller.command.CommandUtils.messagesBundle;
 
 public class LoginService {
-    private static LoginService instance;
     private DaoFactory daoFactory;
     private static final Logger LOGGER = LogManager.getLogger(LoginService.class);
 
-    public static LoginService getInstance() {
-        if (instance == null) {
-            synchronized (LoginService.class) {
-                if (instance == null) {
-                    LoginService loginService = new LoginService();
-                    instance = loginService;
-                }
-            }
-        }
-        return instance;
-    }
-
-    private LoginService() {
-        daoFactory = DaoFactory.getInstance();
+    public LoginService(DaoFactory daoFactory) {
+        this.daoFactory = daoFactory;
         LOGGER.info(LoginService.class.getSimpleName());
     }
 

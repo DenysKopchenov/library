@@ -24,12 +24,15 @@ import static com.dkop.library.controller.command.CommandUtils.messagesBundle;
 
 public class AdminCommand implements Command {
     private final Map<String, Consumer<HttpServletRequest>> operations = new HashMap<>();
-    private final BookService bookService = BookService.getInstance();
-    private final UserService userService = UserService.getInstance();
-    private final PaginationService paginationService = PaginationService.getInstance();
+    private final BookService bookService;
+    private final UserService userService;
+    private final PaginationService paginationService;
     private static final Logger LOGGER = LogManager.getLogger(AdminCommand.class);
 
-    public AdminCommand() {
+    public AdminCommand(BookService bookService, UserService userService, PaginationService paginationService) {
+        this.bookService = bookService;
+        this.userService = userService;
+        this.paginationService = paginationService;
         init();
         LOGGER.info(AdminCommand.class.getSimpleName());
     }

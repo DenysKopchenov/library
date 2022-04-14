@@ -123,7 +123,7 @@ public class UserDaoImpl implements UserDao {
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             LOGGER.error(e, e.getCause());
-            throw new UnableToDeleteException(messagesBundle.getString("unable.delete"), e);
+            throw new UnableToDeleteException(messagesBundle.getString("unable.delete.user"), e);
         }
     }
 

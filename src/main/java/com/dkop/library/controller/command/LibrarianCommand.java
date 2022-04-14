@@ -29,11 +29,11 @@ public class LibrarianCommand implements Command {
     private final PaginationService paginationService;
     private static final Logger LOGGER = LogManager.getLogger(LibrarianCommand.class);
 
-    public LibrarianCommand() {
-        bookService = BookService.getInstance();
-        userService = UserService.getInstance();
-        orderService = OrderService.getInstance();
-        paginationService = PaginationService.getInstance();
+    public LibrarianCommand(BookService bookService, UserService userService, OrderService orderService, PaginationService paginationService) {
+        this.bookService = bookService;
+        this.userService = userService;
+        this.orderService = orderService;
+        this.paginationService = paginationService;
         init();
         LOGGER.info(LibrarianCommand.class.getSimpleName());
     }

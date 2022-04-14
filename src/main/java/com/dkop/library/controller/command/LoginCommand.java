@@ -10,10 +10,11 @@ import java.util.Map;
 
 public class LoginCommand implements Command {
     private static final String LOGIN_JSP = "/WEB-INF/login.jsp";
-    private final LoginService loginService = LoginService.getInstance();
+    private final LoginService loginService;
     private static final Logger LOGGER = LogManager.getLogger(LoginCommand.class);
 
-    public LoginCommand() {
+    public LoginCommand(LoginService loginService) {
+        this.loginService = loginService;
         LOGGER.info(LoginCommand.class.getSimpleName());
     }
 

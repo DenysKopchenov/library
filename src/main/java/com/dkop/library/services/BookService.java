@@ -20,23 +20,11 @@ import static com.dkop.library.controller.command.CommandUtils.messagesBundle;
 
 public class BookService {
     private final DaoFactory daoFactory;
-    private static BookService instance;
     private static final Logger LOGGER = LogManager.getLogger(BookService.class);
 
-    public static BookService getInstance() {
-        if (instance == null) {
-            synchronized (BookService.class) {
-                if (instance == null) {
-                    BookService bookService = new BookService();
-                    instance = bookService;
-                }
-            }
-        }
-        return instance;
-    }
 
-    private BookService() {
-        daoFactory = DaoFactory.getInstance();
+    public BookService(DaoFactory daoFactory) {
+        this.daoFactory = daoFactory;
         LOGGER.info(BookService.class.getSimpleName());
     }
 

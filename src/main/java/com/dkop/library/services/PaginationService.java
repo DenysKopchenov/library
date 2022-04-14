@@ -12,28 +12,15 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 public class PaginationService {
-    private static PaginationService instance;
     private static final Logger LOGGER = LogManager.getLogger(PaginationService.class);
     private final BookService bookService;
     private final UserService userService;
     private final OrderService orderService;
 
-    public static PaginationService getInstance() {
-        if (instance == null) {
-            synchronized (BookService.class) {
-                if (instance == null) {
-                    PaginationService paginationService = new PaginationService();
-                    instance = paginationService;
-                }
-            }
-        }
-        return instance;
-    }
-
-    private PaginationService() {
-        bookService = BookService.getInstance();
-        userService = UserService.getInstance();
-        orderService = OrderService.getInstance();
+    public PaginationService(BookService bookService, UserService userService, OrderService orderService) {
+        this.bookService = bookService;
+        this.userService = userService;
+        this.orderService = orderService;
         LOGGER.info(PaginationService.class.getSimpleName());
     }
 

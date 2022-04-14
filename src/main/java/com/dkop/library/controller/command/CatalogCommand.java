@@ -9,10 +9,11 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 public class CatalogCommand implements Command {
-    private final PaginationService paginationService = PaginationService.getInstance();
+    private final PaginationService paginationService;
     private static final Logger LOGGER = LogManager.getLogger(CatalogCommand.class);
 
-    public CatalogCommand() {
+    public CatalogCommand(PaginationService paginationService) {
+        this.paginationService = paginationService;
         LOGGER.info(CatalogCommand.class.getSimpleName());
     }
 

@@ -17,27 +17,13 @@ import java.util.List;
 import static com.dkop.library.controller.command.CommandUtils.messagesBundle;
 
 public class OrderService {
-    private static OrderService instance;
     private static final Logger LOGGER = LogManager.getLogger(OrderService.class);
     private final BookService bookService;
     private final DaoFactory daoFactory;
 
-
-    public static OrderService getInstance() {
-        if (instance == null) {
-            synchronized (LoginService.class) {
-                if (instance == null) {
-                    OrderService orderService = new OrderService();
-                    instance = orderService;
-                }
-            }
-        }
-        return instance;
-    }
-
-    private OrderService() {
-        daoFactory = DaoFactory.getInstance();
-        bookService = BookService.getInstance();
+    public OrderService(BookService bookService, DaoFactory daoFactory) {
+        this.bookService = bookService;
+        this.daoFactory = daoFactory;
         LOGGER.info(OrderService.class.getSimpleName());
     }
 
