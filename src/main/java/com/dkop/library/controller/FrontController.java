@@ -42,7 +42,7 @@ public class FrontController extends HttpServlet {
             response.sendRedirect(pageToGo.replaceAll(".*redirect:", "/app"));
         } else {
             if (type.equals("POST") && StringUtils.containsAny(pageToGo, "admin", "reader", "librarian")) {
-                response.sendRedirect(request.getRequestURI());
+                response.sendRedirect(request.getRequestURI() + "?" + request.getQueryString());
             } else {
                 request.getRequestDispatcher(pageToGo).forward(request, response);
             }
