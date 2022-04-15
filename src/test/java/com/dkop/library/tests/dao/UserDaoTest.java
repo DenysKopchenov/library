@@ -67,13 +67,20 @@ public class UserDaoTest {
 
     @Test
     public void testFindAllByRole() throws SQLException {
+        when(mockResultSet.next()).thenReturn(Boolean.TRUE, Boolean.FALSE);
         List<User> allUsers = userDao.findAllByRole("role", 1, 5);
         verify(mockConnection, times(1)).prepareStatement(SELECT_USERS_BY_ROLE);
         verify(mockPreparedStatement, times(1)).setString(1, "role");
         verify(mockPreparedStatement, times(1)).setInt(2, 1);
         verify(mockPreparedStatement, times(1)).setInt(3, 5);
         verify(mockPreparedStatement, times(1)).executeQuery();
-        Assert.assertTrue(allUsers.isEmpty());
+        verify(mockResultSet, times(1)).getString("first_name");
+        verify(mockResultSet, times(1)).getString("last_name");
+        verify(mockResultSet, times(1)).getString("email");
+        verify(mockResultSet, times(1)).getString("role");
+        verify(mockResultSet, times(1)).getString("status");
+        verify(mockResultSet, times(1)).getInt("id");
+        Assert.assertEquals(1, allUsers.size());
     }
 
     @Test
@@ -120,11 +127,27 @@ public class UserDaoTest {
     }
 
     @Test(expected = DoesNotExistException.class)
-    public void testFindByEmail() throws SQLException, DoesNotExistException {
+    public void testFindByEmailThrows() throws SQLException, DoesNotExistException {
         userDao.findByEmail("ivanov@mail.com");
         verify(mockConnection, times(1)).prepareStatement(SELECT_USER_BY_EMAIL);
         verify(mockPreparedStatement, times(1)).setString(1, "ivanov@mail.com");
         verify(mockPreparedStatement, times(1)).executeQuery();
+    }
+
+    @Test
+    public void testFindByEmail() throws SQLException, DoesNotExistException {
+        when(mockResultSet.next()).thenReturn(Boolean.TRUE);
+        userDao.findByEmail("ivanov@mail.com");
+        verify(mockConnection, times(1)).prepareStatement(SELECT_USER_BY_EMAIL);
+        verify(mockPreparedStatement, times(1)).setString(1, "ivanov@mail.com");
+        verify(mockPreparedStatement, times(1)).executeQuery();
+        verify(mockResultSet, times(1)).getString("first_name");
+        verify(mockResultSet, times(1)).getString("last_name");
+        verify(mockResultSet, times(1)).getString("email");
+        verify(mockResultSet, times(1)).getString("password");
+        verify(mockResultSet, times(1)).getString("role");
+        verify(mockResultSet, times(1)).getString("status");
+        verify(mockResultSet, times(1)).getInt("id");
     }
 
     private User createTestUser() {

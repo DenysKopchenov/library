@@ -47,10 +47,21 @@ public class OrderDaoTest {
 
     @Test
     public void testFindAll() throws SQLException {
+        when(mockResultSet.next()).thenReturn(Boolean.TRUE, Boolean.FALSE);
+        when(mockResultSet.getDate(anyString())).thenReturn(Date.valueOf(LocalDate.now()));
         List<Order> allOrders = orderDao.findAll();
         verify(mockConnection, times(1)).prepareStatement(SELECT_ALL_ORDERS);
         verify(mockPreparedStatement, times(1)).executeQuery();
-        Assert.assertTrue(allOrders.isEmpty());
+        verify(mockResultSet, times(1)).getInt("id");
+        verify(mockResultSet, times(1)).getInt("book_id");
+        verify(mockResultSet, times(1)).getInt("user_id");
+        verify(mockResultSet, times(1)).getString("type");
+        verify(mockResultSet, times(1)).getString("status");
+        verify(mockResultSet, times(1)).getDate("create_date");
+        verify(mockResultSet, times(1)).getDate("approved_date");
+        verify(mockResultSet, times(1)).getDate("expected_return_date");
+        verify(mockResultSet, times(1)).getDate("actual_return_date");
+        Assert.assertEquals(1, allOrders.size());
     }
 
     @Test(expected = NotFoundException.class)

@@ -9,7 +9,6 @@ import com.dkop.library.exceptions.UnableToDeleteException;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mock;
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -127,11 +126,32 @@ public class BooksDaoTest {
     }
 
     @Test(expected = NotFoundException.class)
+    public void testFindByIdThrows() throws NotFoundException, SQLException {
+        try {
+            booksDao.findById(1);
+        } catch (NotFoundException e) {
+            verify(mockConnection, times(1)).prepareStatement(SELECT_BOOK_BY_ID);
+            verify(mockPreparedStatement, times(1)).setInt(1, 1);
+            verify(mockPreparedStatement, times(1)).executeQuery();
+            throw e;
+        }
+    }
+
+    @Test()
     public void testFindById() throws NotFoundException, SQLException {
+        when(mockResultSet.next()).thenReturn(Boolean.TRUE);
+        when(mockResultSet.getDate("publishing_date")).thenReturn(Date.valueOf(LocalDate.now()));
         booksDao.findById(1);
         verify(mockConnection, times(1)).prepareStatement(SELECT_BOOK_BY_ID);
         verify(mockPreparedStatement, times(1)).setInt(1, 1);
         verify(mockPreparedStatement, times(1)).executeQuery();
+        verify(mockResultSet, times(1)).getInt("id");
+        verify(mockResultSet, times(1)).getString("title");
+        verify(mockResultSet, times(1)).getString("author");
+        verify(mockResultSet, times(1)).getString("publisher");
+        verify(mockResultSet, times(1)).getDate("publishing_date");
+        verify(mockResultSet, times(1)).getInt("amount");
+        verify(mockResultSet, times(1)).getInt("on_order");
     }
 
     private Book createTestBook() {
