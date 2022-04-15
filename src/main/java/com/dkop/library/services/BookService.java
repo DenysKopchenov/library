@@ -47,26 +47,26 @@ public class BookService {
     }
 
     public void updateBook(int id, String title, String author, String publisher, String publishingDate, String amount) throws NotFoundException {
-        Book bookFromDB = findById(id);
-        LocalDate date = LocalDate.parse(publishingDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-        Book updatingBook = Book.newBuilder()
-                .id(id)
-                .title(title)
-                .author(author)
-                .publisher(publisher)
-                .publishingDate(date)
-                .amount(Integer.parseInt(amount))
-                .onOrder(bookFromDB.getOnOrder())
-                .build();
-        try (BooksDao booksDao = DaoFactory.getInstance().createBooksDao()) {
+        try (BooksDao booksDao = daoFactory.createBooksDao()) {
+            Book bookFromDB = booksDao.findById(id);
+            LocalDate date = LocalDate.parse(publishingDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            Book updatingBook = Book.newBuilder()
+                    .id(id)
+                    .title(title)
+                    .author(author)
+                    .publisher(publisher)
+                    .publishingDate(date)
+                    .amount(Integer.parseInt(amount))
+                    .onOrder(bookFromDB.getOnOrder())
+                    .build();
             booksDao.update(updatingBook);
         }
     }
 
     public void deleteBook(int id) throws NotFoundException, UnableToDeleteException {
-        findById(id);
-        try (BooksDao booksDao = DaoFactory.getInstance().createBooksDao();
-             OrderDao orderDao = DaoFactory.getInstance().createOrderDao()) {
+        try (BooksDao booksDao = daoFactory.createBooksDao();
+             OrderDao orderDao = daoFactory.createOrderDao()) {
+            booksDao.findById(id);
             if (orderDao.isAvailableToDeleteBook(id)){
                 booksDao.delete(id);
             } else {
@@ -77,7 +77,7 @@ public class BookService {
 
     public List<Book> findAllBooksByAuthor(String author) {
         List<Book> books;
-        try (BooksDao booksDao = DaoFactory.getInstance().createBooksDao()) {
+        try (BooksDao booksDao = daoFactory.createBooksDao()) {
             books = booksDao.findAllByAuthor(author);
         }
         return books;
@@ -85,26 +85,26 @@ public class BookService {
 
     public List<Book> findAllBooksByTitle(String title) {
         List<Book> books;
-        try (BooksDao booksDao = DaoFactory.getInstance().createBooksDao()) {
+        try (BooksDao booksDao = daoFactory.createBooksDao()) {
             books = booksDao.findAllByTitle(title);
         }
         return books;
     }
 
     public Book findById(int id) throws NotFoundException {
-        try (BooksDao booksDao = DaoFactory.getInstance().createBooksDao()) {
+        try (BooksDao booksDao = daoFactory.createBooksDao()) {
             return booksDao.findById(id);
         }
     }
 
     public List<Book> findAllSorted(String sortBy, int start, int numberOfRecords) {
-        try (BooksDao booksDao = DaoFactory.getInstance().createBooksDao()) {
+        try (BooksDao booksDao = daoFactory.createBooksDao()) {
             return booksDao.findAllSorted(sortBy, start, numberOfRecords);
         }
     }
 
     public int countAllRows() {
-        try (BooksDao booksDao = DaoFactory.getInstance().createBooksDao()) {
+        try (BooksDao booksDao = daoFactory.createBooksDao()) {
             return booksDao.countAllRows();
         }
     }
