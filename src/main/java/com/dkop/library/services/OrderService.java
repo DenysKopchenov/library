@@ -6,6 +6,7 @@ import com.dkop.library.dao.OrderDao;
 import com.dkop.library.entity.Book;
 import com.dkop.library.entity.Order;
 import com.dkop.library.exceptions.NotFoundException;
+import com.dkop.library.exceptions.SomeoneWantsToBreakProgramException;
 import com.dkop.library.exceptions.UnableToAcceptOrderException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -72,7 +73,8 @@ public class OrderService {
 
     public void acceptOrder(Order order) throws NotFoundException, UnableToAcceptOrderException {
         if (!order.getStatus().equals("pending")) {
-            LOGGER.error(new RuntimeException());
+            LOGGER.error(SomeoneWantsToBreakProgramException.class);
+            throw new SomeoneWantsToBreakProgramException();
         }
         try (OrderDao orderDao = daoFactory.createOrderDao();
              BooksDao booksDao = daoFactory.createBooksDao()) {
@@ -91,9 +93,10 @@ public class OrderService {
         }
     }
 
-    public void rejectOrder(Order order) throws NotFoundException {
+    public void rejectOrder(Order order) {
         if (!order.getStatus().equals("pending")) {
-            LOGGER.error(new RuntimeException());
+            LOGGER.error(SomeoneWantsToBreakProgramException.class);
+            throw new SomeoneWantsToBreakProgramException();
         }
         order.setStatus("rejected");
         try (OrderDao orderDao = daoFactory.createOrderDao()) {

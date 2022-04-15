@@ -153,8 +153,8 @@ public class BookServiceTest {
 
     @Test(expected = NotFoundException.class)
     public void testFindByIdThrows() throws NotFoundException {
+        when(booksDaoMock.findById(1)).thenThrow(NotFoundException.class);
         try {
-            when(booksDaoMock.findById(1)).thenThrow(NotFoundException.class);
             bookService.findById(1);
         } catch (NotFoundException e) {
             verify(daoFactoryMock, times(1)).createBooksDao();
