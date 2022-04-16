@@ -12,7 +12,7 @@ public class LocalizationUtil {
     public static void setErrorMessagesBundle(ResourceBundle errorMessagesBundle) {
         LocalizationUtil.errorMessagesBundle = errorMessagesBundle;
     }
-    public static void setLocalizationBundleMessagesBundle(ResourceBundle localizationBundle) {
+    public static void setLocalizationBundle(ResourceBundle localizationBundle) {
         LocalizationUtil.localizationBundle = localizationBundle;
     }
 

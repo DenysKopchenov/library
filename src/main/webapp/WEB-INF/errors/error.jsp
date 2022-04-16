@@ -2,7 +2,8 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
-<c:set var="title" value="ERROR"/>
+<fmt:setLocale value="${language}"/>
+<fmt:message key="error.page" var="title"/>
 
 <html>
 <head>
@@ -14,15 +15,14 @@
         <div class="col-md-12">
             <div class="error-template">
                 <h1>
-                    Oops!</h1>
+                    404 <fmt:message key="error.message"/></h1>
                 <h2>
-                    404 Not Found</h2>
+                    404 <fmt:message key="error.message"/></h2>
                 <div class="error-details">
-                    Sorry, an error has occurred, Requested page not found!
+                   404 <fmt:message key="error.message"/>
                 </div>
                 <div class="error-actions">
-                    <a href="/app/library/" class="btn btn-primary btn-lg"><span class="glyphicon glyphicon-home"></span>
-                        Take Me Home </a>
+                    <a href="/app/library/" class="btn btn-primary btn-lg"><span class="glyphicon glyphicon-home"></span><fmt:message key="home"/></a>
                 </div>
             </div>
         </div>

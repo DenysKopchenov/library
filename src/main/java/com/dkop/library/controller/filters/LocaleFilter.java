@@ -33,7 +33,7 @@ public class LocaleFilter implements Filter {
         }
 
         LocalizationUtil.setErrorMessagesBundle(ResourceBundle.getBundle("messages", locale));
-        LocalizationUtil.setLocalizationBundleMessagesBundle(ResourceBundle.getBundle("localization", locale));
+        LocalizationUtil.setLocalizationBundle(ResourceBundle.getBundle("localization", locale));
         filterChain.doFilter(servletRequest, servletResponse);
     }
 

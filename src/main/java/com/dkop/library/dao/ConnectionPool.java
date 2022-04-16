@@ -13,7 +13,7 @@ public class ConnectionPool {
     }
 
     static {
-        ResourceBundle resourceBundle = ResourceBundle.getBundle("app");
+        ResourceBundle resourceBundle = ResourceBundle.getBundle("db");
 
         ds.setUrl(resourceBundle.getString("db.url"));
         ds.setUsername(resourceBundle.getString("db.username"));
