@@ -19,8 +19,8 @@
     <thead>
 <div class="btn-group">
   <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-
-    ${sortBy == null ? "Title" : sortBy}
+   <fmt:message key="catalog.sort.title" var="sortButton"/>
+    ${sortBy == null ? sortButton : sortBy}
     </button>
   <div class="dropdown-menu">
     <a class="dropdown-item" href="?sort=title&page=${i}&perPage=${perPage}"><fmt:message key="catalog.title"/></a>

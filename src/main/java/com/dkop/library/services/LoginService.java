@@ -1,6 +1,5 @@
 package com.dkop.library.services;
 
-import com.dkop.library.controller.command.CommandUtils;
 import com.dkop.library.dao.DaoFactory;
 import com.dkop.library.dao.UserDao;
 import com.dkop.library.entity.User;
@@ -13,6 +12,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import java.util.Set;
 
 import static com.dkop.library.utils.LocalizationUtil.errorMessagesBundle;
 
@@ -28,10 +30,10 @@ public class LoginService {
     public String login(String email, String password, HttpServletRequest request) {
         try {
             String userRole = authenticateUser(email, password);
-            if (CommandUtils.checkIsLogged(request, email)) {
+            if (checkIsLogged(request, email)) {
                 throw new AlreadyLoggedException(errorMessagesBundle.getString("already.logged"));
             } else {
-                CommandUtils.setUserRole(request, email, userRole);
+                setUserRole(request, email, userRole);
                 LOGGER.info("'{}' logged in. Role - '{}'.", email, userRole);
                 return resolvePageByRole(userRole);
             }
@@ -42,16 +44,6 @@ public class LoginService {
         }
     }
 
-    /**
-     * This method authenticate email and password, if user exist return role;
-     *
-     * @param email    email from request
-     * @param password password form request and encode
-     * @return User role if user authenticates
-     * @throws DoesNotExistException  if email does not exist
-     * @throws WrongPasswordException if password is not equal to user password in DB
-     * @throws WasBlockedException    if status is blocked
-     */
     public String authenticateUser(String email, String password) throws DoesNotExistException, WrongPasswordException, WasBlockedException {
         try (UserDao userDao = daoFactory.createUserDao()) {
             User user = userDao.findByEmail(email);
@@ -67,13 +59,7 @@ public class LoginService {
         }
     }
 
-    /**
-     * Return string page to redirect depends on user role;
-     *
-     * @param userRole after authenticate user
-     * @return path to move depends on user role
-     */
-    public String resolvePageByRole(String userRole) {
+    private String resolvePageByRole(String userRole) {
         switch (userRole) {
             case "admin":
                 return "redirect:/library/admin";
@@ -84,5 +70,21 @@ public class LoginService {
             default:
                 throw new RuntimeException("Unknown role: " + userRole);
         }
+    }
+
+    private void setUserRole(HttpServletRequest request, String email, String role) {
+        HttpSession session = request.getSession();
+        session.setAttribute("email", email);
+        session.setAttribute("role", role);
+    }
+
+    private boolean checkIsLogged(HttpServletRequest request, String email) {
+        Set<String> loggedUsers = (Set<String>) request.getServletContext().getAttribute("loggedUsers");
+
+        if (loggedUsers.contains(email)) {
+            return true;
+        }
+        loggedUsers.add(email);
+        return false;
     }
 }
