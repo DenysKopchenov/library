@@ -54,11 +54,11 @@ public class UserDaoImpl implements UserDao {
         return 0;
     }
 
-    public List<User> findAllByRole(String role, int offset, int numberOfRecords) {
+    public List<User> findAllByRole(String role, int start, int numberOfRecords) {
         List<User> allUsers = new ArrayList<>();
         try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_USERS_BY_ROLE)) {
             preparedStatement.setString(1, role);
-            preparedStatement.setInt(2, offset);
+            preparedStatement.setInt(2, start);
             preparedStatement.setInt(3, numberOfRecords);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 while (resultSet.next()) {

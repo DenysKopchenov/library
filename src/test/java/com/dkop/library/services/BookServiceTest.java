@@ -1,4 +1,4 @@
-package com.dkop.library.tests.service;
+package com.dkop.library.services;
 
 import com.dkop.library.dao.BooksDao;
 import com.dkop.library.dao.DaoFactory;

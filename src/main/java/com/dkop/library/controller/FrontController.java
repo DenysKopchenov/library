@@ -31,6 +31,7 @@ public class FrontController extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         processRequest(req, resp, req.getMethod());
     }
+    
 
     private void processRequest(HttpServletRequest request, HttpServletResponse response, String type) throws ServletException, IOException {
         String path = request.getRequestURI();

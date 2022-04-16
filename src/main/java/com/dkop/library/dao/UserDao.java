@@ -11,7 +11,7 @@ public interface UserDao extends GenericDao<User> {
 
     void changeStatus(int id, String newStatus) throws SQLException;
 
-    List<User> findAllByRole(String role, int offset, int numberOfRecords);
+    List<User> findAllByRole(String role, int start, int numberOfRecords);
 
     int countAllRowsByRole(String role);
 }

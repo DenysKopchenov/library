@@ -1,4 +1,4 @@
-package com.dkop.library.tests.service;
+package com.dkop.library.services;
 
 import com.dkop.library.dao.BooksDao;
 import com.dkop.library.dao.DaoFactory;
@@ -14,6 +14,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.MockedStatic;
+import org.mockito.internal.matchers.Or;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -176,9 +177,11 @@ public class OrderServiceTest {
 
     @Test
     public void testFindById() throws NotFoundException {
-        orderService.findById(1);
+        when(orderDaoMock.findById(1)).thenReturn(Order.newBuilder().build());
+        Order foundedOrder = orderService.findById(1);
         verify(daoFactoryMock, times(1)).createOrderDao();
         verify(orderDaoMock, times(1)).findById(1);
+        Assert.assertEquals(foundedOrder, Order.newBuilder().build());
     }
 
     @Test
