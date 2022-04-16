@@ -2,8 +2,8 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
-<c:set var="title" value="Login"/>
-
+<fmt:setLocale value="${language}"/>
+<fmt:message key="login" var="title"/>
 
 <!DOCTYPE html>
 <html lang=${language}>
@@ -13,27 +13,26 @@
 <body>
 <%@ include file="/WEB-INF/components/nav_bar_guest.jspf" %>
 <div>
-<%-- <h1>Login</h1> --%>
 <h3> <font style="color:hsl(0,100%,50%);">${errorMessage}</font></h3>
 <div class="col-2 mx-auto">
+    <h2>
+        <fmt:message key="login"/>
+    </h2>
 <form method="post">
                 <br><label for="email"><b><fmt:message key="email"/></b></label><br>
                 <input type="text" name="email" placeholder="<fmt:message key="email"/>" value="${email}"/>
                 <br><c:if test="${validation.containsKey('email')}">    
                 <font style="color:hsl(0,100%,50%);">${validation.get("email")}</font>
                 </c:if>
-
                 <br><label for="password"><b><fmt:message key="password"/></b></label><br>
                 <input type="password" name="password" placeholder="<fmt:message key="password"/>"/>
                 <br><c:if test="${validation.containsKey('password')}">
-                        <font style="color:hsl(0,100%,50%);">${validation.get("password")}</font>
+                      <font style="color:hsl(0,100%,50%);">${validation.get("password")}</font>
                         </c:if>
-                <font style="color:hsl(0,100%,50%);">${wrongPassword}</font>
-                <br><input class="btn btn-primary" type="submit" value="<fmt:message key="login"/>"/>
+                        <br><input class="btn btn-primary" type="submit" value="<fmt:message key="login"/>"/>
                 <a class="btn btn-primary" href="${pageContext.request.contextPath}/library/" role="button"><fmt:message key="home"/></a>
 </form>
 </div>
-<h1><font style="color:hsl(0,100%,50%);">${wasBlocked}</font></h1>
 </div>
 <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
         integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"

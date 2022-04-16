@@ -1,39 +1,39 @@
 <div class="col-2 mx-auto">
         <form method="post">
-                <br><label for="title"><b>Title</b></label><br>
-                <input type="text" name="title" placeholder="Title"/>
+                <br><label for="title"><b><fmt:message key="catalog.title"/></b></label><br>
+                <input type="text" name="title" placeholder="<fmt:message key="catalog.title"/>"/>
                 <br>
                 <c:if test="${validation.containsKey('title')}">
                         <font style="color:hsl(0,100%,50%);">${validation.get("title")}</font>
                 </c:if>
 
-                <br><label for="author"><b>Author</b></label><br>
-                <input type="text" name="author" placeholder="Author"/>
+                <br><label for="author"><b><fmt:message key="catalog.author"/></b></label><br>
+                <input type="text" name="author" placeholder="<fmt:message key="catalog.author"/>"/>
                 <br>
         <c:if test="${validation.containsKey('author')}">
             <font style="color:hsl(0,100%,50%);">${validation.get("author")}</font>
         </c:if>
 
-        <br><label for="publisher"><b>Publisher</b></label><br>
-        <input type="text" name="publisher" placeholder="Publisher"/>
+        <br><label for="publisher"><b><fmt:message key="catalog.publisher"/></b></label><br>
+        <input type="text" name="publisher" placeholder="<fmt:message key="catalog.publisher"/>"/>
         <br>
         <c:if test="${validation.containsKey('publisher')}">
             <font style="color:hsl(0,100%,50%);">${validation.get("publisher")}</font>
         </c:if>
 
-        <br><label for="publishing_date"><b>Publishing date</b></label><br>
-        <input type="date" name="publishing_date" placeholder="yyyy/MM/dd"/>
+        <br><label for="publishing_date"><b><fmt:message key="catalog.publishing.date"/></b></label><br>
+        <input type="date" name="publishing_date"/>
         <br>
         <c:if test="${validation.containsKey('publishingDate')}">
             <font style="color:hsl(0,100%,50%);">${validation.get("publishingDate")}</font>
         </c:if>
 
-        <br><label for="amount"><b>Amount</b></label><br>
-        <input type="number" name="amount" placeholder="Amount"/>
+        <br><label for="amount"><b><fmt:message key="catalog.amount"/></b></label><br>
+        <input type="number" name="amount" placeholder="<fmt:message key="catalog.amount"/>"/>
         <br>
         <c:if test="${validation.containsKey('amount')}">
             <font style="color:hsl(0,100%,50%);">${validation.get("amount")}</font>
         </c:if>
-        <br><input class="btn btn-primary" type="submit" name="createNewBook" value="Create Book"/>
+        <br><input class="btn btn-primary" type="submit" name="createNewBook" value="<fmt:message key="create.book.button"/>"/>
     </form>
 </div>

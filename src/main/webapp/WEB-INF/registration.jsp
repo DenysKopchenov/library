@@ -2,7 +2,8 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
-<c:set var="title" value="Registration"/>
+<fmt:setLocale value="${language}"/>
+<fmt:message key="title.registration" var="title"/>
 
 <!DOCTYPE html>
 <html lang=${language}>
@@ -12,7 +13,6 @@
 <body>
 <%@ include file="/WEB-INF/components/nav_bar_guest.jspf" %>
     <div>
-
 <%@ include file="/WEB-INF/forms/reg_form.jspf" %>
         </div>
 <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
