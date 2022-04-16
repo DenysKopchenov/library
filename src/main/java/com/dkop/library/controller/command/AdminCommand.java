@@ -21,6 +21,7 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 import static com.dkop.library.utils.LocalizationUtil.errorMessagesBundle;
+import static com.dkop.library.utils.LocalizationUtil.localizationBundle;
 
 public class AdminCommand implements Command {
     private final Map<String, Consumer<HttpServletRequest>> operations = new HashMap<>();
@@ -181,16 +182,16 @@ public class AdminCommand implements Command {
         if (sortBy != null) {
             switch (sortBy) {
                 case "author":
-                    request.setAttribute("sortBy", "By Author");
+                    request.setAttribute("sortBy", localizationBundle.getString("catalog.sort.author"));
                     break;
                 case "publisher":
-                    request.setAttribute("sortBy", "By Publisher");
+                    request.setAttribute("sortBy", localizationBundle.getString("catalog.sort.publisher"));
                     break;
                 case "publishing_date":
-                    request.setAttribute("sortBy", "By Publishing date");
+                    request.setAttribute("sortBy", localizationBundle.getString("catalog.sort.publishing.date"));
                     break;
                 default:
-                    request.setAttribute("sortBy", "By Title");
+                    request.setAttribute("sortBy", localizationBundle.getString("catalog.sort.title"));
             }
             catalog = paginationService.paginateBooks(sortBy, page, perPage);
         } else {

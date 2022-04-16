@@ -13,7 +13,6 @@
 <body>
 <%@ include file="/WEB-INF/components/nav_bar_guest.jspf" %>
 <div>
-<h3> <font style="color:hsl(0,100%,50%);">${errorMessage}</font></h3>
 <div class="col-2 mx-auto">
     <h2>
         <fmt:message key="login"/>
@@ -32,6 +31,7 @@
                         <br><input class="btn btn-primary" type="submit" value="<fmt:message key="login"/>"/>
                 <a class="btn btn-primary" href="${pageContext.request.contextPath}/library/" role="button"><fmt:message key="home"/></a>
 </form>
+<h3> <font style="color:hsl(0,100%,50%);">${errorMessage}</font></h3>
 </div>
 </div>
 <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"

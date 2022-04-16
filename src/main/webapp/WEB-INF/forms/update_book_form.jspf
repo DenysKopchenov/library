@@ -4,13 +4,13 @@
             <table class="table table-bordered">
                 <thead>
                 <tr>
-                    <th>id</th>
-                    <th>Title</th>
-                    <th>Author</th>
-                    <th>Publisher</th>
-                    <th>Publishing date</th>
-                    <th>Amount</th>
-                    <th>On order</th>
+                    <th><fmt:message key="id"/></th>
+                    <th><fmt:message key="catalog.title"/></th>
+                    <th><fmt:message key="catalog.author"/></th>
+                    <th><fmt:message key="catalog.publisher"/></th>
+                    <th><fmt:message key="catalog.publishing.date"/></th>
+                    <th><fmt:message key="catalog.amount"/></th>
+                    <th><fmt:message key="catalog.on.order"/></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -27,50 +27,49 @@
             </table>
             <div class="col-2 mx-auto">
                 <form method="post">
-                    <br><label for="title"><b>Title</b></label><br>
+                    <br><label for="title"><b><fmt:message key="catalog.title"/></b></label><br>
                     <input type="text" name="title" value="${operation eq 'updateBook' ? updatingBook.getTitle() : ''}"
-                           placeholder="Title"/>
+                           placeholder="<fmt:message key="catalog.title"/>"/>
                     <br>
                     <c:if test="${validation.containsKey('title')}">
                         <font style="color:hsl(0,100%,50%);">${validation.get("title")}</font>
                     </c:if>
 
-                    <br><label for="author"><b>Author</b></label><br>
+                    <br><label for="author"><b><fmt:message key="catalog.author"/></b></label><br>
                     <input type="text" name="author"
                            value="${operation eq 'updateBook' ? updatingBook.getAuthor() : ''}"
-                           placeholder="Author"/>
+                           placeholder="<fmt:message key="catalog.author"/>"/>
                     <br>
                     <c:if test="${validation.containsKey('author')}">
                         <font style="color:hsl(0,100%,50%);">${validation.get("author")}</font>
                     </c:if>
 
-                    <br><label for="publisher"><b>Publisher</b></label><br>
+                    <br><label for="publisher"><b><fmt:message key="catalog.publisher"/></b></label><br>
                     <input type="text" name="publisher"
                            value="${operation eq 'updateBook' ? updatingBook.getPublisher() : ''}"
-                           placeholder="Publisher"/>
+                           placeholder="<fmt:message key="catalog.publisher"/>"/>
                     <br>
                     <c:if test="${validation.containsKey('publisher')}">
                         <font style="color:hsl(0,100%,50%);">${validation.get("publisher")}</font>
                     </c:if>
 
-                    <br><label for="publishing_date"><b>Publishing date</b></label><br>
+                    <br><label for="publishing_date"><b><fmt:message key="catalog.publishing.date"/></b></label><br>
                     <input type="date" name="publishing_date"
-                           value="${operation eq 'updateBook' ? updatingBook.getPublishingDate() : ''}"
-                           placeholder="yyyy-MM-dd"/>
+                           value="${operation eq 'updateBook' ? updatingBook.getPublishingDate() : ''}"/>
                     <br>
                     <c:if test="${validation.containsKey('publishingDate')}">
                         <font style="color:hsl(0,100%,50%);">${validation.get("publishingDate")}</font>
                     </c:if>
 
-                    <br><label for="amount"><b>Amount</b></label><br>
+                    <br><label for="amount"><b><fmt:message key="catalog.amount"/></b></label><br>
                     <input type="number" name="amount"
                            value="${operation eq 'updateBook' ? updatingBook.getAmount() : ''}"
-                           placeholder="Amount"/>
+                           placeholder="<fmt:message key="catalog.amount"/>"/>
                     <br>
                     <c:if test="${validation.containsKey('amount')}">
                         <font style="color:hsl(0,100%,50%);">${validation.get("amount")}</font>
                     </c:if>
-                    <br><input class="btn btn-primary" type="submit" name="updateCurrentBook" value="Update Book"/>
+                    <br><input class="btn btn-primary" type="submit" name="updateCurrentBook" value="<fmt:message key="update.book.button"/>"/>
                 </form>
             </div>
         </div>
