@@ -1,32 +1,40 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid">
-        <a class="navbar-brand" href="${pageContext.request.contextPath}/library/reader">Reader</a>
+        <a class="navbar-brand" href="${pageContext.request.contextPath}/library/reader"><fmt:message key="title.reader"/></a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
                 <a class="nav-link" href="?operations=catalog">
                     <fmt:message key="navbar.catalog"/>
                 </a>
+                </li>
+                <li class="nav-item">
                 <a class="nav-link" href="?operations=showApprovedOrders">
                     <fmt:message key="navbar.approved.orders"/>
                 </a>
+                </li>
+                <li class="nav-item">
                 <form class="d-flex">
                     <input class="form-control me-2" name="searchByAuthor" type="search"
-                           placeholder="Search by author" aria-label="Search by author">
+                           placeholder="<fmt:message key="navbar.search.author"/>" aria-label="Search by author">
                     <button class="btn btn-outline-success" type="submit">
                         <fmt:message key="navbar.search"/>
                     </button>
                 </form>
+                </li>
+                <li class="nav-item">
                 <form class="d-flex">
                     <input class="form-control me-2" name="searchByTitle" type="search"
-                           placeholder="Search by title" aria-label="Search by title">
+                           placeholder="<fmt:message key="navbar.search.title"/>" aria-label="Search by title">
                     <button class="btn btn-outline-success" type="submit">
                         <fmt:message key="navbar.search"/>
                     </button>
                 </form>
+                </li>
                 <li class="nav-item">
                     <a class="nav-link" href="?operations=userInfo">
                         <fmt:message key="navbar.profile"/>
@@ -54,5 +62,5 @@
             </ul>
         </div>
     </div>
-    <div> Penalty: ${totalPenalty}</div>
+    <div> <fmt:message key="penalty"/>: ${totalPenalty}</div>
 </nav>

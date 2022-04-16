@@ -129,12 +129,13 @@ public class LibrarianCommand implements Command {
     private String penaltyFormatter(String penalty) {
         StringBuilder builder = new StringBuilder();
         if (penalty.length() < 3) {
-            builder.append("0.").append(penalty);
+            builder.append("0.").append(penalty).append(" UAH");
             return builder.toString();
         } else {
             builder.append(penalty, 0, penalty.length() - 2)
                     .append(".")
-                    .append(penalty, penalty.length() - 2, penalty.length());
+                    .append(penalty, penalty.length() - 2, penalty.length())
+                    .append(" UAH");
         }
         return builder.toString();
     }
