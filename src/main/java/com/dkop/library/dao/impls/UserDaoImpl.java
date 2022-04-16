@@ -12,7 +12,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.dkop.library.controller.command.CommandUtils.messagesBundle;
+import static com.dkop.library.utils.LocalizationUtil.errorMessagesBundle;
 import static com.dkop.library.dao.impls.Queries.*;
 
 public class UserDaoImpl implements UserDao {
@@ -91,7 +91,7 @@ public class UserDaoImpl implements UserDao {
                 if (resultSet.next()) {
                     user = extractUserFromResultSet(resultSet);
                 } else {
-                    throw new NotFoundException(messagesBundle.getString("user.not.found"));
+                    throw new NotFoundException(errorMessagesBundle.getString("user.not.found"));
                 }
             }
         } catch (SQLException e) {
@@ -123,7 +123,7 @@ public class UserDaoImpl implements UserDao {
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             LOGGER.error(e, e.getCause());
-            throw new UnableToDeleteException(messagesBundle.getString("unable.delete.user"), e);
+            throw new UnableToDeleteException(errorMessagesBundle.getString("unable.delete.user"), e);
         }
     }
 
@@ -143,7 +143,7 @@ public class UserDaoImpl implements UserDao {
                             .id(resultSet.getInt("id"))
                             .build();
                 } else {
-                    throw new DoesNotExistException("Email " + email + messagesBundle.getString("email.does.not.exist"));
+                    throw new DoesNotExistException("Email " + email + errorMessagesBundle.getString("email.does.not.exist"));
                 }
             }
         } catch (SQLException e) {

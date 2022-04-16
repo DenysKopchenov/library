@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
-import static com.dkop.library.controller.command.CommandUtils.messagesBundle;
+import static com.dkop.library.utils.LocalizationUtil.errorMessagesBundle;
 
 public class ReaderCommand implements Command {
     private final Map<String, Consumer<HttpServletRequest>> operations = new HashMap<>();
@@ -95,9 +95,9 @@ public class ReaderCommand implements Command {
     private void createOrderIfNotExist(int bookId, int userId, String orderType, HttpServletRequest request) throws AlreadyExistException {
         if (!orderService.isOrderExist(bookId, userId, orderType)) {
             orderService.createOrder(bookId, userId, orderType);
-            request.setAttribute("successMessage", messagesBundle.getString("order.created"));
+            request.setAttribute("successMessage", errorMessagesBundle.getString("order.created"));
         } else {
-            throw new AlreadyExistException(messagesBundle.getString("order.already.exist"));
+            throw new AlreadyExistException(errorMessagesBundle.getString("order.already.exist"));
         }
     }
 
@@ -178,7 +178,7 @@ public class ReaderCommand implements Command {
         if (StringUtils.isNumeric(orderId)) {
             try {
                 orderService.returnBook(Integer.parseInt(orderId));
-                request.setAttribute("successMessage", messagesBundle.getString("successfully.returned"));
+                request.setAttribute("successMessage", errorMessagesBundle.getString("successfully.returned"));
                 showApprovedOrders(request);
             } catch (NotFoundException e) {
                 LOGGER.error(e, e.getCause());

@@ -16,7 +16,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import static com.dkop.library.controller.command.CommandUtils.messagesBundle;
+import static com.dkop.library.utils.LocalizationUtil.errorMessagesBundle;
 import static com.dkop.library.dao.impls.Queries.*;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
@@ -31,7 +31,7 @@ public class UserDaoTest {
     @Before
     public void setUp() throws SQLException {
         userDao = new UserDaoImpl(connectionMock);
-        messagesBundle = mock(ResourceBundle.class);
+        errorMessagesBundle = mock(ResourceBundle.class);
         when(connectionMock.prepareStatement(anyString())).thenReturn(preparedStatementMock);
         when(preparedStatementMock.executeQuery()).thenReturn(resultSetMock);
     }

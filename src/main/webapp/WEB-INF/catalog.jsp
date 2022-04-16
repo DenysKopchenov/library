@@ -2,8 +2,8 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
-<c:set var="title" value="Catalog"/>
-
+<fmt:setLocale value="${language}"/>
+<fmt:message key="navbar.catalog" var="title"/>
 
 <!DOCTYPE html>
 <html lang=${language}>
@@ -19,13 +19,14 @@
     <thead>
 <div class="btn-group">
   <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-    ${sortBy == null ? "By Title" : sortBy}
+
+    ${sortBy == null ? "Title" : sortBy}
     </button>
   <div class="dropdown-menu">
-    <a class="dropdown-item" href="?sort=title&page=${i}&perPage=${perPage}">Title</a>
-    <a class="dropdown-item" href="?sort=author&page=${i}&perPage=${perPage}">Author</a>
-    <a class="dropdown-item" href="?sort=publisher&page=${i}&perPage=${perPage}">Publisher</a>
-    <a class="dropdown-item" href="?sort=publishing_date&page=${i}&perPage=${perPage}">Publishing date</a>
+    <a class="dropdown-item" href="?sort=title&page=${i}&perPage=${perPage}"><fmt:message key="catalog.title"/></a>
+    <a class="dropdown-item" href="?sort=author&page=${i}&perPage=${perPage}"><fmt:message key="catalog.author"/></a>
+    <a class="dropdown-item" href="?sort=publisher&page=${i}&perPage=${perPage}"><fmt:message key="catalog.publisher"/></a>
+    <a class="dropdown-item" href="?sort=publishing_date&page=${i}&perPage=${perPage}"><fmt:message key="catalog.publishing.date"/></a>
   </div>
 </div>
 <div class="btn-group" style="float:right">
@@ -39,10 +40,10 @@
   </div>
   </div>
                         <tr>
-                            <th>Title</th>
-                            <th>Author</th>
-                            <th>Publisher</th>
-                            <th>Publishing date</th>
+                            <th><fmt:message key="catalog.title"/></th>
+                            <th><fmt:message key="catalog.author"/></th>
+                            <th><fmt:message key="catalog.publisher"/></th>
+                            <th><fmt:message key="catalog.publishing.date"/></th>
                         </tr>
                         </thead>
                         <tbody>

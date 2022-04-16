@@ -16,7 +16,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 
-import static com.dkop.library.controller.command.CommandUtils.messagesBundle;
+import static com.dkop.library.utils.LocalizationUtil.errorMessagesBundle;
 
 
 public class BookService {
@@ -42,7 +42,7 @@ public class BookService {
             booksDao.create(book);
         } catch (SQLException e) {
             LOGGER.error(e, e.getCause());
-            throw new AlreadyExistException(messagesBundle.getString("book.already.exist"), e);
+            throw new AlreadyExistException(errorMessagesBundle.getString("book.already.exist"), e);
         }
     }
 
@@ -70,7 +70,7 @@ public class BookService {
             if (orderDao.isAvailableToDeleteBook(id)){
                 booksDao.delete(id);
             } else {
-                throw new UnableToDeleteException(messagesBundle.getString("unable.delete.book"));
+                throw new UnableToDeleteException(errorMessagesBundle.getString("unable.delete.book"));
             }
         }
     }

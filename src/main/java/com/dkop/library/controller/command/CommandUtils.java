@@ -2,15 +2,9 @@ package com.dkop.library.controller.command;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.ResourceBundle;
 import java.util.Set;
 
 public class CommandUtils {
-    public static ResourceBundle messagesBundle;
-
-    public static void setMessagesBundle(ResourceBundle messagesBundle) {
-        CommandUtils.messagesBundle = messagesBundle;
-    }
 
     private CommandUtils() {
     }

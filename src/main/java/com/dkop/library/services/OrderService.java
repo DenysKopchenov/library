@@ -16,7 +16,7 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.util.List;
 
-import static com.dkop.library.controller.command.CommandUtils.messagesBundle;
+import static com.dkop.library.utils.LocalizationUtil.errorMessagesBundle;
 
 public class OrderService {
     private static final Logger LOGGER = LogManager.getLogger(OrderService.class);
@@ -81,7 +81,7 @@ public class OrderService {
             Book book = booksDao.findById(order.getBookId());
             int amount = book.getAmount();
             if (amount <= 0) {
-                throw new UnableToAcceptOrderException(messagesBundle.getString("unable.accept.order"));
+                throw new UnableToAcceptOrderException(errorMessagesBundle.getString("unable.accept.order"));
             }
             book.setAmount(book.getAmount() - 1);
             book.setOnOrder(book.getOnOrder() + 1);

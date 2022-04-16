@@ -1,6 +1,6 @@
 package com.dkop.library.controller.filters;
 
-import com.dkop.library.controller.command.CommandUtils;
+import com.dkop.library.utils.LocalizationUtil;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -32,7 +32,8 @@ public class LocaleFilter implements Filter {
             locale = new Locale((String) req.getSession().getAttribute(LANGUAGE));
         }
 
-        CommandUtils.setMessagesBundle(ResourceBundle.getBundle("messages", locale));
+        LocalizationUtil.setErrorMessagesBundle(ResourceBundle.getBundle("messages", locale));
+        LocalizationUtil.setLocalizationBundleMessagesBundle(ResourceBundle.getBundle("localization", locale));
         filterChain.doFilter(servletRequest, servletResponse);
     }
 

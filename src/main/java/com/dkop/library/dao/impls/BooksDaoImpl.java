@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-import static com.dkop.library.controller.command.CommandUtils.messagesBundle;
+import static com.dkop.library.utils.LocalizationUtil.errorMessagesBundle;
 import static com.dkop.library.dao.impls.Queries.*;
 
 
@@ -67,7 +67,7 @@ public class BooksDaoImpl implements BooksDao {
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             LOGGER.error(e, e.getCause());
-            throw new UnableToDeleteException(messagesBundle.getString("unable.delete.book"), e);
+            throw new UnableToDeleteException(errorMessagesBundle.getString("unable.delete.book"), e);
         }
     }
 
@@ -138,7 +138,7 @@ public class BooksDaoImpl implements BooksDao {
                 if (resultSet.next()) {
                     book = extractBooksFromResultSet(resultSet);
                 } else {
-                    throw new NotFoundException(messagesBundle.getString("book.not.found"));
+                    throw new NotFoundException(errorMessagesBundle.getString("book.not.found"));
                 }
             }
         } catch (SQLException e) {

@@ -14,7 +14,7 @@ import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 
-import static com.dkop.library.controller.command.CommandUtils.messagesBundle;
+import static com.dkop.library.utils.LocalizationUtil.errorMessagesBundle;
 
 public class LoginService {
     private DaoFactory daoFactory;
@@ -29,7 +29,7 @@ public class LoginService {
         try {
             String userRole = authenticateUser(email, password);
             if (CommandUtils.checkIsLogged(request, email)) {
-                throw new AlreadyLoggedException(messagesBundle.getString("already.logged"));
+                throw new AlreadyLoggedException(errorMessagesBundle.getString("already.logged"));
             } else {
                 CommandUtils.setUserRole(request, email, userRole);
                 LOGGER.info("'{}' logged in. Role - '{}'.", email, userRole);
@@ -59,10 +59,10 @@ public class LoginService {
                 if (user.getPassword().equals(DigestUtils.sha256Hex(password))) {
                     return user.getRole();
                 } else {
-                    throw new WrongPasswordException(messagesBundle.getString("wrong.password"));
+                    throw new WrongPasswordException(errorMessagesBundle.getString("wrong.password"));
                 }
             } else {
-                throw new WasBlockedException(messagesBundle.getString("was.blocked"));
+                throw new WasBlockedException(errorMessagesBundle.getString("was.blocked"));
             }
         }
     }

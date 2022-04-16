@@ -1,8 +1,6 @@
 package com.dkop.library.services;
 
-import com.dkop.library.dao.BooksDao;
 import com.dkop.library.dao.DaoFactory;
-import com.dkop.library.dao.OrderDao;
 import com.dkop.library.dao.UserDao;
 import com.dkop.library.entity.User;
 import com.dkop.library.exceptions.AlreadyExistException;
@@ -19,8 +17,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import static com.dkop.library.controller.command.CommandUtils.messagesBundle;
-import static org.junit.Assert.*;
+import static com.dkop.library.utils.LocalizationUtil.errorMessagesBundle;
 import static org.mockito.Mockito.*;
 
 public class UserServiceTest {
@@ -33,7 +30,7 @@ public class UserServiceTest {
         try (MockedStatic<DaoFactory> daoFactoryMockedStatic = mockStatic(DaoFactory.class)) {
             daoFactoryMockedStatic.when(DaoFactory::getInstance).thenReturn(daoFactoryMock);
             when(daoFactoryMock.createUserDao()).thenReturn(userDaoMock);
-            messagesBundle = mock(ResourceBundle.class);
+            errorMessagesBundle = mock(ResourceBundle.class);
             userService = new UserService(DaoFactory.getInstance());
         }
     }

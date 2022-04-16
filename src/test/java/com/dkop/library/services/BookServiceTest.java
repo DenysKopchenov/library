@@ -7,7 +7,6 @@ import com.dkop.library.entity.Book;
 import com.dkop.library.exceptions.AlreadyExistException;
 import com.dkop.library.exceptions.NotFoundException;
 import com.dkop.library.exceptions.UnableToDeleteException;
-import com.dkop.library.services.BookService;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,11 +14,10 @@ import org.mockito.MockedStatic;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import static com.dkop.library.controller.command.CommandUtils.messagesBundle;
+import static com.dkop.library.utils.LocalizationUtil.errorMessagesBundle;
 import static org.mockito.Mockito.*;
 
 public class BookServiceTest {
@@ -34,7 +32,7 @@ public class BookServiceTest {
             daoFactoryMockedStatic.when(DaoFactory::getInstance).thenReturn(daoFactoryMock);
             when(daoFactoryMock.createBooksDao()).thenReturn(booksDaoMock);
             when(daoFactoryMock.createOrderDao()).thenReturn(orderDaoMock);
-            messagesBundle = mock(ResourceBundle.class);
+            errorMessagesBundle = mock(ResourceBundle.class);
             bookService = new BookService(DaoFactory.getInstance());
         }
     }
