@@ -2,7 +2,8 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
-<c:set var="title" value="Librarian"/>
+<fmt:setLocale value="${language}"/>
+<fmt:message key="title.librarian" var="title"/>
 
 <!DOCTYPE html>
 <html lang=${language}>
@@ -19,10 +20,10 @@
     <table class="table table-bordered">
                         <thead>
                         <tr>
-                            <th>First name</th>
-                            <th>Last name</th>
-                            <th>Email</th>
-                            <th>Role</th>
+                            <th><fmt:message key="first.name"/></th>
+                            <th><fmt:message key="last.name"/></th>
+                            <th><fmt:message key="email"/></th>
+                            <th><fmt:message key="role"/></th>
                         </tr>
                         </thead>
                         <tbody>
@@ -54,15 +55,15 @@
       </div>
     <thead>
                         <tr>
-                            <th>Create date</th>
-                            <th>Title</th>
-                            <th>Author</th>
-                            <th>Publisher</th>
-                            <th>Publishing date</th>
-                            <th>Reader full name</th>
-                            <th>Type</th>
-                            <th>Status</th>
-                            <th colspan="3" style="text-align:center;">Operations</th>
+                    <th><fmt:message key="order.create.date"/></th>
+                    <th><fmt:message key="catalog.title"/></th>
+                    <th><fmt:message key="catalog.author"/></th>
+                    <th><fmt:message key="catalog.publisher"/></th>
+                    <th><fmt:message key="catalog.publishing.date"/></th>
+                    <th><fmt:message key="reader.full.name"/></th>
+                    <th><fmt:message key="type"/></th>
+                    <th><fmt:message key="status"/></th>
+                    <th colspan="3" style="text-align:center;"><fmt:message key="operations"/></th>
                         </tr>
                         </thead>
                         <tbody>
@@ -77,9 +78,9 @@
                             <td>${pendingOrder.getType()}</td>
                             <td>${pendingOrder.getStatus()}</td>
                             <td style="text-align:center;">
-                            <a class="btn btn-primary" href="?operations=acceptOrder&orderId=${pendingOrder.getOrderId()}&page=${currentPage}&perPage=${perPage}"> Accept </a>
-                            <a class="btn btn-danger" href="?operations=rejectOrder&orderId=${pendingOrder.getOrderId()}&page=${currentPage}&perPage=${perPage}"> Reject </a>
-                            <a class="btn btn-primary" href="?operations=showReadersApprovedOrders&userId=${pendingOrder.getUser().getId()}"> Details </a>
+                            <a class="btn btn-primary" href="?operations=acceptOrder&orderId=${pendingOrder.getOrderId()}&page=${currentPage}&perPage=${perPage}"><fmt:message key="accept.button"/></a>
+                            <a class="btn btn-danger" href="?operations=rejectOrder&orderId=${pendingOrder.getOrderId()}&page=${currentPage}&perPage=${perPage}"><fmt:message key="reject.button"/></a>
+                            <a class="btn btn-primary" href="?operations=showReadersApprovedOrders&userId=${pendingOrder.getUser().getId()}"><fmt:message key="details.button"/></a>
                             </td>
                         </tr>
     </c:forEach>
@@ -88,13 +89,13 @@
                                                 <nav aria-label="Page navigation example">
                                                 <ul class="pagination">
                                                 <c:if test="${currentPage > 1}">
-                                                <li class="page-item"><a class="page-link" href="?operations=showPendingOrders&page=${currentPage - 1}&perPage=${perPage}">Previous</a></li>
+                                                <li class="page-item"><a class="page-link" href="?operations=showPendingOrders&page=${currentPage - 1}&perPage=${perPage}"><fmt:message key="pagination.previous"/></a></li>
                                                 </c:if>
                                                  <c:forEach begin="1" end="${numberOfPages}" var="i">
                                                    <li class="active"><a class="page-link" href="?operations=showPendingOrders&page=${i}&perPage=${perPage}">${i}</a></li>
                                                   </c:forEach>
                                                    <c:if test="${currentPage < numberOfPages}">
-                                                     <li class="page-item"><a class="page-link" href="?operations=showPendingOrders&page=${currentPage + 1}&perPage=${perPage}">Next</a></li>
+                                                     <li class="page-item"><a class="page-link" href="?operations=showPendingOrders&page=${currentPage + 1}&perPage=${perPage}"><fmt:message key="pagination.next"/></a></li>
                                                     </c:if>
                                                     </ul>
                                                  </nav>
@@ -118,13 +119,13 @@
       </div>
     <thead>
                         <tr>
-                            <th>Id</th>
-                            <th>First name</th>
-                            <th>Last name</th>
-                            <th>Email</th>
-                            <th>Role</th>
-                            <th>Status</th>
-                            <th>Operations</th>
+                            <th><fmt:message key="id"/></th>
+                            <th><fmt:message key="first.name"/></th>
+                            <th><fmt:message key="last.name"/></th>
+                            <th><fmt:message key="email"/></th>
+                            <th><fmt:message key="role"/></th>
+                            <th><fmt:message key="status"/></th>
+                            <th style="text-align:center;"><fmt:message key="operations"/></th>
                         </tr>
                         </thead>
                         <tbody>
@@ -137,7 +138,7 @@
                             <td>${reader.getRole()}</td>
                             <td>${reader.getStatus()}</td>
                             <td style="text-align:center;">
-                            <a class="btn btn-primary" href="?operations=showReadersApprovedOrders&userId=${reader.getId()}"> Show approved orders </a>
+                            <a class="btn btn-primary" href="?operations=showReadersApprovedOrders&userId=${reader.getId()}"><fmt:message key="show.approved.orders"/></a>
                             </td>
                         </tr>
     </c:forEach>
@@ -146,13 +147,13 @@
                                                 <nav aria-label="Page navigation example">
                                                 <ul class="pagination">
                                                 <c:if test="${currentPage > 1}">
-                                                <li class="page-item"><a class="page-link" href="?operations=showAllReaders&page=${currentPage - 1}&perPage=${perPage}">Previous</a></li>
+                                                <li class="page-item"><a class="page-link" href="?operations=showAllReaders&page=${currentPage - 1}&perPage=${perPage}"><fmt:message key="pagination.previous"/></a></li>
                                                 </c:if>
                                                  <c:forEach begin="1" end="${numberOfPages}" var="i">
                                                    <li class="active"><a class="page-link" href="?operations=showAllReaders&page=${i}&perPage=${perPage}">${i}</a></li>
                                                   </c:forEach>
                                                    <c:if test="${currentPage < numberOfPages}">
-                                                     <li class="page-item"><a class="page-link" href="?operations=showAllReaders&page=${currentPage + 1}&perPage=${perPage}">Next</a></li>
+                                                     <li class="page-item"><a class="page-link" href="?operations=showAllReaders&page=${currentPage + 1}&perPage=${perPage}"><fmt:message key="pagination.next"/></a></li>
                                                     </c:if>
                                                     </ul>
                                                  </nav>
@@ -175,15 +176,15 @@
       </div>
     <thead>
                         <tr>
-                            <th>Reader full name</th>
-                            <th>Title</th>
-                            <th>Author</th>
-                            <th>Publisher</th>
-                            <th>Publishing date</th>
-                            <th>Expected return date</th>
-                            <th>Type</th>
-                            <th>Status</th>
-                            <th>Penalty</th>
+                        <th><fmt:message key="reader.full.name"/></th>
+                        <th><fmt:message key="catalog.title"/></th>
+                        <th><fmt:message key="catalog.author"/></th>
+                        <th><fmt:message key="catalog.publisher"/></th>
+                        <th><fmt:message key="catalog.publishing.date"/></th>
+                        <th><fmt:message key="expected.return.date"/></th>
+                        <th><fmt:message key="type"/></th>
+                        <th><fmt:message key="status"/></th>
+                        <th><fmt:message key="penalty"/></th>
                         </tr>
                         </thead>
                         <tbody>
@@ -205,13 +206,13 @@
                               <nav aria-label="Page navigation example">
                                              <ul class="pagination">
                                         <c:if test="${currentPage > 1}">
-                                 <li class="page-item"><a class="page-link" href="?operations=showReadersApprovedOrders&userId=${userId}&page=${currentPage - 1}&perPage=${perPage}">Previous</a></li>
+                                 <li class="page-item"><a class="page-link" href="?operations=showReadersApprovedOrders&userId=${userId}&page=${currentPage - 1}&perPage=${perPage}"><fmt:message key="pagination.зкумшщгі"/></a></li>
                           </c:if>
                                    <c:forEach begin="1" end="${numberOfPages}" var="i">
                                  <li class="active"><a class="page-link" href="?operations=showReadersApprovedOrders&userId=${userId}&page=${i}&perPage=${perPage}">${i}</a></li>
                                                  </c:forEach>
                                           <c:if test="${currentPage < numberOfPages}">
-                                           <li class="page-item"><a class="page-link" href="?operations=showReadersApprovedOrders&userId=${userId}&page=${currentPage + 1}&perPage=${perPage}">Next</a></li>
+                                           <li class="page-item"><a class="page-link" href="?operations=showReadersApprovedOrders&userId=${userId}&page=${currentPage + 1}&perPage=${perPage}"><fmt:message key="pagination.next"/></a></li>
                                        </c:if>
                                                    </ul>
                                                       </nav>
