@@ -3,10 +3,7 @@ package com.dkop.library.services;
 import com.dkop.library.dao.DaoFactory;
 import com.dkop.library.dao.UserDao;
 import com.dkop.library.entity.User;
-import com.dkop.library.exceptions.AlreadyLoggedException;
-import com.dkop.library.exceptions.DoesNotExistException;
-import com.dkop.library.exceptions.WasBlockedException;
-import com.dkop.library.exceptions.WrongPasswordException;
+import com.dkop.library.exceptions.*;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -16,6 +13,8 @@ import javax.servlet.http.HttpSession;
 
 import java.util.Set;
 
+import static com.dkop.library.utils.Fields.EMAIL;
+import static com.dkop.library.utils.Fields.ERROR_MESSAGE;
 import static com.dkop.library.utils.LocalizationUtil.errorMessagesBundle;
 
 public class LoginService {
@@ -40,7 +39,7 @@ public class LoginService {
             }
         } catch (DoesNotExistException | WrongPasswordException | WasBlockedException | AlreadyLoggedException e) {
             LOGGER.error(e, e.getCause());
-            request.setAttribute("errorMessage", e.getMessage());
+            request.setAttribute(ERROR_MESSAGE, e.getMessage());
             return "/WEB-INF/login.jsp";
         }
     }
@@ -69,13 +68,13 @@ public class LoginService {
             case "reader":
                 return "redirect:/library/reader";
             default:
-                throw new RuntimeException("Unknown role: " + userRole);
+                throw new UnknownOperationException("Unknown role: " + userRole);
         }
     }
 
     private void setUserRole(HttpServletRequest request, String email, String role) {
         HttpSession session = request.getSession();
-        session.setAttribute("email", email);
+        session.setAttribute(EMAIL, email);
         session.setAttribute("role", role);
     }
 

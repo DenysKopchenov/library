@@ -18,10 +18,10 @@ public class ConnectionPool {
         ds.setUrl(resourceBundle.getString("db.url"));
         ds.setUsername(resourceBundle.getString("db.username"));
         ds.setPassword(resourceBundle.getString("db.password"));
-        ds.setDriverClassName("com.mysql.cj.jdbc.Driver");
-        ds.setMinIdle(25);
-        ds.setMaxIdle(100);
-        ds.setMaxOpenPreparedStatements(150);
+        ds.setDriverClassName(resourceBundle.getString("db.driver"));
+        ds.setMinIdle(Integer.parseInt(resourceBundle.getString("db.min.idle")));
+        ds.setMaxIdle(Integer.parseInt(resourceBundle.getString("db.max.idle")));
+        ds.setMaxOpenPreparedStatements(Integer.parseInt(resourceBundle.getString("db.max.opened.statements")));
     }
 
     public static Connection getConnection() throws SQLException {

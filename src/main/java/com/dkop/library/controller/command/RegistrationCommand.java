@@ -2,12 +2,14 @@ package com.dkop.library.controller.command;
 
 import com.dkop.library.exceptions.AlreadyExistException;
 import com.dkop.library.services.UserService;
-import com.dkop.library.services.Validator;
+import com.dkop.library.utils.Validator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
+
+import static com.dkop.library.utils.Fields.*;
 
 
 public class RegistrationCommand implements Command {
@@ -26,7 +28,7 @@ public class RegistrationCommand implements Command {
         String lastName = request.getParameter("lastName");
         String password = request.getParameter("password");
         String confirmPassword = request.getParameter("confirmPassword");
-        String email = request.getParameter("email");
+        String email = request.getParameter(EMAIL);
         if (firstName == null
                 || lastName == null
                 || password == null
@@ -41,11 +43,11 @@ public class RegistrationCommand implements Command {
                 userService.createUser(firstName, lastName, email, password, "reader", "active");
             } catch (AlreadyExistException e) {
                 LOGGER.error(e, e.getCause());
-                request.setAttribute("errorMessage", e.getMessage());
+                request.setAttribute(ERROR_MESSAGE, e.getMessage());
                 return REGISTRATION_JSP;
             }
         } else {
-            request.setAttribute("validation", errors);
+            request.setAttribute(VALIDATION, errors);
             return REGISTRATION_JSP;
         }
         return "redirect:/library/login";

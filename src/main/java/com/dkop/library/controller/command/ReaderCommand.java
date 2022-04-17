@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
+import static com.dkop.library.utils.Fields.*;
 import static com.dkop.library.utils.LocalizationUtil.errorMessagesBundle;
 import static com.dkop.library.utils.LocalizationUtil.localizationBundle;
 
@@ -81,14 +82,14 @@ public class ReaderCommand implements Command {
     private void orderBookOperation(HttpServletRequest request) {
         if (StringUtils.isNotBlank(request.getParameter("order"))) {
             String orderType = request.getParameter("order");
-            String email = (String) request.getSession().getAttribute("email");
+            String email = (String) request.getSession().getAttribute(EMAIL);
             try {
                 int userId = userService.getUserInfo(email).getId();
                 int bookId = Integer.parseInt(request.getParameter("bookId"));
                 createOrderIfNotExist(bookId, userId, orderType, request);
             } catch (AlreadyExistException | DoesNotExistException e) {
                 LOGGER.error(e, e.getCause());
-                request.setAttribute("errorMessage", e.getMessage());
+                request.setAttribute(ERROR_MESSAGE, e.getMessage());
             }
         }
     }
@@ -96,7 +97,7 @@ public class ReaderCommand implements Command {
     private void createOrderIfNotExist(int bookId, int userId, String orderType, HttpServletRequest request) throws AlreadyExistException {
         if (!orderService.isOrderExist(bookId, userId, orderType)) {
             orderService.createOrder(bookId, userId, orderType);
-            request.setAttribute("successMessage", errorMessagesBundle.getString("order.created"));
+            request.setAttribute(SUCCESS_MESSAGE, errorMessagesBundle.getString("order.created"));
         } else {
             throw new AlreadyExistException(errorMessagesBundle.getString("order.already.exist"));
         }
@@ -118,16 +119,16 @@ public class ReaderCommand implements Command {
         if (sortBy != null) {
             switch (sortBy) {
                 case "author":
-                    request.setAttribute("sortBy", localizationBundle.getString("catalog.sort.author"));
+                    request.setAttribute(SORT_BY, localizationBundle.getString("catalog.sort.author"));
                     break;
                 case "publisher":
-                    request.setAttribute("sortBy", localizationBundle.getString("catalog.sort.publisher"));
+                    request.setAttribute(SORT_BY, localizationBundle.getString("catalog.sort.publisher"));
                     break;
                 case "publishing_date":
-                    request.setAttribute("sortBy", localizationBundle.getString("catalog.sort.publishing.date"));
+                    request.setAttribute(SORT_BY, localizationBundle.getString("catalog.sort.publishing.date"));
                     break;
                 default:
-                    request.setAttribute("sortBy", localizationBundle.getString("catalog.sort.title"));
+                    request.setAttribute(SORT_BY, localizationBundle.getString("catalog.sort.title"));
             }
             catalog = paginationService.paginateBooks(sortBy, page, perPage);
         } else {
@@ -142,7 +143,7 @@ public class ReaderCommand implements Command {
 
     private void showApprovedOrders(HttpServletRequest request) {
         try {
-            User user = userService.getUserInfo((String) request.getSession().getAttribute("email"));
+            User user = userService.getUserInfo((String) request.getSession().getAttribute(EMAIL));
             List<UserOrderDto> userApprovedOrders = new ArrayList<>();
             int perPage = paginationService.getRecordsPerPage(request);
             int page = paginationService.getPageNumber(request);
@@ -159,7 +160,7 @@ public class ReaderCommand implements Command {
                     userApprovedOrders.add(userOrder);
                 } catch (NotFoundException e) {
                     LOGGER.error(e, e.getCause());
-                    request.setAttribute("errorMessage", e.getMessage());
+                    request.setAttribute(ERROR_MESSAGE, e.getMessage());
                 }
             });
             int numberOfPages = paginationService.countNumberOfPagesForUserApprovedOrders("approved", user.getId(), perPage);
@@ -168,7 +169,7 @@ public class ReaderCommand implements Command {
             request.setAttribute("currentPage", page);
             request.setAttribute("userApprovedOrders", userApprovedOrders);
         } catch (DoesNotExistException e) {
-            request.setAttribute("errorMessage", e.getMessage());
+            request.setAttribute(ERROR_MESSAGE, e.getMessage());
         }
 
 
@@ -179,11 +180,11 @@ public class ReaderCommand implements Command {
         if (StringUtils.isNumeric(orderId)) {
             try {
                 orderService.returnBook(Integer.parseInt(orderId));
-                request.setAttribute("successMessage", errorMessagesBundle.getString("successfully.returned"));
+                request.setAttribute(SUCCESS_MESSAGE, errorMessagesBundle.getString("successfully.returned"));
                 showApprovedOrders(request);
             } catch (NotFoundException e) {
                 LOGGER.error(e, e.getCause());
-                request.setAttribute("errorMessage", e.getMessage());
+                request.setAttribute(ERROR_MESSAGE, e.getMessage());
             }
         }
     }
@@ -191,32 +192,32 @@ public class ReaderCommand implements Command {
     private void isAnyFounded(List<Book> books, HttpServletRequest request, String by, String parameter) {
         if (!books.isEmpty()) {
             request.setAttribute("foundedBooks", books);
-            request.setAttribute("successMessage", String.format("Books founded %s '%s':", by, parameter));
+            request.setAttribute(SUCCESS_MESSAGE, String.format("Books founded %s '%s':", by, parameter));
         } else {
-            request.setAttribute("errorMessage", String.format("No books found %s '%s':", by, parameter));
+            request.setAttribute(ERROR_MESSAGE, String.format("No books founded %s '%s':", by, parameter));
         }
     }
 
     private void showUserInfo(HttpServletRequest request) {
-        String email = (String) request.getSession().getAttribute("email");
+        String email = (String) request.getSession().getAttribute(EMAIL);
         try {
             User user = userService.getUserInfo(email);
             request.setAttribute("user", user);
         } catch (DoesNotExistException e) {
             LOGGER.error(e, e.getCause());
-            request.setAttribute("errorMessage", e.getMessage());
+            request.setAttribute(ERROR_MESSAGE, e.getMessage());
         }
     }
 
     private void totalPenalty(HttpServletRequest request) {
         try {
-            User user = userService.getUserInfo((String) request.getSession().getAttribute("email"));
+            User user = userService.getUserInfo((String) request.getSession().getAttribute(EMAIL));
             List<Order> allApproved = orderService.findAllUserApprovedOrders(user.getId(), 0, 0);
             long totalPenalty = allApproved.stream().mapToLong(orderService::checkForPenalty).sum();
             request.setAttribute("totalPenalty", penaltyFormatter(String.valueOf(totalPenalty)));
         } catch (DoesNotExistException e) {
             LOGGER.error(e, e.getCause());
-            request.setAttribute("errorMessage", e.getMessage());
+            request.setAttribute(ERROR_MESSAGE, e.getMessage());
         }
     }
 

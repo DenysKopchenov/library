@@ -1,5 +1,6 @@
 package com.dkop.library.controller.filters;
 
+import com.dkop.library.exceptions.UnknownOperationException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -10,8 +11,9 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Set;
 
+import static com.dkop.library.utils.Fields.HOME_PAGE;
+
 public class AuthenticationFilter implements Filter {
-    private static final String HOME_PAGE = "/app/library/";
     private static final Logger LOGGER = LogManager.getLogger(AuthenticationFilter.class);
 
 
@@ -66,7 +68,7 @@ public class AuthenticationFilter implements Filter {
                 }
                 break;
             default:
-                throw new RuntimeException("Unknown role: " + role);
+                throw new UnknownOperationException("Unknown role: " + role);
         }
 
     }

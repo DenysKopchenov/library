@@ -12,6 +12,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.dkop.library.utils.Fields.EMAIL;
 import static com.dkop.library.utils.LocalizationUtil.errorMessagesBundle;
 import static com.dkop.library.dao.impls.Queries.*;
 
@@ -104,7 +105,7 @@ public class UserDaoImpl implements UserDao {
         return User.newBuilder()
                 .firstName(resultSet.getString("first_name"))
                 .lastName(resultSet.getString("last_name"))
-                .email(resultSet.getString("email"))
+                .email(resultSet.getString(EMAIL))
                 .role(resultSet.getString("role"))
                 .status(resultSet.getString("status"))
                 .id(resultSet.getInt("id"))
@@ -136,7 +137,7 @@ public class UserDaoImpl implements UserDao {
                     user = User.newBuilder()
                             .firstName(resultSet.getString("first_name"))
                             .lastName(resultSet.getString("last_name"))
-                            .email(resultSet.getString("email"))
+                            .email(resultSet.getString(EMAIL))
                             .password(resultSet.getString("password"))
                             .role(resultSet.getString("role"))
                             .status(resultSet.getString("status"))

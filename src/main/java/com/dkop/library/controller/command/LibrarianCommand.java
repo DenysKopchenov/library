@@ -21,6 +21,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
+import static com.dkop.library.utils.Fields.EMAIL;
+import static com.dkop.library.utils.Fields.ERROR_MESSAGE;
+
 public class LibrarianCommand implements Command {
     private final Map<String, Consumer<HttpServletRequest>> operations = new HashMap<>();
     private final BookService bookService;
@@ -63,13 +66,13 @@ public class LibrarianCommand implements Command {
     }
 
     private void showUserInfo(HttpServletRequest request) {
-        String email = (String) request.getSession().getAttribute("email");
+        String email = (String) request.getSession().getAttribute(EMAIL);
         try {
             User user = userService.getUserInfo(email);
             request.setAttribute("user", user);
         } catch (DoesNotExistException e) {
             LOGGER.error(e, e.getCause());
-            request.setAttribute("errorMessage", e.getMessage());
+            request.setAttribute(ERROR_MESSAGE, e.getMessage());
         }
     }
 
@@ -99,7 +102,7 @@ public class LibrarianCommand implements Command {
                     userApprovedOrders.add(userOrder);
                 } catch (NotFoundException e) {
                     LOGGER.error(e, e.getCause());
-                    request.setAttribute("errorMessage", e.getMessage());
+                    request.setAttribute(ERROR_MESSAGE, e.getMessage());
                 }
             });
 
@@ -151,7 +154,7 @@ public class LibrarianCommand implements Command {
                 pendingOrders.add(userOrder);
             } catch (NotFoundException e) {
                 LOGGER.error(e, e.getCause());
-                request.setAttribute("errorMessage", e.getMessage());
+                request.setAttribute(ERROR_MESSAGE, e.getMessage());
             }
         });
 
@@ -171,7 +174,7 @@ public class LibrarianCommand implements Command {
                 showPendingOrders(request);
             } catch (NotFoundException | UnableToAcceptOrderException e) {
                 LOGGER.error(e, e.getCause());
-                request.setAttribute("errorMessage", e.getMessage());
+                request.setAttribute(ERROR_MESSAGE, e.getMessage());
             }
         }
     }
@@ -185,7 +188,7 @@ public class LibrarianCommand implements Command {
                 showPendingOrders(request);
             } catch (NotFoundException e) {
                 LOGGER.error(e, e.getCause());
-                request.setAttribute("errorMessage", e.getMessage());
+                request.setAttribute(ERROR_MESSAGE, e.getMessage());
             }
         }
     }

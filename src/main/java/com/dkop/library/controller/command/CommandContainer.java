@@ -6,7 +6,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class CommandContainer {
+
     private static final Map<String, Command> commands = new HashMap<>();
+
+    private CommandContainer() {
+    }
 
     static {
         final ServiceContainer sc = new ServiceContainer();
@@ -19,7 +23,7 @@ public class CommandContainer {
         commands.put("catalog", new CatalogCommand(sc.getPaginationService()));
     }
 
-    public static Command getCommand(String commandName){
+    public static Command getCommand(String commandName) {
         return commands.getOrDefault(commandName, p -> "/start.jsp");
     }
 }

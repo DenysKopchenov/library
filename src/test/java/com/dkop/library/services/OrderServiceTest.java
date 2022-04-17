@@ -6,7 +6,7 @@ import com.dkop.library.dao.OrderDao;
 import com.dkop.library.entity.Book;
 import com.dkop.library.entity.Order;
 import com.dkop.library.exceptions.NotFoundException;
-import com.dkop.library.exceptions.SomeoneWantsToBreakProgramException;
+import com.dkop.library.exceptions.UnknownOperationException;
 import com.dkop.library.exceptions.UnableToAcceptOrderException;
 import org.junit.Assert;
 import org.junit.Before;
@@ -97,7 +97,7 @@ public class OrderServiceTest {
         verify(orderDaoMock, times(1)).processOrder(testOrder, testBook);
     }
 
-    @Test(expected = SomeoneWantsToBreakProgramException.class)
+    @Test(expected = UnknownOperationException.class)
     public void testAcceptOrderThrowsRuntimeEx() throws UnableToAcceptOrderException, NotFoundException {
         Order testOrder = Order.newBuilder()
                 .bookId(1)
@@ -142,7 +142,7 @@ public class OrderServiceTest {
         verify(orderDaoMock, times(1)).processOrder(testOrder, testBook);
     }
 
-    @Test(expected = SomeoneWantsToBreakProgramException.class)
+    @Test(expected = UnknownOperationException.class)
     public void testRejectOrderThrowsRuntimeEx() {
         Order testOrder = Order.newBuilder()
                 .status("approved")

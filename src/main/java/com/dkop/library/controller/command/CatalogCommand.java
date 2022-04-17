@@ -8,6 +8,7 @@ import org.apache.logging.log4j.Logger;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
+import static com.dkop.library.utils.Fields.SORT_BY;
 import static com.dkop.library.utils.LocalizationUtil.localizationBundle;
 
 public class CatalogCommand implements Command {
@@ -29,16 +30,16 @@ public class CatalogCommand implements Command {
         if (sortBy != null) {
             switch (sortBy) {
                 case "author":
-                    request.setAttribute("sortBy", localizationBundle.getString("catalog.sort.author"));
+                    request.setAttribute(SORT_BY, localizationBundle.getString("catalog.sort.author"));
                     break;
                 case "publisher":
-                    request.setAttribute("sortBy", localizationBundle.getString("catalog.sort.publisher"));
+                    request.setAttribute(SORT_BY, localizationBundle.getString("catalog.sort.publisher"));
                     break;
                 case "publishing_date":
-                    request.setAttribute("sortBy", localizationBundle.getString("catalog.sort.publishing.date"));
+                    request.setAttribute(SORT_BY, localizationBundle.getString("catalog.sort.publishing.date"));
                     break;
                 default:
-                    request.setAttribute("sortBy", localizationBundle.getString("catalog.sort.title"));
+                    request.setAttribute(SORT_BY, localizationBundle.getString("catalog.sort.title"));
             }
             catalog = paginationService.paginateBooks(sortBy, page, perPage);
         } else {

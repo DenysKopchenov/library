@@ -1,12 +1,13 @@
-package com.dkop.library.services;
+package com.dkop.library.utils;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.dkop.library.utils.Fields.EMAIL;
 import static com.dkop.library.utils.LocalizationUtil.errorMessagesBundle;
-import static com.dkop.library.services.RegexContainer.*;
+import static com.dkop.library.utils.RegexContainer.*;
 
 public class Validator {
 
@@ -16,7 +17,7 @@ public class Validator {
     public static Map<String, String> validateLoginForm(String email, String password) {
         Map<String, String> errors = new HashMap<>();
         if (!email.matches(EMAIL_VALIDATION)) {
-            errors.put("email", errorMessagesBundle.getString("email"));
+            errors.put(EMAIL, errorMessagesBundle.getString(EMAIL));
         }
         if (!password.matches(PASSWORD_VALIDATION)) {
             errors.put("password", errorMessagesBundle.getString("password"));
@@ -64,7 +65,7 @@ public class Validator {
             errors.put("confirmPassword", errorMessagesBundle.getString("confirm.password"));
         }
         if (!email.matches(RegexContainer.EMAIL_VALIDATION)) {
-            errors.put("email", errorMessagesBundle.getString("email"));
+            errors.put(EMAIL, errorMessagesBundle.getString(EMAIL));
         }
         return errors;
     }

@@ -4,7 +4,7 @@ import com.dkop.library.dao.DaoFactory;
 import com.dkop.library.dao.UserDao;
 import com.dkop.library.entity.User;
 import com.dkop.library.exceptions.DoesNotExistException;
-import com.dkop.library.exceptions.SomeoneWantsToBreakProgramException;
+import com.dkop.library.exceptions.UnknownOperationException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -14,6 +14,7 @@ import javax.servlet.jsp.tagext.TagSupport;
 
 import java.io.IOException;
 
+import static com.dkop.library.utils.Fields.EMAIL;
 import static com.dkop.library.utils.LocalizationUtil.localizationBundle;
 
 public class UserInfoTag extends TagSupport {
@@ -23,13 +24,13 @@ public class UserInfoTag extends TagSupport {
     @Override
     public int doStartTag() {
         HttpSession session = pageContext.getSession();
-        String email = (String) session.getAttribute("email");
+        String email = (String) session.getAttribute(EMAIL);
         User user;
         try (UserDao userDao = DaoFactory.getInstance().createUserDao()) {
             user = userDao.findByEmail(email);
         } catch (DoesNotExistException e) {
             LOGGER.error(e, e.getCause());
-            throw new SomeoneWantsToBreakProgramException();
+            throw new UnknownOperationException();
         }
         JspWriter out = pageContext.getOut();
         StringBuilder table = new StringBuilder();
