@@ -29,7 +29,8 @@ public class LoginService {
 
     public String login(String email, String password, HttpServletRequest request) {
         try {
-            String userRole = authenticateUser(email, password);
+            User user = authenticateUser(email, password);
+            String userRole = user.getRole();
             if (checkIsLogged(request, email)) {
                 throw new AlreadyLoggedException(errorMessagesBundle.getString("already.logged"));
             } else {
@@ -44,12 +45,12 @@ public class LoginService {
         }
     }
 
-    public String authenticateUser(String email, String password) throws DoesNotExistException, WrongPasswordException, WasBlockedException {
+    public User authenticateUser(String email, String password) throws DoesNotExistException, WrongPasswordException, WasBlockedException {
         try (UserDao userDao = daoFactory.createUserDao()) {
             User user = userDao.findByEmail(email);
             if (user.getStatus().equals("active")) {
                 if (user.getPassword().equals(DigestUtils.sha256Hex(password))) {
-                    return user.getRole();
+                    return user;
                 } else {
                     throw new WrongPasswordException(errorMessagesBundle.getString("wrong.password"));
                 }

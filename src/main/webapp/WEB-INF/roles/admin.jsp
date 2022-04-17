@@ -2,6 +2,8 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib uri="/WEB-INF/tld/userInfo.tld" prefix="table" %>
+
 <fmt:setLocale value="${language}"/>
 <fmt:message key="title.admin" var="title"/>
 
@@ -24,28 +26,7 @@
     <%@ include file="/WEB-INF/forms/update_book_form.jspf" %>
 </c:if>
 <c:if test="${user != null}">
-<div class="row">
-    <div class="col-4 mx-auto">
-    <table class="table table-bordered table-light">
-                        <thead>
-                        <tr>
-                            <th><fmt:message key="first.name"/></th>
-                            <th><fmt:message key="last.name"/></th>
-                            <th><fmt:message key="email"/></th>
-                            <th><fmt:message key="role"/></th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td>${user.getFirstName()}</td>
-                            <td>${user.getLastName()}</td>
-                            <td>${user.getEmail()}</td>
-                            <td>${user.getRole()}</td>
-                        </tr>
-                        </tbody>
-                    </table>
-    </div>
-</div>
+<table:info/>
 </c:if>
 <c:if test="${catalog != null}">
 <div class="row" >

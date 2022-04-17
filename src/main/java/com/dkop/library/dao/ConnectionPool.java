@@ -18,6 +18,7 @@ public class ConnectionPool {
         ds.setUrl(resourceBundle.getString("db.url"));
         ds.setUsername(resourceBundle.getString("db.username"));
         ds.setPassword(resourceBundle.getString("db.password"));
+        ds.setDriverClassName("com.mysql.cj.jdbc.Driver");
         ds.setMinIdle(25);
         ds.setMaxIdle(100);
         ds.setMaxOpenPreparedStatements(150);
