@@ -19,6 +19,7 @@ import java.util.List;
 import static com.dkop.library.utils.LocalizationUtil.errorMessagesBundle;
 
 public class OrderService {
+
     private static final Logger LOGGER = LogManager.getLogger(OrderService.class);
     private final DaoFactory daoFactory;
 
@@ -51,7 +52,6 @@ public class OrderService {
             return orderDao.findAllOrdersByStatus(status, start, numberOfRecords);
         }
     }
-
 
     public void returnBook(int orderId) throws NotFoundException {
         try (OrderDao orderDao = daoFactory.createOrderDao();
@@ -110,7 +110,6 @@ public class OrderService {
             return orderDao.findById(orderId);
         }
     }
-
 
     public long checkForPenalty(Order order) {
         LocalDate expectedReturnDate = order.getExpectedReturnDate();

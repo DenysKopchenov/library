@@ -28,7 +28,6 @@ public class LocaleFilter implements Filter {
         } else if (req.getSession().getAttribute(LANGUAGE) == null) {
             req.getSession().setAttribute(LANGUAGE, "en");
         } else {
-            req.getSession().setAttribute(LANGUAGE, req.getSession().getAttribute(LANGUAGE));
             locale = new Locale((String) req.getSession().getAttribute(LANGUAGE));
         }
 

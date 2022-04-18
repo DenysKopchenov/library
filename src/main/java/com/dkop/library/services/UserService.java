@@ -17,6 +17,7 @@ import java.util.List;
 import static com.dkop.library.utils.LocalizationUtil.errorMessagesBundle;
 
 public class UserService {
+
     private static final Logger LOGGER = LogManager.getLogger(UserService.class);
     private final DaoFactory daoFactory;
 

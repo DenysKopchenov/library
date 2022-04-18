@@ -12,8 +12,8 @@
     <properties>
         <mockito.all.version>1.10.19</mockito.all.version>
         <junit.version>4.13.2</junit.version>
-        <log4j.api.version>2.17.1</log4j.api.version>
-        <log4j.core.version>2.17.1</log4j.core.version>
+        <log4j.api.version>2.17.2</log4j.api.version>
+        <log4j.core.version>2.17.2</log4j.core.version>
         <javaee.api.version>8.0.1</javaee.api.version>
         <jstl.version>1.2</jstl.version>
         <mysql.connector.java.version>8.0.28</mysql.connector.java.version>

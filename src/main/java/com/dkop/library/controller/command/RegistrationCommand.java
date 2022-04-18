@@ -13,6 +13,7 @@ import static com.dkop.library.utils.Fields.*;
 
 
 public class RegistrationCommand implements Command {
+
     private static final String REGISTRATION_JSP = "/WEB-INF/registration.jsp";
     private final UserService userService;
     private static final Logger LOGGER = LogManager.getLogger(RegistrationCommand.class);

@@ -12,6 +12,7 @@ import static com.dkop.library.utils.Fields.SORT_BY;
 import static com.dkop.library.utils.LocalizationUtil.localizationBundle;
 
 public class CatalogCommand implements Command {
+
     private final PaginationService paginationService;
     private static final Logger LOGGER = LogManager.getLogger(CatalogCommand.class);
 

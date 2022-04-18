@@ -27,6 +27,7 @@ import static com.dkop.library.utils.LocalizationUtil.errorMessagesBundle;
 import static com.dkop.library.utils.LocalizationUtil.localizationBundle;
 
 public class ReaderCommand implements Command {
+
     private final Map<String, Consumer<HttpServletRequest>> operations = new HashMap<>();
     private final BookService bookService;
     private final UserService userService;

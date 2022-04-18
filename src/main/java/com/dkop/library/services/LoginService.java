@@ -18,6 +18,7 @@ import static com.dkop.library.utils.Fields.ERROR_MESSAGE;
 import static com.dkop.library.utils.LocalizationUtil.errorMessagesBundle;
 
 public class LoginService {
+
     private DaoFactory daoFactory;
     private static final Logger LOGGER = LogManager.getLogger(LoginService.class);
 

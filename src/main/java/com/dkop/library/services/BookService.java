@@ -20,9 +20,9 @@ import static com.dkop.library.utils.LocalizationUtil.errorMessagesBundle;
 
 
 public class BookService {
+
     private final DaoFactory daoFactory;
     private static final Logger LOGGER = LogManager.getLogger(BookService.class);
-
 
     public BookService(DaoFactory daoFactory) {
         this.daoFactory = daoFactory;
@@ -67,7 +67,7 @@ public class BookService {
         try (BooksDao booksDao = daoFactory.createBooksDao();
              OrderDao orderDao = daoFactory.createOrderDao()) {
             booksDao.findById(id);
-            if (orderDao.isAvailableToDeleteBook(id)){
+            if (orderDao.isAvailableToDeleteBook(id)) {
                 booksDao.delete(id);
             } else {
                 throw new UnableToDeleteException(errorMessagesBundle.getString("unable.delete.book"));

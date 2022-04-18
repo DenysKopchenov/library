@@ -14,8 +14,8 @@ import java.util.Set;
 import static com.dkop.library.utils.Fields.HOME_PAGE;
 
 public class AuthenticationFilter implements Filter {
-    private static final Logger LOGGER = LogManager.getLogger(AuthenticationFilter.class);
 
+    private static final Logger LOGGER = LogManager.getLogger(AuthenticationFilter.class);
 
     @Override
     public void init(FilterConfig filterConfig) {

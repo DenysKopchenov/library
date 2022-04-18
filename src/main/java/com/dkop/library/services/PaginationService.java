@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 public class PaginationService {
+
     private static final Logger LOGGER = LogManager.getLogger(PaginationService.class);
     private final BookService bookService;
     private final UserService userService;

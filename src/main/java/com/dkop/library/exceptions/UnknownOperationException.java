@@ -1,6 +1,7 @@
 package com.dkop.library.exceptions;
 
 public class UnknownOperationException extends RuntimeException{
+
     public UnknownOperationException() {
     }
 

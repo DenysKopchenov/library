@@ -10,6 +10,7 @@ import java.util.Set;
 import static com.dkop.library.utils.Fields.EMAIL;
 
 public class LogOutCommand implements Command {
+
     private static final Logger LOGGER = LogManager.getLogger(LogOutCommand.class);
 
     public LogOutCommand() {

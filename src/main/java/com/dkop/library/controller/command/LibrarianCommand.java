@@ -25,6 +25,7 @@ import static com.dkop.library.utils.Fields.EMAIL;
 import static com.dkop.library.utils.Fields.ERROR_MESSAGE;
 
 public class LibrarianCommand implements Command {
+
     private final Map<String, Consumer<HttpServletRequest>> operations = new HashMap<>();
     private final BookService bookService;
     private final UserService userService;

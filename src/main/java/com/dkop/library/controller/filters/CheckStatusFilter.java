@@ -16,6 +16,7 @@ import java.io.IOException;
 import static com.dkop.library.utils.Fields.EMAIL;
 
 public class CheckStatusFilter implements Filter {
+
     private final Command logout = CommandContainer.getCommand("logout");
     private final UserService userService = new UserService(DaoFactory.getInstance());
     private static final Logger LOGGER = LogManager.getLogger(CheckStatusFilter.class);
