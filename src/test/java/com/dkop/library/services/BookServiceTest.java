@@ -21,6 +21,7 @@ import static com.dkop.library.utils.LocalizationUtil.localizationBundle;
 import static org.mockito.Mockito.*;
 
 public class BookServiceTest {
+
     private BookService bookService;
     private DaoFactory daoFactoryMock = mock(DaoFactory.class);
     private BooksDao booksDaoMock = mock(BooksDao.class);

@@ -37,7 +37,6 @@ public class AdminCommand implements Command {
         this.userService = userService;
         this.paginationService = paginationService;
         init();
-        LOGGER.info(AdminCommand.class.getSimpleName());
     }
 
     private void init() {
@@ -126,7 +125,7 @@ public class AdminCommand implements Command {
             try {
                 Book book = bookService.findById(Integer.parseInt(id));
                 request.setAttribute("operation", "updateBook");
-                request.setAttribute("updatingBook", book); //shows what book is updating
+                request.setAttribute("updatingBook", book);
                 if (request.getParameter("updateCurrentBook") != null) {
                     String title = request.getParameter("title");
                     String author = request.getParameter("author");

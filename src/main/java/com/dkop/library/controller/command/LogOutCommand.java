@@ -14,7 +14,6 @@ public class LogOutCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger(LogOutCommand.class);
 
     public LogOutCommand() {
-        LOGGER.info(LogOutCommand.class.getSimpleName());
     }
 
     @Override

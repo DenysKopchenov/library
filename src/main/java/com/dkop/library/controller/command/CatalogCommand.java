@@ -14,11 +14,9 @@ import static com.dkop.library.utils.LocalizationUtil.localizationBundle;
 public class CatalogCommand implements Command {
 
     private final PaginationService paginationService;
-    private static final Logger LOGGER = LogManager.getLogger(CatalogCommand.class);
 
     public CatalogCommand(PaginationService paginationService) {
         this.paginationService = paginationService;
-        LOGGER.info(CatalogCommand.class.getSimpleName());
     }
 
     @Override

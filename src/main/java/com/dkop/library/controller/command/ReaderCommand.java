@@ -24,7 +24,6 @@ import java.util.function.Consumer;
 
 import static com.dkop.library.utils.Fields.*;
 import static com.dkop.library.utils.LocalizationUtil.localizationBundle;
-import static com.dkop.library.utils.LocalizationUtil.localizationBundle;
 
 public class ReaderCommand implements Command {
 
@@ -42,7 +41,6 @@ public class ReaderCommand implements Command {
         this.orderService = orderService;
         this.paginationService = paginationService;
         init();
-        LOGGER.info(ReaderCommand.class.getSimpleName());
     }
 
 

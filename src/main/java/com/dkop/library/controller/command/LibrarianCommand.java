@@ -39,7 +39,6 @@ public class LibrarianCommand implements Command {
         this.orderService = orderService;
         this.paginationService = paginationService;
         init();
-        LOGGER.info(LibrarianCommand.class.getSimpleName());
     }
 
     private void init() {

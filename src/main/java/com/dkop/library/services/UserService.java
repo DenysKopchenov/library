@@ -23,7 +23,6 @@ public class UserService {
 
     public UserService(DaoFactory daoFactory) {
         this.daoFactory = daoFactory;
-        LOGGER.info(UserService.class.getSimpleName());
     }
 
     public User findById(int id) throws NotFoundException {

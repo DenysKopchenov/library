@@ -3,6 +3,7 @@ package com.dkop.library.dao;
 import com.dkop.library.dao.impls.JDBCDaoFactory;
 
 public abstract class DaoFactory {
+
     private static DaoFactory instance;
 
     public static DaoFactory getInstance() {

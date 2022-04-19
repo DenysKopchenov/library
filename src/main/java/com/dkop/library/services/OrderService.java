@@ -25,7 +25,6 @@ public class OrderService {
 
     public OrderService(DaoFactory daoFactory) {
         this.daoFactory = daoFactory;
-        LOGGER.info(OrderService.class.getSimpleName());
     }
 
     public void createOrder(int bookId, int userId, String type) {
@@ -60,7 +59,8 @@ public class OrderService {
             if (order.getStatus().equals("approved")) {
                 order.setStatus("completed");
             } else {
-                LOGGER.error(new RuntimeException());
+                LOGGER.error("Unable to return not approved order");
+                throw new UnknownOperationException();
             }
 
             Book book = booksDao.findById(order.getBookId());
@@ -73,7 +73,7 @@ public class OrderService {
 
     public void acceptOrder(Order order) throws NotFoundException, UnableToAcceptOrderException {
         if (!order.getStatus().equals("pending")) {
-            LOGGER.error(UnknownOperationException.class);
+            LOGGER.error("Unable to accept not pending order");
             throw new UnknownOperationException();
         }
         try (OrderDao orderDao = daoFactory.createOrderDao();
@@ -95,7 +95,7 @@ public class OrderService {
 
     public void rejectOrder(Order order) {
         if (!order.getStatus().equals("pending")) {
-            LOGGER.error(UnknownOperationException.class);
+            LOGGER.error("Unable to accept not pending order");
             throw new UnknownOperationException();
         }
         order.setStatus("rejected");

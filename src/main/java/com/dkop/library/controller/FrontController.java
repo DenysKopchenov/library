@@ -14,12 +14,10 @@ import java.io.IOException;
 import java.util.HashSet;
 
 public class FrontController extends HttpServlet {
-    private static final Logger LOGGER = LogManager.getLogger(FrontController.class);
 
     @Override
     public void init(ServletConfig servletConfig) {
         servletConfig.getServletContext().setAttribute("loggedUsers", new HashSet<>());
-        LOGGER.info(FrontController.class.getSimpleName());
     }
 
     @Override

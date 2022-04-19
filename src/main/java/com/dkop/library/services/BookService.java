@@ -26,7 +26,6 @@ public class BookService {
 
     public BookService(DaoFactory daoFactory) {
         this.daoFactory = daoFactory;
-        LOGGER.info(BookService.class.getSimpleName());
     }
 
     public void createBook(String title, String author, String publisher, String publishingDate, String amount) throws AlreadyExistException {

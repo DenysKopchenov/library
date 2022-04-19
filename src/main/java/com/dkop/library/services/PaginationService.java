@@ -1,28 +1,25 @@
 package com.dkop.library.services;
 
-import com.dkop.library.dao.DaoFactory;
 import com.dkop.library.entity.Book;
 import com.dkop.library.entity.Order;
 import com.dkop.library.entity.User;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 public class PaginationService {
 
-    private static final Logger LOGGER = LogManager.getLogger(PaginationService.class);
     private final BookService bookService;
     private final UserService userService;
     private final OrderService orderService;
+    private static final int DEFAULT_PAGE_NUMBER = 1;
+    private static final int DEFAULT_RECORDS_PER_PAGE = 5;
 
     public PaginationService(BookService bookService, UserService userService, OrderService orderService) {
         this.bookService = bookService;
         this.userService = userService;
         this.orderService = orderService;
-        LOGGER.info(PaginationService.class.getSimpleName());
     }
 
     public List<User> paginateUsersByRole(String role, int currentPageNumber, int perPage) {
@@ -65,13 +62,13 @@ public class PaginationService {
         if (StringUtils.isNumeric(request.getParameter("perPage"))) {
             return Integer.parseInt(request.getParameter("perPage"));
         }
-        return 5;
+        return DEFAULT_RECORDS_PER_PAGE;
     }
 
     public int getPageNumber(HttpServletRequest request) {
         if (StringUtils.isNumeric(request.getParameter("page"))) {
             return Integer.parseInt(request.getParameter("page"));
         }
-        return 1;
+        return DEFAULT_PAGE_NUMBER;
     }
 }

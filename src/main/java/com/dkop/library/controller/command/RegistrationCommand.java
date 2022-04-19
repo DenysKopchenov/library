@@ -20,7 +20,6 @@ public class RegistrationCommand implements Command {
 
     public RegistrationCommand(UserService userService) {
         this.userService = userService;
-        LOGGER.info(RegistrationCommand.class.getSimpleName());
     }
 
     @Override

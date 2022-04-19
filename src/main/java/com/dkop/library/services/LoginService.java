@@ -24,7 +24,6 @@ public class LoginService {
 
     public LoginService(DaoFactory daoFactory) {
         this.daoFactory = daoFactory;
-        LOGGER.info(LoginService.class.getSimpleName());
     }
 
     public String login(String email, String password, HttpServletRequest request) {
@@ -33,11 +32,11 @@ public class LoginService {
             String userRole = user.getRole();
             if (checkIsLogged(request, email)) {
                 throw new AlreadyLoggedException(localizationBundle.getString("already.logged"));
-            } else {
-                setUserRole(request, email, userRole);
-                LOGGER.info("'{}' logged in. Role - '{}'.", email, userRole);
-                return resolvePageByRole(userRole);
             }
+            setUserRole(request, email, userRole);
+            LOGGER.info("'{}' logged in. Role - '{}'.", email, userRole);
+            return resolvePageByRole(userRole);
+
         } catch (DoesNotExistException | WrongPasswordException | WasBlockedException | AlreadyLoggedException e) {
             LOGGER.error(e, e.getCause());
             request.setAttribute(ERROR_MESSAGE, e.getMessage());
@@ -51,12 +50,11 @@ public class LoginService {
             if (user.getStatus().equals("active")) {
                 if (user.getPassword().equals(DigestUtils.sha256Hex(password))) {
                     return user;
-                } else {
-                    throw new WrongPasswordException(localizationBundle.getString("wrong.password"));
                 }
-            } else {
-                throw new WasBlockedException(localizationBundle.getString("was.blocked"));
+                throw new WrongPasswordException(localizationBundle.getString("wrong.password"));
             }
+            throw new WasBlockedException(localizationBundle.getString("was.blocked"));
+
         }
     }
 

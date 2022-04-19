@@ -22,32 +22,16 @@ public class Order {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
     public int getUserId() {
         return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
     }
 
     public int getBookId() {
         return bookId;
     }
 
-    public void setBookId(int bookId) {
-        this.bookId = bookId;
-    }
-
     public String getType() {
         return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
     }
 
     public String getStatus() {
@@ -60,10 +44,6 @@ public class Order {
 
     public LocalDate getCreateDate() {
         return createDate;
-    }
-
-    public void setCreateDate(LocalDate createDate) {
-        this.createDate = createDate;
     }
 
     public LocalDate getApprovedDate() {
@@ -86,8 +66,17 @@ public class Order {
         return actualReturnDate;
     }
 
-    public void setActualReturnDate(LocalDate actualReturnDate) {
-        this.actualReturnDate = actualReturnDate;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Order order = (Order) o;
+        return id == order.id && userId == order.userId && bookId == order.bookId && Objects.equals(type, order.type) && Objects.equals(status, order.status) && Objects.equals(createDate, order.createDate) && Objects.equals(approvedDate, order.approvedDate) && Objects.equals(expectedReturnDate, order.expectedReturnDate) && Objects.equals(actualReturnDate, order.actualReturnDate);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, userId, bookId, type, status, createDate, approvedDate, expectedReturnDate, actualReturnDate);
     }
 
     @Override
@@ -102,19 +91,6 @@ public class Order {
         sb.append(", actualReturnDate=").append(actualReturnDate);
         sb.append('}');
         return sb.toString();
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Order order = (Order) o;
-        return id == order.id && userId == order.userId && bookId == order.bookId && Objects.equals(type, order.type) && Objects.equals(status, order.status) && Objects.equals(createDate, order.createDate) && Objects.equals(approvedDate, order.approvedDate) && Objects.equals(expectedReturnDate, order.expectedReturnDate) && Objects.equals(actualReturnDate, order.actualReturnDate);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, userId, bookId, type, status, createDate, approvedDate, expectedReturnDate, actualReturnDate);
     }
 
     public static Builder newBuilder() {
