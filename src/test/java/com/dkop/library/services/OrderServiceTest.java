@@ -71,7 +71,7 @@ public class OrderServiceTest {
     @Test(expected = RuntimeException.class)
     public void testReturnBookThrowsRuntimeEx() throws NotFoundException {
         try {
-            orderService.returnBook(1);
+            orderService.returnOrder(1);
         } catch (RuntimeException e) {
             verify(daoFactoryMock, times(1)).createOrderDao();
             verify(daoFactoryMock, times(1)).createBooksDao();
@@ -89,7 +89,7 @@ public class OrderServiceTest {
         Book testBook = Book.newBuilder().build();
         when(orderDaoMock.findById(1)).thenReturn(testOrder);
         when(booksDaoMock.findById(1)).thenReturn(testBook);
-        orderService.returnBook(1);
+        orderService.returnOrder(1);
         verify(daoFactoryMock, times(1)).createOrderDao();
         verify(daoFactoryMock, times(1)).createBooksDao();
         verify(orderDaoMock, times(1)).findById(1);

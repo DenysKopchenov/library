@@ -52,7 +52,13 @@ public class OrderService {
         }
     }
 
-    public void returnBook(int orderId) throws NotFoundException {
+    /**
+     * Changes order status to the completed, update specified book: increases amount on 1, decreases onOrder on 1
+     * @param orderId
+     * @throws NotFoundException if order or book was not found
+     * @throws UnknownOperationException if order status is not 'approved'
+     */
+    public void returnOrder(int orderId) throws NotFoundException {
         try (OrderDao orderDao = daoFactory.createOrderDao();
              BooksDao booksDao = daoFactory.createBooksDao()) {
             Order order = orderDao.findById(orderId);
@@ -71,6 +77,13 @@ public class OrderService {
         }
     }
 
+    /**
+     * Changes order status to the approved, update specified book: increases onOrder on 1, decreases amount on 1
+     * @param order
+     * @throws NotFoundException if book was not found
+     * @throws UnableToAcceptOrderException if book amount <= 0
+     * @throws UnknownOperationException if order status is not 'pending'
+     */
     public void acceptOrder(Order order) throws NotFoundException, UnableToAcceptOrderException {
         if (!order.getStatus().equals("pending")) {
             LOGGER.error("Unable to accept not pending order");
@@ -93,6 +106,11 @@ public class OrderService {
         }
     }
 
+    /**
+     * Changes order status to the rejected
+     * @param order
+     * @throws UnknownOperationException if order status is not 'pending'
+     */
     public void rejectOrder(Order order) {
         if (!order.getStatus().equals("pending")) {
             LOGGER.error("Unable to accept not pending order");
@@ -111,6 +129,11 @@ public class OrderService {
         }
     }
 
+    /**
+     * Checks is the user has penalty. 5 UAH for each day difference between expected return date
+     * @param order
+     * @return penalty size
+     */
     public long checkForPenalty(Order order) {
         LocalDate expectedReturnDate = order.getExpectedReturnDate();
         LocalDate now = LocalDate.now();

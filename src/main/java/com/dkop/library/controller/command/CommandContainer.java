@@ -5,6 +5,9 @@ import com.dkop.library.services.ServiceContainer;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Container for all commands
+ */
 public class CommandContainer {
 
     private static final Map<String, Command> commands = new HashMap<>();
@@ -23,6 +26,11 @@ public class CommandContainer {
         commands.put("catalog", new CatalogCommand(sc.getPaginationService()));
     }
 
+    /**
+     * Returns command for FrontController
+     * @param commandName
+     * @return Command by name or start page by default if name dopes not exist
+     */
     public static Command getCommand(String commandName) {
         return commands.getOrDefault(commandName, p -> "/start.jsp");
     }

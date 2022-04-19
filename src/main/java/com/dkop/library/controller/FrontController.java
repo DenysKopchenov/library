@@ -2,8 +2,6 @@ package com.dkop.library.controller;
 
 import com.dkop.library.controller.command.*;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -13,6 +11,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.HashSet;
 
+/**
+ * Main servlet that mapping request to the command
+ */
 public class FrontController extends HttpServlet {
 
     @Override

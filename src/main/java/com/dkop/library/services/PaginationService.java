@@ -45,13 +45,13 @@ public class PaginationService {
         return orderService.findAllOrdersByStatus(status, startIndex, perPage);
     }
 
-    public List<Order> paginateOrdersByUser(int userId, int currentPageNumber, int perPage) {
-        int startIndex = (currentPageNumber - 1) * perPage;
-        return orderService.findAllUserApprovedOrders(userId, startIndex, perPage);
-    }
-
     public int countNumberOfPagesForOrdersByStatus(String status, int perPage) {
         return (int) Math.ceil(orderService.countAllRowsByStatus(status) * 1.0 / perPage);
+    }
+
+    public List<Order> paginateApprovedOrdersByUser(int userId, int currentPageNumber, int perPage) {
+        int startIndex = (currentPageNumber - 1) * perPage;
+        return orderService.findAllUserApprovedOrders(userId, startIndex, perPage);
     }
 
     public int countNumberOfPagesForUserApprovedOrders(String status, int userId, int perPage) {

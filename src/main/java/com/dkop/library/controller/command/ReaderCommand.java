@@ -25,6 +25,10 @@ import java.util.function.Consumer;
 import static com.dkop.library.utils.Fields.*;
 import static com.dkop.library.utils.LocalizationUtil.localizationBundle;
 
+/**
+ * Reader command
+ * Handle operations on reader page
+ */
 public class ReaderCommand implements Command {
 
     private final Map<String, Consumer<HttpServletRequest>> operations = new HashMap<>();
@@ -58,12 +62,12 @@ public class ReaderCommand implements Command {
         if (StringUtils.isNotBlank(request.getParameter("searchByAuthor"))) {
             String author = (request.getParameter("searchByAuthor"));
             List<Book> books = bookService.findAllBooksByAuthor(author);
-            isAnyFounded(books, request, "by Author", author);
+            isAnyFounded(books, request);
         }
         if (StringUtils.isNotBlank(request.getParameter("searchByTitle"))) {
             String title = request.getParameter("searchByTitle");
             List<Book> books = bookService.findAllBooksByTitle(title);
-            isAnyFounded(books, request, "by Title", title);
+            isAnyFounded(books, request);
         }
         if (StringUtils.isNotBlank(request.getParameter("operations"))) {
             String operation = request.getParameter("operations");
@@ -146,7 +150,7 @@ public class ReaderCommand implements Command {
             List<UserOrderDto> userApprovedOrders = new ArrayList<>();
             int perPage = paginationService.getRecordsPerPage(request);
             int page = paginationService.getPageNumber(request);
-            List<Order> allApproved = paginationService.paginateOrdersByUser(user.getId(), page, perPage);
+            List<Order> allApproved = paginationService.paginateApprovedOrdersByUser(user.getId(), page, perPage);
             allApproved.forEach(order -> {
                 try {
                     UserOrderDto userOrder = new UserOrderDto();
@@ -178,7 +182,7 @@ public class ReaderCommand implements Command {
         String orderId = request.getParameter("orderId");
         if (StringUtils.isNumeric(orderId)) {
             try {
-                orderService.returnBook(Integer.parseInt(orderId));
+                orderService.returnOrder(Integer.parseInt(orderId));
                 request.setAttribute(SUCCESS_MESSAGE, localizationBundle.getString("successfully.returned"));
                 showApprovedOrders(request);
             } catch (NotFoundException e) {
@@ -188,12 +192,11 @@ public class ReaderCommand implements Command {
         }
     }
 
-    private void isAnyFounded(List<Book> books, HttpServletRequest request, String by, String parameter) {
+    private void isAnyFounded(List<Book> books, HttpServletRequest request) {
         if (!books.isEmpty()) {
             request.setAttribute("foundedBooks", books);
-            request.setAttribute(SUCCESS_MESSAGE, String.format("Books founded %s '%s':", by, parameter));
         } else {
-            request.setAttribute(ERROR_MESSAGE, String.format("No books founded %s '%s':", by, parameter));
+            request.setAttribute(ERROR_MESSAGE, localizationBundle.getString("book.not.found"));
         }
     }
 

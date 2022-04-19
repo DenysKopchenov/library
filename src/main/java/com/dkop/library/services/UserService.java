@@ -43,13 +43,25 @@ public class UserService {
         }
     }
 
+    /**
+     * Creates a user entity and a password hash using SHA256HEX, then inserts it into the database
+     *
+     * @param firstName
+     * @param lastName
+     * @param email
+     * @param password
+     * @param role
+     * @param status
+     * @throws AlreadyExistException if the user with specified email already exists in the database
+     */
     public void createUser(String firstName, String lastName, String email, String password, String role, String status) throws AlreadyExistException {
         try (UserDao userDao = daoFactory.createUserDao()) {
+            String passwordHash = DigestUtils.sha256Hex(password);
             User user = User.newBuilder()
                     .firstName(firstName)
                     .lastName(lastName)
                     .email(email)
-                    .password(DigestUtils.sha256Hex(password))
+                    .password(passwordHash)
                     .role(role)
                     .status(status)
                     .build();
@@ -71,9 +83,6 @@ public class UserService {
         try (UserDao userDao = daoFactory.createUserDao()) {
             userDao.findById(id);
             userDao.changeStatus(id, newStatus);
-        } catch (SQLException e) {
-            LOGGER.error(e, e.getCause());
-            throw new NotFoundException(localizationBundle.getString("user.not.found"));
         }
     }
 

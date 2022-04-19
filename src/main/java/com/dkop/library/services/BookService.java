@@ -18,7 +18,9 @@ import java.util.List;
 
 import static com.dkop.library.utils.LocalizationUtil.localizationBundle;
 
-
+/**
+ * Service for handling operations with books
+ */
 public class BookService {
 
     private final DaoFactory daoFactory;
@@ -28,6 +30,15 @@ public class BookService {
         this.daoFactory = daoFactory;
     }
 
+    /**
+     * Creates a book entity, with the specified parameters and inserts it in the database
+     * @param title
+     * @param author
+     * @param publisher
+     * @param publishingDate
+     * @param amount
+     * @throws AlreadyExistException if book already exist in database
+     */
     public void createBook(String title, String author, String publisher, String publishingDate, String amount) throws AlreadyExistException {
         LocalDate date = LocalDate.parse(publishingDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         Book book = Book.newBuilder()
@@ -45,6 +56,16 @@ public class BookService {
         }
     }
 
+    /**
+     * Finds a book by the specified id and updates it with the given parameters
+     * @param id
+     * @param title
+     * @param author
+     * @param publisher
+     * @param publishingDate
+     * @param amount
+     * @throws NotFoundException
+     */
     public void updateBook(int id, String title, String author, String publisher, String publishingDate, String amount) throws NotFoundException {
         try (BooksDao booksDao = daoFactory.createBooksDao()) {
             Book bookFromDB = booksDao.findById(id);
@@ -62,6 +83,12 @@ public class BookService {
         }
     }
 
+    /**
+     * Finds a book by the specified id and deletes it
+     * @param id
+     * @throws NotFoundException
+     * @throws UnableToDeleteException
+     */
     public void deleteBook(int id) throws NotFoundException, UnableToDeleteException {
         try (BooksDao booksDao = daoFactory.createBooksDao();
              OrderDao orderDao = daoFactory.createOrderDao()) {
@@ -75,19 +102,15 @@ public class BookService {
     }
 
     public List<Book> findAllBooksByAuthor(String author) {
-        List<Book> books;
         try (BooksDao booksDao = daoFactory.createBooksDao()) {
-            books = booksDao.findAllByAuthor(author);
+            return booksDao.findAllByAuthor(author);
         }
-        return books;
     }
 
     public List<Book> findAllBooksByTitle(String title) {
-        List<Book> books;
         try (BooksDao booksDao = daoFactory.createBooksDao()) {
-            books = booksDao.findAllByTitle(title);
+            return booksDao.findAllByTitle(title);
         }
-        return books;
     }
 
     public Book findById(int id) throws NotFoundException {

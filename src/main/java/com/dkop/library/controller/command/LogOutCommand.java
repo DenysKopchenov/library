@@ -9,6 +9,9 @@ import java.util.Set;
 
 import static com.dkop.library.utils.Fields.EMAIL;
 
+/**
+ * Command for Login page
+ */
 public class LogOutCommand implements Command {
 
     private static final Logger LOGGER = LogManager.getLogger(LogOutCommand.class);

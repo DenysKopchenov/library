@@ -23,7 +23,10 @@ import java.util.function.Consumer;
 import static com.dkop.library.utils.Fields.*;
 import static com.dkop.library.utils.LocalizationUtil.*;
 
-
+/**
+ * Admin command
+ * Handle operations on admin page
+ */
 public class AdminCommand implements Command {
 
     private final Map<String, Consumer<HttpServletRequest>> operations = new HashMap<>();
@@ -43,7 +46,7 @@ public class AdminCommand implements Command {
         operations.put("createBook", this::createBookOperation);
         operations.put("deleteBook", this::deleteBookOperation);
         operations.put("updateBook", this::updateBookOperation);
-        operations.put("catalog", this::showCatalogBookOperation);
+        operations.put("catalog", this::showCatalogOperation);
         operations.put("showAllReaders", this::showAllReadersOperation);
         operations.put("showAllLibrarians", this::showAllLibrariansOperation);
         operations.put("userInfo", this::showUserInfo);
@@ -109,7 +112,7 @@ public class AdminCommand implements Command {
             try {
                 bookService.deleteBook(Integer.parseInt(bookId));
                 request.setAttribute(SUCCESS_MESSAGE, localizationBundle.getString("successfully.deleted"));
-                showCatalogBookOperation(request);
+                showCatalogOperation(request);
             } catch (NotFoundException | UnableToDeleteException e) {
                 LOGGER.error(e, e.getCause());
                 request.setAttribute(ERROR_MESSAGE, e.getMessage());
@@ -174,7 +177,7 @@ public class AdminCommand implements Command {
         request.setAttribute("allLibrarians", usersPerPage);
     }
 
-    private void showCatalogBookOperation(HttpServletRequest request) {
+    private void showCatalogOperation(HttpServletRequest request) {
         request.setAttribute("sort", request.getParameter("sort"));
         String sortBy = request.getParameter("sort");
         int perPage = paginationService.getRecordsPerPage(request);

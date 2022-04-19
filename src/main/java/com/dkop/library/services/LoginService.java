@@ -44,11 +44,12 @@ public class LoginService {
         }
     }
 
-    public User authenticateUser(String email, String password) throws DoesNotExistException, WrongPasswordException, WasBlockedException {
+    private User authenticateUser(String email, String password) throws DoesNotExistException, WrongPasswordException, WasBlockedException {
         try (UserDao userDao = daoFactory.createUserDao()) {
             User user = userDao.findByEmail(email);
             if (user.getStatus().equals("active")) {
-                if (user.getPassword().equals(DigestUtils.sha256Hex(password))) {
+                String passwordHash = DigestUtils.sha256Hex(password);
+                if (user.getPassword().equals(passwordHash)) {
                     return user;
                 }
                 throw new WrongPasswordException(localizationBundle.getString("wrong.password"));

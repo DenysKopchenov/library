@@ -49,13 +49,13 @@ public class BooksDaoImpl implements BooksDao {
         return allBooks;
     }
 
-    public void create(Book book) throws SQLException {
+    public void create(Book entity) throws SQLException {
         try (PreparedStatement preparedStatement = connection.prepareStatement(CREATE_BOOK)) {
-            preparedStatement.setString(1, book.getTitle());
-            preparedStatement.setString(2, book.getAuthor());
-            preparedStatement.setString(3, book.getPublisher());
-            preparedStatement.setDate(4, Date.valueOf(book.getPublishingDate()));
-            preparedStatement.setInt(5, book.getAmount());
+            preparedStatement.setString(1, entity.getTitle());
+            preparedStatement.setString(2, entity.getAuthor());
+            preparedStatement.setString(3, entity.getPublisher());
+            preparedStatement.setDate(4, Date.valueOf(entity.getPublishingDate()));
+            preparedStatement.setInt(5, entity.getAmount());
 
             preparedStatement.executeUpdate();
         }
@@ -71,15 +71,15 @@ public class BooksDaoImpl implements BooksDao {
         }
     }
 
-    public void update(Book book) {
+    public void update(Book entity) {
         try (PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_BOOK)) {
-            preparedStatement.setString(1, book.getTitle());
-            preparedStatement.setString(2, book.getAuthor());
-            preparedStatement.setString(3, book.getPublisher());
-            preparedStatement.setDate(4, Date.valueOf(book.getPublishingDate()));
-            preparedStatement.setInt(5, book.getAmount());
-            preparedStatement.setInt(6, book.getOnOrder());
-            preparedStatement.setInt(7, book.getId());
+            preparedStatement.setString(1, entity.getTitle());
+            preparedStatement.setString(2, entity.getAuthor());
+            preparedStatement.setString(3, entity.getPublisher());
+            preparedStatement.setDate(4, Date.valueOf(entity.getPublishingDate()));
+            preparedStatement.setInt(5, entity.getAmount());
+            preparedStatement.setInt(6, entity.getOnOrder());
+            preparedStatement.setInt(7, entity.getId());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             LOGGER.error(e, e.getCause());

@@ -24,6 +24,10 @@ import java.util.function.Consumer;
 import static com.dkop.library.utils.Fields.EMAIL;
 import static com.dkop.library.utils.Fields.ERROR_MESSAGE;
 
+/**
+ * Librarian command
+ * Handle operations on librarian page
+ */
 public class LibrarianCommand implements Command {
 
     private final Map<String, Consumer<HttpServletRequest>> operations = new HashMap<>();
@@ -95,7 +99,7 @@ public class LibrarianCommand implements Command {
             int perPage = paginationService.getRecordsPerPage(request);
             int page = paginationService.getPageNumber(request);
             List<UserOrderDto> userApprovedOrders = new ArrayList<>();
-            List<Order> allApproved = paginationService.paginateOrdersByUser(userId, page, perPage);
+            List<Order> allApproved = paginationService.paginateApprovedOrdersByUser(userId, page, perPage);
             allApproved.forEach(order -> {
                 try {
                     UserOrderDto userOrder = prepareUserOrderForView(order);

@@ -2,8 +2,6 @@ package com.dkop.library.controller.command;
 
 import com.dkop.library.entity.Book;
 import com.dkop.library.services.PaginationService;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -11,6 +9,9 @@ import java.util.List;
 import static com.dkop.library.utils.Fields.SORT_BY;
 import static com.dkop.library.utils.LocalizationUtil.localizationBundle;
 
+/**
+ * Command for Catalog page
+ */
 public class CatalogCommand implements Command {
 
     private final PaginationService paginationService;

@@ -25,11 +25,11 @@ public class OrderDaoImpl implements OrderDao {
     }
 
     @Override
-    public void create(Order order) throws SQLException {
+    public void create(Order entity) throws SQLException {
         try (PreparedStatement preparedStatement = connection.prepareStatement(CREATE_ORDER)) {
-            preparedStatement.setInt(1, order.getBookId());
-            preparedStatement.setInt(2, order.getUserId());
-            preparedStatement.setString(3, order.getType());
+            preparedStatement.setInt(1, entity.getBookId());
+            preparedStatement.setInt(2, entity.getUserId());
+            preparedStatement.setString(3, entity.getType());
             preparedStatement.setDate(4, Date.valueOf(LocalDate.now()));
             preparedStatement.executeUpdate();
         }
@@ -83,12 +83,12 @@ public class OrderDaoImpl implements OrderDao {
     }
 
     @Override
-    public void update(Order order) {
+    public void update(Order entity) {
         try (PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_ORDER)) {
-            preparedStatement.setString(1, order.getStatus());
-            preparedStatement.setDate(2, Date.valueOf(order.getApprovedDate()));
-            preparedStatement.setDate(3, Date.valueOf(order.getExpectedReturnDate()));
-            preparedStatement.setInt(4, order.getId());
+            preparedStatement.setString(1, entity.getStatus());
+            preparedStatement.setDate(2, Date.valueOf(entity.getApprovedDate()));
+            preparedStatement.setDate(3, Date.valueOf(entity.getExpectedReturnDate()));
+            preparedStatement.setInt(4, entity.getId());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             LOGGER.error(e, e.getCause());

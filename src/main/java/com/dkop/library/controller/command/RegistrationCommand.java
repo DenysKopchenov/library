@@ -11,7 +11,9 @@ import java.util.Map;
 
 import static com.dkop.library.utils.Fields.*;
 
-
+/**
+ * Command for Registration page
+ */
 public class RegistrationCommand implements Command {
 
     private static final String REGISTRATION_JSP = "/WEB-INF/registration.jsp";

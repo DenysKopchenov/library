@@ -25,14 +25,14 @@ public class UserDaoImpl implements UserDao {
         this.connection = connection;
     }
 
-    public void create(User user) throws SQLException {
+    public void create(User entity) throws SQLException {
         try (PreparedStatement preparedStatement = connection.prepareStatement(CREATE_USER)) {
-            preparedStatement.setString(1, user.getFirstName());
-            preparedStatement.setString(2, user.getLastName());
-            preparedStatement.setString(3, user.getEmail());
-            preparedStatement.setString(4, user.getPassword());
-            preparedStatement.setString(5, user.getRole());
-            preparedStatement.setString(6, user.getStatus());
+            preparedStatement.setString(1, entity.getFirstName());
+            preparedStatement.setString(2, entity.getLastName());
+            preparedStatement.setString(3, entity.getEmail());
+            preparedStatement.setString(4, entity.getPassword());
+            preparedStatement.setString(5, entity.getRole());
+            preparedStatement.setString(6, entity.getStatus());
             preparedStatement.executeUpdate();
         }
     }
@@ -113,7 +113,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public void update(User user) {
+    public void update(User entity) {
         throw new UnsupportedOperationException();
     }
 
