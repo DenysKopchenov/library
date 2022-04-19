@@ -17,7 +17,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import static com.dkop.library.utils.LocalizationUtil.errorMessagesBundle;
+import static com.dkop.library.utils.LocalizationUtil.localizationBundle;
 import static org.mockito.Mockito.*;
 
 public class UserServiceTest {
@@ -30,7 +30,7 @@ public class UserServiceTest {
         try (MockedStatic<DaoFactory> daoFactoryMockedStatic = mockStatic(DaoFactory.class)) {
             daoFactoryMockedStatic.when(DaoFactory::getInstance).thenReturn(daoFactoryMock);
             when(daoFactoryMock.createUserDao()).thenReturn(userDaoMock);
-            errorMessagesBundle = mock(ResourceBundle.class);
+            localizationBundle = mock(ResourceBundle.class);
             userService = new UserService(DaoFactory.getInstance());
         }
     }

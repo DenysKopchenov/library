@@ -31,7 +31,6 @@ public class LocaleFilter implements Filter {
             locale = new Locale((String) req.getSession().getAttribute(LANGUAGE));
         }
 
-        LocalizationUtil.setErrorMessagesBundle(ResourceBundle.getBundle("messages", locale));
         LocalizationUtil.setLocalizationBundle(ResourceBundle.getBundle("localization", locale));
         filterChain.doFilter(servletRequest, servletResponse);
     }

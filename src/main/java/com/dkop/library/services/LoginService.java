@@ -15,7 +15,7 @@ import java.util.Set;
 
 import static com.dkop.library.utils.Fields.EMAIL;
 import static com.dkop.library.utils.Fields.ERROR_MESSAGE;
-import static com.dkop.library.utils.LocalizationUtil.errorMessagesBundle;
+import static com.dkop.library.utils.LocalizationUtil.localizationBundle;
 
 public class LoginService {
 
@@ -32,7 +32,7 @@ public class LoginService {
             User user = authenticateUser(email, password);
             String userRole = user.getRole();
             if (checkIsLogged(request, email)) {
-                throw new AlreadyLoggedException(errorMessagesBundle.getString("already.logged"));
+                throw new AlreadyLoggedException(localizationBundle.getString("already.logged"));
             } else {
                 setUserRole(request, email, userRole);
                 LOGGER.info("'{}' logged in. Role - '{}'.", email, userRole);
@@ -52,10 +52,10 @@ public class LoginService {
                 if (user.getPassword().equals(DigestUtils.sha256Hex(password))) {
                     return user;
                 } else {
-                    throw new WrongPasswordException(errorMessagesBundle.getString("wrong.password"));
+                    throw new WrongPasswordException(localizationBundle.getString("wrong.password"));
                 }
             } else {
-                throw new WasBlockedException(errorMessagesBundle.getString("was.blocked"));
+                throw new WasBlockedException(localizationBundle.getString("was.blocked"));
             }
         }
     }

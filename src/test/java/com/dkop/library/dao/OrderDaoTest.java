@@ -13,7 +13,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import static com.dkop.library.utils.LocalizationUtil.errorMessagesBundle;
+import static com.dkop.library.utils.LocalizationUtil.localizationBundle;
 import static com.dkop.library.dao.impls.Queries.*;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
@@ -28,7 +28,7 @@ public class OrderDaoTest {
     @Before
     public void setUp() throws SQLException {
         orderDao = new OrderDaoImpl(connectionMock);
-        errorMessagesBundle = mock(ResourceBundle.class);
+        localizationBundle = mock(ResourceBundle.class);
         when(connectionMock.prepareStatement(anyString())).thenReturn(preparedStatementMock);
         when(preparedStatementMock.executeQuery()).thenReturn(resultSetMock);
     }

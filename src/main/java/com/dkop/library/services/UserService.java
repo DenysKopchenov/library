@@ -14,7 +14,7 @@ import org.apache.logging.log4j.Logger;
 import java.sql.SQLException;
 import java.util.List;
 
-import static com.dkop.library.utils.LocalizationUtil.errorMessagesBundle;
+import static com.dkop.library.utils.LocalizationUtil.localizationBundle;
 
 public class UserService {
 
@@ -57,7 +57,7 @@ public class UserService {
             userDao.create(user);
         } catch (SQLException e) {
             LOGGER.error(e, e.getCause());
-            throw new AlreadyExistException("Email " + email + errorMessagesBundle.getString("email.already.exist"), e);
+            throw new AlreadyExistException("Email " + email + localizationBundle.getString("email.already.exist"), e);
         }
     }
 
@@ -74,7 +74,7 @@ public class UserService {
             userDao.changeStatus(id, newStatus);
         } catch (SQLException e) {
             LOGGER.error(e, e.getCause());
-            throw new NotFoundException(errorMessagesBundle.getString("user.not.found"));
+            throw new NotFoundException(localizationBundle.getString("user.not.found"));
         }
     }
 

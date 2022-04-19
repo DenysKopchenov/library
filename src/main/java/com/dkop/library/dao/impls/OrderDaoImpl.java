@@ -12,7 +12,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.dkop.library.utils.LocalizationUtil.errorMessagesBundle;
+import static com.dkop.library.utils.LocalizationUtil.localizationBundle;
 import static com.dkop.library.dao.impls.Queries.*;
 
 public class OrderDaoImpl implements OrderDao {
@@ -73,7 +73,7 @@ public class OrderDaoImpl implements OrderDao {
                 if (resultSet.next()) {
                     order = extractOrderFromResultSet(resultSet);
                 } else {
-                    throw new NotFoundException(errorMessagesBundle.getString("order.not.found"));
+                    throw new NotFoundException(localizationBundle.getString("order.not.found"));
                 }
             }
         } catch (SQLException e) {

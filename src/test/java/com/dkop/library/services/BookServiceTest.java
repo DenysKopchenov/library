@@ -17,7 +17,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import static com.dkop.library.utils.LocalizationUtil.errorMessagesBundle;
+import static com.dkop.library.utils.LocalizationUtil.localizationBundle;
 import static org.mockito.Mockito.*;
 
 public class BookServiceTest {
@@ -32,7 +32,7 @@ public class BookServiceTest {
             daoFactoryMockedStatic.when(DaoFactory::getInstance).thenReturn(daoFactoryMock);
             when(daoFactoryMock.createBooksDao()).thenReturn(booksDaoMock);
             when(daoFactoryMock.createOrderDao()).thenReturn(orderDaoMock);
-            errorMessagesBundle = mock(ResourceBundle.class);
+            localizationBundle = mock(ResourceBundle.class);
             bookService = new BookService(DaoFactory.getInstance());
         }
     }
