@@ -16,9 +16,6 @@ public class LogOutCommand implements Command {
 
     private static final Logger LOGGER = LogManager.getLogger(LogOutCommand.class);
 
-    public LogOutCommand() {
-    }
-
     @Override
     public String execute(HttpServletRequest request) {
         HttpSession session = request.getSession();

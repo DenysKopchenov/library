@@ -2,6 +2,9 @@ package com.dkop.library.dao.impls;
 
 public final class Queries {
 
+    private Queries() {
+    }
+
     //Books
     public static final String SELECT_BOOKS = "SELECT * FROM books ORDER BY %s LIMIT ?, ?;";
     public static final String CREATE_BOOK = "INSERT INTO books (title, author, publisher, publishing_date, amount) VALUES (?, ?, ?, ?, ?);";
