@@ -5,7 +5,6 @@ import com.dkop.library.entity.Order;
 import com.dkop.library.entity.User;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.annotation.DependsOn;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;

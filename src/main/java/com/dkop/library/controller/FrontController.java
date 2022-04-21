@@ -1,14 +1,8 @@
 package com.dkop.library.controller;
 
-import com.dkop.library.config.ApplicationConfig;
+import com.dkop.library.config.ApplicationContextProvider;
 import com.dkop.library.controller.command.*;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowire;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Configurable;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.stereotype.Component;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -17,9 +11,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.HashSet;
-
-import static com.dkop.library.config.ApplicationConfig.APPLICATION_CONTEXT;
-
 
 /**
  * Main servlet that mapping request to the command
@@ -30,7 +21,7 @@ public class FrontController extends HttpServlet {
 
     @Override
     public void init(ServletConfig servletConfig) {
-        commandContainer = APPLICATION_CONTEXT.getBean(CommandContainer.class);
+        commandContainer = ApplicationContextProvider.getApplicationContext().getBean(CommandContainer.class);
         servletConfig.getServletContext().setAttribute("loggedUsers", new HashSet<>());
     }
 

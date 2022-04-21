@@ -1,25 +1,17 @@
 package com.dkop.library.controller.filters;
 
-import com.dkop.library.config.ApplicationConfig;
+import com.dkop.library.config.ApplicationContextProvider;
 import com.dkop.library.controller.command.LogOutCommand;
 import com.dkop.library.exceptions.DoesNotExistException;
 import com.dkop.library.services.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowire;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Configurable;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.context.annotation.DependsOn;
-import org.springframework.stereotype.Component;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static com.dkop.library.config.ApplicationConfig.APPLICATION_CONTEXT;
 import static com.dkop.library.utils.Fields.EMAIL;
 
 public class CheckStatusFilter implements Filter {
@@ -30,8 +22,8 @@ public class CheckStatusFilter implements Filter {
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-        logOutCommand = APPLICATION_CONTEXT.getBean(LogOutCommand.class);
-        userService = APPLICATION_CONTEXT.getBean(UserService.class);
+        logOutCommand = ApplicationContextProvider.getApplicationContext().getBean(LogOutCommand.class);
+        userService = ApplicationContextProvider.getApplicationContext().getBean(UserService.class);
         //do nothing
     }
 

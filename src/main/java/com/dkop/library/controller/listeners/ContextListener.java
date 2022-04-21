@@ -3,7 +3,6 @@ package com.dkop.library.controller.listeners;
 import com.dkop.library.config.ApplicationConfig;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import javax.servlet.ServletContext;
@@ -19,6 +18,7 @@ public class ContextListener implements ServletContextListener {
         System.setProperty("logFile", path);
 
         final Logger logger = LogManager.getLogger(ContextListener.class);
+        context.setAttribute("applicationContext", new AnnotationConfigApplicationContext(ApplicationConfig.class));
         logger.info("Context initialized");
     }
 }

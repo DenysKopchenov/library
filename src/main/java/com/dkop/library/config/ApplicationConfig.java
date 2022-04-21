@@ -1,8 +1,6 @@
 package com.dkop.library.config;
 
-import com.dkop.library.controller.FrontController;
 import org.apache.commons.dbcp.BasicDataSource;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.*;
 
 import javax.sql.DataSource;
@@ -11,8 +9,6 @@ import java.util.ResourceBundle;
 @Configuration
 @ComponentScan("com.dkop.library")
 public class ApplicationConfig {
-
-    public static final ApplicationContext APPLICATION_CONTEXT = new AnnotationConfigApplicationContext(ApplicationConfig.class);
 
     @Bean
     public DataSource dataSource(){
