@@ -13,6 +13,8 @@ import com.dkop.library.services.UserService;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -28,6 +30,7 @@ import static com.dkop.library.utils.Fields.ERROR_MESSAGE;
  * Librarian command
  * Handle operations on librarian page
  */
+@Component
 public class LibrarianCommand implements Command {
 
     private final Map<String, Consumer<HttpServletRequest>> operations = new HashMap<>();

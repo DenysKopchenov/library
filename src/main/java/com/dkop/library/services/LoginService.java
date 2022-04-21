@@ -1,12 +1,12 @@
 package com.dkop.library.services;
 
-import com.dkop.library.dao.DaoFactory;
 import com.dkop.library.dao.UserDao;
 import com.dkop.library.entity.User;
 import com.dkop.library.exceptions.*;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -17,13 +17,14 @@ import static com.dkop.library.utils.Fields.EMAIL;
 import static com.dkop.library.utils.Fields.ERROR_MESSAGE;
 import static com.dkop.library.utils.LocalizationUtil.localizationBundle;
 
+@Service
 public class LoginService {
 
-    private DaoFactory daoFactory;
+    private final UserDao userDao;
     private static final Logger LOGGER = LogManager.getLogger(LoginService.class);
 
-    public LoginService(DaoFactory daoFactory) {
-        this.daoFactory = daoFactory;
+    public LoginService(UserDao userDao) {
+        this.userDao = userDao;
     }
 
     public String login(String email, String password, HttpServletRequest request) {
@@ -45,7 +46,6 @@ public class LoginService {
     }
 
     private User authenticateUser(String email, String password) throws DoesNotExistException, WrongPasswordException, WasBlockedException {
-        try (UserDao userDao = daoFactory.createUserDao()) {
             User user = userDao.findByEmail(email);
             if (user.getStatus().equals("active")) {
                 String passwordHash = DigestUtils.sha256Hex(password);
@@ -55,8 +55,6 @@ public class LoginService {
                 throw new WrongPasswordException(localizationBundle.getString("wrong.password"));
             }
             throw new WasBlockedException(localizationBundle.getString("was.blocked"));
-
-        }
     }
 
     private String resolvePageByRole(String userRole) {

@@ -2,6 +2,7 @@ package com.dkop.library.controller.command;
 
 import com.dkop.library.services.LoginService;
 import com.dkop.library.utils.Validator;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
@@ -12,6 +13,7 @@ import static com.dkop.library.utils.Fields.VALIDATION;
 /**
  * Command for Login page
  */
+@Component
 public class LoginCommand implements Command {
 
     private static final String LOGIN_JSP = "/WEB-INF/login.jsp";

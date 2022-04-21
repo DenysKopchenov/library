@@ -13,6 +13,7 @@ import com.dkop.library.utils.Validator;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
@@ -27,6 +28,7 @@ import static com.dkop.library.utils.LocalizationUtil.*;
  * Admin command
  * Handle operations on admin page
  */
+@Component
 public class AdminCommand implements Command {
 
     private final Map<String, Consumer<HttpServletRequest>> operations = new HashMap<>();

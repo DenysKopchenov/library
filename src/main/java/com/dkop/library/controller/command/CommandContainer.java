@@ -1,29 +1,31 @@
 package com.dkop.library.controller.command;
 
-import com.dkop.library.services.ServiceContainer;
-
-import java.util.HashMap;
-import java.util.Map;
+import org.springframework.stereotype.Component;
 
 /**
  * Container for all commands
  */
+@Component
 public class CommandContainer {
 
-    private static final Map<String, Command> commands = new HashMap<>();
+    private final LoginCommand loginCommand;
+    private final LogOutCommand logOutCommand;
+    private final RegistrationCommand registrationCommand;
+    private final AdminCommand adminCommand;
+    private final LibrarianCommand librarianCommand;
+    private final ReaderCommand readerCommand;
+    private final CatalogCommand catalogCommand;
+    private final StartCommand startCommand;
 
-    private CommandContainer() {
-    }
-
-    static {
-        final ServiceContainer sc = new ServiceContainer();
-        commands.put("login", new LoginCommand(sc.getLoginService()));
-        commands.put("logout", new LogOutCommand());
-        commands.put("registration", new RegistrationCommand(sc.getUserService()));
-        commands.put("admin", new AdminCommand(sc.getBookService(), sc.getUserService(), sc.getPaginationService()));
-        commands.put("librarian", new LibrarianCommand(sc.getBookService(), sc.getUserService(), sc.getOrderService(), sc.getPaginationService()));
-        commands.put("reader", new ReaderCommand(sc.getBookService(), sc.getUserService(), sc.getOrderService(), sc.getPaginationService()));
-        commands.put("catalog", new CatalogCommand(sc.getPaginationService()));
+    public CommandContainer(LoginCommand loginCommand, LogOutCommand logOutCommand, RegistrationCommand registrationCommand, AdminCommand adminCommand, LibrarianCommand librarianCommand, ReaderCommand readerCommand, CatalogCommand catalogCommand, StartCommand noCommand) {
+        this.loginCommand = loginCommand;
+        this.logOutCommand = logOutCommand;
+        this.registrationCommand = registrationCommand;
+        this.adminCommand = adminCommand;
+        this.librarianCommand = librarianCommand;
+        this.readerCommand = readerCommand;
+        this.catalogCommand = catalogCommand;
+        this.startCommand = noCommand;
     }
 
     /**
@@ -31,7 +33,24 @@ public class CommandContainer {
      * @param commandName
      * @return Command by name or start page by default if name dopes not exist
      */
-    public static Command getCommand(String commandName) {
-        return commands.getOrDefault(commandName, p -> "/start.jsp");
+    public Command getCommand(String commandName) {
+        switch (commandName){
+            case "login":
+                return loginCommand;
+            case "logout":
+                return logOutCommand;
+            case "registration":
+                return registrationCommand;
+            case "admin":
+                return adminCommand;
+            case "librarian":
+                return librarianCommand;
+            case "reader":
+                return readerCommand;
+            case "catalog":
+                return catalogCommand;
+            default: return startCommand;
+        }
+
     }
 }

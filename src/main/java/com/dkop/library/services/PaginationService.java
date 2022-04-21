@@ -4,10 +4,15 @@ import com.dkop.library.entity.Book;
 import com.dkop.library.entity.Order;
 import com.dkop.library.entity.User;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.context.annotation.DependsOn;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
+@Service
+@DependsOn({"bookService", "userService", "orderService"})
 public class PaginationService {
 
     private final BookService bookService;

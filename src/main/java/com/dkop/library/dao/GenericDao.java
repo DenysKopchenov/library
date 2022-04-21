@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Base interface for all dao classes
  */
-public interface GenericDao<E> extends AutoCloseable {
+public interface GenericDao<E> {
 
     /**
      * Creates an entity in database
@@ -48,5 +48,4 @@ public interface GenericDao<E> extends AutoCloseable {
     /**
      * Close connection to database
      */
-    void close();
 }

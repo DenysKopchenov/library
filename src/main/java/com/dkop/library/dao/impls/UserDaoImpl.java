@@ -7,7 +7,9 @@ import com.dkop.library.exceptions.NotFoundException;
 import com.dkop.library.exceptions.UnableToDeleteException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.stereotype.Component;
 
+import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,24 +18,27 @@ import static com.dkop.library.utils.Fields.EMAIL;
 import static com.dkop.library.utils.LocalizationUtil.localizationBundle;
 import static com.dkop.library.dao.impls.Queries.*;
 
+@Component
 public class UserDaoImpl implements UserDao {
 
+    private final DataSource dataSource;
     private static final Logger LOGGER = LogManager.getLogger(UserDaoImpl.class);
-    private final Connection connection;
 
-    public UserDaoImpl(Connection connection) {
-        this.connection = connection;
+    public UserDaoImpl(DataSource dataSource) {
+        this.dataSource = dataSource;
     }
 
     public void create(User user) throws SQLException {
-        try (PreparedStatement preparedStatement = connection.prepareStatement(CREATE_USER)) {
-            preparedStatement.setString(1, user.getFirstName());
-            preparedStatement.setString(2, user.getLastName());
-            preparedStatement.setString(3, user.getEmail());
-            preparedStatement.setString(4, user.getPassword());
-            preparedStatement.setString(5, user.getRole());
-            preparedStatement.setString(6, user.getStatus());
-            preparedStatement.executeUpdate();
+        try (Connection connection = dataSource.getConnection()) {
+            try (PreparedStatement preparedStatement = dataSource.getConnection().prepareStatement(CREATE_USER)) {
+                preparedStatement.setString(1, user.getFirstName());
+                preparedStatement.setString(2, user.getLastName());
+                preparedStatement.setString(3, user.getEmail());
+                preparedStatement.setString(4, user.getPassword());
+                preparedStatement.setString(5, user.getRole());
+                preparedStatement.setString(6, user.getStatus());
+                preparedStatement.executeUpdate();
+            }
         }
     }
 
@@ -42,11 +47,13 @@ public class UserDaoImpl implements UserDao {
     }
 
     public int countAllRowsByRole(String role) {
-        try (PreparedStatement preparedStatement = connection.prepareStatement(COUNT_ROWS_BY_ROLE)) {
-            preparedStatement.setString(1, role);
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                if (resultSet.next()) {
-                    return resultSet.getInt("count");
+        try (Connection connection = dataSource.getConnection()) {
+            try (PreparedStatement preparedStatement = connection.prepareStatement(COUNT_ROWS_BY_ROLE)) {
+                preparedStatement.setString(1, role);
+                try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                    if (resultSet.next()) {
+                        return resultSet.getInt("count");
+                    }
                 }
             }
         } catch (SQLException e) {
@@ -57,13 +64,15 @@ public class UserDaoImpl implements UserDao {
 
     public List<User> findAllByRole(String role, int start, int numberOfRecords) {
         List<User> allUsers = new ArrayList<>();
-        try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_USERS_BY_ROLE)) {
-            preparedStatement.setString(1, role);
-            preparedStatement.setInt(2, start);
-            preparedStatement.setInt(3, numberOfRecords);
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                while (resultSet.next()) {
-                    allUsers.add(extractUserFromResultSet(resultSet));
+        try (Connection connection = dataSource.getConnection()) {
+            try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_USERS_BY_ROLE)) {
+                preparedStatement.setString(1, role);
+                preparedStatement.setInt(2, start);
+                preparedStatement.setInt(3, numberOfRecords);
+                try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                    while (resultSet.next()) {
+                        allUsers.add(extractUserFromResultSet(resultSet));
+                    }
                 }
             }
         } catch (SQLException e) {
@@ -74,10 +83,12 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public void changeStatus(int id, String newStatus) {
-        try (PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_USER_STATUS)) {
-            preparedStatement.setString(1, newStatus);
-            preparedStatement.setInt(2, id);
-            preparedStatement.executeUpdate();
+        try (Connection connection = dataSource.getConnection()) {
+            try (PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_USER_STATUS)) {
+                preparedStatement.setString(1, newStatus);
+                preparedStatement.setInt(2, id);
+                preparedStatement.executeUpdate();
+            }
         } catch (SQLException e) {
             LOGGER.error(e, e.getCause());
         }
@@ -86,13 +97,15 @@ public class UserDaoImpl implements UserDao {
     @Override
     public User findById(int id) throws NotFoundException {
         User user = null;
-        try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_USER_BY_ID)) {
-            preparedStatement.setInt(1, id);
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                if (resultSet.next()) {
-                    user = extractUserFromResultSet(resultSet);
-                } else {
-                    throw new NotFoundException(localizationBundle.getString("user.not.found"));
+        try (Connection connection = dataSource.getConnection()) {
+            try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_USER_BY_ID)) {
+                preparedStatement.setInt(1, id);
+                try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                    if (resultSet.next()) {
+                        user = extractUserFromResultSet(resultSet);
+                    } else {
+                        throw new NotFoundException(localizationBundle.getString("user.not.found"));
+                    }
                 }
             }
         } catch (SQLException e) {
@@ -119,9 +132,11 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public void delete(int id) throws UnableToDeleteException {
-        try (PreparedStatement preparedStatement = connection.prepareStatement(DELETE_USER_BY_ID)) {
-            preparedStatement.setInt(1, id);
-            preparedStatement.executeUpdate();
+        try (Connection connection = dataSource.getConnection()) {
+            try (PreparedStatement preparedStatement = connection.prepareStatement(DELETE_USER_BY_ID)) {
+                preparedStatement.setInt(1, id);
+                preparedStatement.executeUpdate();
+            }
         } catch (SQLException e) {
             LOGGER.error(e, e.getCause());
             throw new UnableToDeleteException(localizationBundle.getString("unable.delete.user"), e);
@@ -130,21 +145,23 @@ public class UserDaoImpl implements UserDao {
 
     public User findByEmail(String email) throws DoesNotExistException {
         User user = null;
-        try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_USER_BY_EMAIL)) {
-            preparedStatement.setString(1, email);
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                if (resultSet.next()) {
-                    user = User.newBuilder()
-                            .firstName(resultSet.getString("first_name"))
-                            .lastName(resultSet.getString("last_name"))
-                            .email(resultSet.getString(EMAIL))
-                            .password(resultSet.getString("password"))
-                            .role(resultSet.getString("role"))
-                            .status(resultSet.getString("status"))
-                            .id(resultSet.getInt("id"))
-                            .build();
-                } else {
-                    throw new DoesNotExistException("Email " + email + localizationBundle.getString("email.does.not.exist"));
+        try (Connection connection = dataSource.getConnection()) {
+            try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_USER_BY_EMAIL)) {
+                preparedStatement.setString(1, email);
+                try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                    if (resultSet.next()) {
+                        user = User.newBuilder()
+                                .firstName(resultSet.getString("first_name"))
+                                .lastName(resultSet.getString("last_name"))
+                                .email(resultSet.getString(EMAIL))
+                                .password(resultSet.getString("password"))
+                                .role(resultSet.getString("role"))
+                                .status(resultSet.getString("status"))
+                                .id(resultSet.getInt("id"))
+                                .build();
+                    } else {
+                        throw new DoesNotExistException("Email " + email + " " + localizationBundle.getString("email.does.not.exist"));
+                    }
                 }
             }
         } catch (SQLException e) {
@@ -153,12 +170,4 @@ public class UserDaoImpl implements UserDao {
         return user;
     }
 
-    @Override
-    public void close() {
-        try {
-            connection.close();
-        } catch (SQLException e) {
-            LOGGER.error(e, e.getCause());
-        }
-    }
 }
