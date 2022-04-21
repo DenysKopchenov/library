@@ -68,7 +68,7 @@ public class UserService {
             userDao.create(user);
         } catch (SQLException e) {
             LOGGER.error(e, e.getCause());
-            throw new AlreadyExistException("Email " + email + localizationBundle.getString("email.already.exist"), e);
+            throw new AlreadyExistException("Email " + email + " " + localizationBundle.getString("email.already.exist"), e);
         }
     }
 

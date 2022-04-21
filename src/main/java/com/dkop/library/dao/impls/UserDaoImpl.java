@@ -144,7 +144,7 @@ public class UserDaoImpl implements UserDao {
                             .id(resultSet.getInt("id"))
                             .build();
                 } else {
-                    throw new DoesNotExistException("Email " + email + localizationBundle.getString("email.does.not.exist"));
+                    throw new DoesNotExistException("Email " + email + " "  + localizationBundle.getString("email.does.not.exist"));
                 }
             }
         } catch (SQLException e) {
