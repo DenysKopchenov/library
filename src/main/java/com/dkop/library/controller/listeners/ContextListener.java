@@ -18,7 +18,9 @@ public class ContextListener implements ServletContextListener {
         System.setProperty("logFile", path);
 
         final Logger logger = LogManager.getLogger(ContextListener.class);
-        context.setAttribute("applicationContext", new AnnotationConfigApplicationContext(ApplicationConfig.class));
+
+        new AnnotationConfigApplicationContext(ApplicationConfig.class);
+
         logger.info("Context initialized");
     }
 }
