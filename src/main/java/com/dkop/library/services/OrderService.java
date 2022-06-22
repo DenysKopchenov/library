@@ -14,6 +14,7 @@ import org.apache.logging.log4j.Logger;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.Period;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import static com.dkop.library.utils.LocalizationUtil.localizationBundle;
@@ -138,7 +139,7 @@ public class OrderService {
         LocalDate expectedReturnDate = order.getExpectedReturnDate();
         LocalDate now = LocalDate.now();
         if (expectedReturnDate.isBefore(now)) {
-            int daysDifference = Period.between(expectedReturnDate, now).getDays();
+            long daysDifference = ChronoUnit.DAYS.between(expectedReturnDate, now);
             return daysDifference * 500L;
         } else {
             return 0;

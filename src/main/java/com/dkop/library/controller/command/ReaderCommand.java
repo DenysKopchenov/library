@@ -214,7 +214,7 @@ public class ReaderCommand implements Command {
     private void totalPenalty(HttpServletRequest request) {
         try {
             User user = userService.getUserInfo((String) request.getSession().getAttribute(EMAIL));
-            List<Order> allApproved = orderService.findAllUserApprovedOrders(user.getId(), 0, 0);
+            List<Order> allApproved = orderService.findAllUserApprovedOrders(user.getId(), 0, orderService.countAllRowsByStatusAndUser("approved", user.getId()));
             long totalPenalty = allApproved.stream().mapToLong(orderService::checkForPenalty).sum();
             request.setAttribute("totalPenalty", penaltyFormatter(String.valueOf(totalPenalty)));
         } catch (DoesNotExistException e) {
